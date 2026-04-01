@@ -144,7 +144,7 @@ Tests: does splitting responsibilities improve accuracy over Experiment 1?
 User Turn → [DST LoRA] → policy() + Entity Selection → [ResponseGen LoRA] → supervisor() → lexicalize() → Evaluate
 ```
 Same pipeline as Experiment 2, but DST and ResponseGen powered by LoRA fine-tuned open-source models.
-Tested with: several fine-tuned configurations (3B base models via Unsloth).
+Tested with: several fine-tuned configurations.
 
 Tests the questions:
 1. Do small open-source fine-tuned models outperform their zero-shot versions from Experiment 2?
