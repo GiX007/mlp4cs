@@ -1,0 +1,33 @@
+# PyCharm IDE
+.idea/
+
+# Virtual environment
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment variables
+.env
+
+# Data (large files)
+data/
+
+# Exclude large JSON files from archived results, keep only summary txt files
+archived_results/**/*.json
+
+# Hugging Face dataset and model cache (large files)
+hf_cache/
+
+# Unsloth temp cache
+unsloth_compiled_cache/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test cache
+.pytest_cache/

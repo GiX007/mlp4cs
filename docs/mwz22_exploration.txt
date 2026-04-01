@@ -1,0 +1,1003 @@
+
+============================================================
+BASIC STRUCTURE of MultiWOZ 2.2 + Dialog Acts of [train]
+============================================================
+
+train split is a <class 'list'> with dialogues as elements of <class 'dict'>
+Number of dialogues: 2850
+
+Top-level keys: ['dialogue_id', 'services', 'turns']
+dialogue_id: str | PMUL4398.json
+services: list | length=2 | ['restaurant', 'hotel']
+turns: list of dict | length=12
+
+First turn keys: ['frames', 'speaker', 'turn_id', 'utterance', 'dialog_act']
+speaker: str | USER
+turn_id: str | 0
+utterance: str | i need a place to dine in the center thats expensive
+frames: list of dict | length=8
+
+First frame keys: ['actions', 'service', 'slots', 'state']
+actions: list | length=0
+service: str | restaurant
+slots: list | length=0
+state: dict | keys=['active_intent', 'requested_slots', 'slot_values']
+
+Unpacking state:
+active_intent: str | find_restaurant
+requested_slots: list | length=0 | []
+slot_values: dict | length=2 | {'restaurant-area': ['centre'], 'restaurant-pricerange': ['expensive']}
+
+Dialog act (attached):
+dialog_act: dict | {'Restaurant-Inform': [['area', 'centre'], ['pricerange', 'expensive']]}
+
+============================================================
+END OF BASIC STRUCTURE
+============================================================
+
+============================================================
+SINGLE DIALOGUE (Index 0) of [train]
+============================================================
+
+dialogue_id: PMUL4398.json
+services: ['restaurant', 'hotel']
+num turns: 12
+
+  Turn 0 [USER]: i need a place to dine in the center thats expensive
+         service: restaurant
+         intent: find_restaurant
+         slots: {'restaurant-area': ['centre'], 'restaurant-pricerange': ['expensive']}
+         requested: []
+         service: hotel
+         intent: find_hotel
+         slots: {}
+         requested: []
+         dialog_act: {'Restaurant-Inform': [['area', 'centre'], ['pricerange', 'expensive']]}
+
+  Turn 1 [SYSTEM]: I have several options for you; do you prefer African, Asian, or British food?
+         dialog_act: {'Restaurant-Inform': [['choice', 'several']], 'Restaurant-Select': [['food', 'African'], ['food', 'Asian'], ['food', 'British']]}
+
+  Turn 2 [USER]: Any sort of food would be fine, as long as it is a bit expensive. Could I get the phone number for your recommendation?
+         service: restaurant
+         intent: find_restaurant
+         slots: {'restaurant-area': ['centre'], 'restaurant-pricerange': ['expensive']}
+         requested: ['restaurant-food']
+         service: hotel
+         intent: find_hotel
+         slots: {}
+         requested: []
+         dialog_act: {'Restaurant-Request': [['food', '?']]}
+
+  Turn 3 [SYSTEM]: There is an Afrian place named Bedouin in the centre. How does that sound?
+         dialog_act: {'Restaurant-Inform': [['area', 'centre'], ['food', 'Afrian'], ['name', 'Bedouin']]}
+
+  Turn 4 [USER]: Sounds good, could I get that phone number? Also, could you recommend me an expensive hotel?
+         service: restaurant
+         intent: find_restaurant
+         slots: {'restaurant-area': ['centre'], 'restaurant-name': ['bedouin'], 'restaurant-pricerange': ['expensive']}
+         requested: ['restaurant-phone']
+         service: hotel
+         intent: find_hotel
+         slots: {'hotel-pricerange': ['expensive'], 'hotel-type': ['hotel']}
+         requested: []
+         dialog_act: {'Hotel-Inform': [['pricerange', 'expensive'], ['type', 'hotel']], 'Restaurant-Request': [['phone', '?']]}
+
+  Turn 5 [SYSTEM]: Bedouin's phone is 01223367660. As far as hotels go, I recommend the University Arms Hotel in the center of town.
+         dialog_act: {'Hotel-Recommend': [['area', 'center of town'], ['name', 'the University Arms Hotel']], 'Restaurant-Inform': [['name', 'Bedouin'], ['phone', '01223367660']]}
+
+  Turn 6 [USER]: Yes. Can you book it for me?
+         service: hotel
+         intent: find_hotel
+         slots: {'hotel-name': ['university arms hotel'], 'hotel-pricerange': ['expensive'], 'hotel-type': ['hotel']}
+         requested: []
+         dialog_act: {'Hotel-Inform': [['none', 'none']]}
+
+  Turn 7 [SYSTEM]: Sure, when would you like that reservation?
+         dialog_act: {'Booking-Request': [['bookday', '?']]}
+
+  Turn 8 [USER]: i want to book it for 2 people and 2 nights starting from saturday.
+         service: hotel
+         intent: book_hotel
+         slots: {'hotel-bookday': ['saturday'], 'hotel-bookpeople': ['2'], 'hotel-bookstay': ['2'], 'hotel-name': ['university arms hotel'], 'hotel-pricerange': ['expensive'], 'hotel-type': ['hotel']}
+         requested: []
+         dialog_act: {'Hotel-Inform': [['bookday', 'saturday'], ['bookpeople', '2'], ['bookstay', '2']]}
+
+  Turn 9 [SYSTEM]: Your booking was successful. Your reference number is FRGZWQL2 . May I help you further?
+         dialog_act: {'Booking-Book': [['ref', 'FRGZWQL2']], 'general-reqmore': [['none', 'none']]}
+
+  Turn 10 [USER]: That is all I need to know. Thanks, good bye.
+         dialog_act: {'general-bye': [['none', 'none']]}
+
+  Turn 11 [SYSTEM]: Thank you so much for Cambridge TownInfo centre. Have a great day!
+         dialog_act: {'general-bye': [['none', 'none']], 'general-welcome': [['none', 'none']]}
+
+============================================================
+END OF SINGLE DIALOGUE
+============================================================
+
+============================================================
+TURN DETAILS (Dialogue 0, Turn 4) of [train]
+============================================================
+
+turn_id: str | 4
+speaker: str | USER
+utterance: str | Sounds good, could I get that phone number? Also, could you recommend me an expensive hotel?
+frames: list of dict | length=8
+dialog_act: dict | {'Hotel-Inform': [['pricerange', 'expensive'], ['type', 'hotel']], 'Restaurant-Request': [['phone', '?']]}
+
+Active frames (active_intent != NONE):
+
+  service: str | restaurant
+  active_intent: str | find_restaurant
+  slot_values: dict | {'restaurant-area': ['centre'], 'restaurant-name': ['bedouin'], 'restaurant-pricerange': ['expensive']}
+  requested_slots: list | length=1 | ['restaurant-phone']
+  slots (spans): list | length=0
+
+  service: str | hotel
+  active_intent: str | find_hotel
+  slot_values: dict | {'hotel-pricerange': ['expensive'], 'hotel-type': ['hotel']}
+  requested_slots: list | length=0 | []
+  slots (spans): list | length=0
+
+Note on USER turns:
+  frames = 8 dicts → one frame per service (hotel, restaurant, taxi, ...)
+  intent = NONE → service not active in this turn (skipped)
+  intent = find_X → user is searching for an entity
+  intent = book_X → user wants to make a booking
+  slot_values → constraints user has specified so far (accumulate across turns)
+  requested_slots → information user is asking the system to provide
+
+Note on SYSTEM turns:
+  frames = [] → system utterance with no span annotations
+  dialog_act → attached from dialog_acts.json
+
+============================================================
+END OF TURN DETAILS
+============================================================
+
+============================================================
+DB STRUCTURE of HOTEL & RESTAURANT
+============================================================
+
+Hotel DB type: <class 'list'> | is a list of: <class 'dict'>
+Hotel DB length: 33 entries
+
+  address: str | 124 tenison road
+  area: str | east
+  internet: str | yes
+  parking: str | no
+  id: str | 0
+  location: list | [52.1963733, 0.1987426]
+  name: str | a and b guest house
+  phone: str | 01223315702
+  postcode: str | cb12dp
+  price: dict | {'double': '70', 'family': '90', 'single': '50'}
+  pricerange: str | moderate
+  stars: str | 4
+  takesbookings: str | yes
+  type: str | guesthouse
+
+Full first hotel entry:
+{
+    "address": "124 tenison road",
+    "area": "east",
+    "internet": "yes",
+    "parking": "no",
+    "id": "0",
+    "location": [
+        52.1963733,
+        0.1987426
+    ],
+    "name": "a and b guest house",
+    "phone": "01223315702",
+    "postcode": "cb12dp",
+    "price": {
+        "double": "70",
+        "family": "90",
+        "single": "50"
+    },
+    "pricerange": "moderate",
+    "stars": "4",
+    "takesbookings": "yes",
+    "type": "guesthouse"
+}
+
+Restaurant DB type: <class 'list'> | is a list of: <class 'dict'>
+Restaurant DB length: 110 entries
+
+  address: str | Regent Street City Centre
+  area: str | centre
+  food: str | italian
+  id: str | 19210
+  introduction: str | Pizza hut is a large chain with restaurants nationwide offering convenience pizzas pasta and salads to eat in or take away
+  location: list | [52.20103, 0.126023]
+  name: str | pizza hut city centre
+  phone: str | 01223323737
+  postcode: str | cb21ab
+  pricerange: str | cheap
+  type: str | restaurant
+
+Full first restaurant entry:
+{
+    "address": "Regent Street City Centre",
+    "area": "centre",
+    "food": "italian",
+    "id": "19210",
+    "introduction": "Pizza hut is a large chain with restaurants nationwide offering convenience pizzas pasta and salads to eat in or take away",
+    "location": [
+        52.20103,
+        0.126023
+    ],
+    "name": "pizza hut city centre",
+    "phone": "01223323737",
+    "postcode": "cb21ab",
+    "pricerange": "cheap",
+    "type": "restaurant"
+}
+
+Key differences hotel vs restaurant:
+  Hotel only: stars, parking, internet, takesbookings, type, price (dict)
+  Restaurant only: food, introduction
+  Shared: name, area, pricerange, phone, address, postcode, location, id
+
+============================================================
+END OF DB STRUCTURE
+============================================================
+
+============================================================
+CONVERSATION EXAMPLES of ['hotel', 'restaurant'] [train]
+============================================================
+
+Total filtered dialogues: 2850
+Showing first 2:
+
+------------------------------------------------------------
+Dialogue ID: PMUL4398.json
+Services: ['restaurant', 'hotel']
+Num turns: 12
+
+  Turn 0 [USER]: i need a place to dine in the center thats expensive
+         service: restaurant
+         intent: find_restaurant
+         slots: {'restaurant-area': ['centre'], 'restaurant-pricerange': ['expensive']}
+         requested: []
+         service: hotel
+         intent: find_hotel
+         slots: {}
+         requested: []
+         dialog_act: {'Restaurant-Inform': [['area', 'centre'], ['pricerange', 'expensive']]}
+
+  Turn 1 [SYSTEM]: I have several options for you; do you prefer African, Asian, or British food?
+         dialog_act: {'Restaurant-Inform': [['choice', 'several']], 'Restaurant-Select': [['food', 'African'], ['food', 'Asian'], ['food', 'British']]}
+
+  Turn 2 [USER]: Any sort of food would be fine, as long as it is a bit expensive. Could I get the phone number for your recommendation?
+         service: restaurant
+         intent: find_restaurant
+         slots: {'restaurant-area': ['centre'], 'restaurant-pricerange': ['expensive']}
+         requested: ['restaurant-food']
+         service: hotel
+         intent: find_hotel
+         slots: {}
+         requested: []
+         dialog_act: {'Restaurant-Request': [['food', '?']]}
+
+  Turn 3 [SYSTEM]: There is an Afrian place named Bedouin in the centre. How does that sound?
+         dialog_act: {'Restaurant-Inform': [['area', 'centre'], ['food', 'Afrian'], ['name', 'Bedouin']]}
+
+  Turn 4 [USER]: Sounds good, could I get that phone number? Also, could you recommend me an expensive hotel?
+         service: restaurant
+         intent: find_restaurant
+         slots: {'restaurant-area': ['centre'], 'restaurant-name': ['bedouin'], 'restaurant-pricerange': ['expensive']}
+         requested: ['restaurant-phone']
+         service: hotel
+         intent: find_hotel
+         slots: {'hotel-pricerange': ['expensive'], 'hotel-type': ['hotel']}
+         requested: []
+         dialog_act: {'Hotel-Inform': [['pricerange', 'expensive'], ['type', 'hotel']], 'Restaurant-Request': [['phone', '?']]}
+
+  Turn 5 [SYSTEM]: Bedouin's phone is 01223367660. As far as hotels go, I recommend the University Arms Hotel in the center of town.
+         dialog_act: {'Hotel-Recommend': [['area', 'center of town'], ['name', 'the University Arms Hotel']], 'Restaurant-Inform': [['name', 'Bedouin'], ['phone', '01223367660']]}
+
+  Turn 6 [USER]: Yes. Can you book it for me?
+         service: hotel
+         intent: find_hotel
+         slots: {'hotel-name': ['university arms hotel'], 'hotel-pricerange': ['expensive'], 'hotel-type': ['hotel']}
+         requested: []
+         dialog_act: {'Hotel-Inform': [['none', 'none']]}
+
+  Turn 7 [SYSTEM]: Sure, when would you like that reservation?
+         dialog_act: {'Booking-Request': [['bookday', '?']]}
+
+  Turn 8 [USER]: i want to book it for 2 people and 2 nights starting from saturday.
+         service: hotel
+         intent: book_hotel
+         slots: {'hotel-bookday': ['saturday'], 'hotel-bookpeople': ['2'], 'hotel-bookstay': ['2'], 'hotel-name': ['university arms hotel'], 'hotel-pricerange': ['expensive'], 'hotel-type': ['hotel']}
+         requested: []
+         dialog_act: {'Hotel-Inform': [['bookday', 'saturday'], ['bookpeople', '2'], ['bookstay', '2']]}
+
+  Turn 9 [SYSTEM]: Your booking was successful. Your reference number is FRGZWQL2 . May I help you further?
+         dialog_act: {'Booking-Book': [['ref', 'FRGZWQL2']], 'general-reqmore': [['none', 'none']]}
+
+  Turn 10 [USER]: That is all I need to know. Thanks, good bye.
+         dialog_act: {'general-bye': [['none', 'none']]}
+
+  Turn 11 [SYSTEM]: Thank you so much for Cambridge TownInfo centre. Have a great day!
+         dialog_act: {'general-bye': [['none', 'none']], 'general-welcome': [['none', 'none']]}
+
+------------------------------------------------------------
+Dialogue ID: SNG1013.json
+Services: ['hotel']
+Num turns: 12
+
+  Turn 0 [USER]: Guten Tag, I am staying overnight in Cambridge and need a place to sleep. I need free parking and internet.
+         service: hotel
+         intent: find_hotel
+         slots: {'hotel-area': ['centre'], 'hotel-internet': ['yes'], 'hotel-parking': ['yes']}
+         requested: []
+         dialog_act: {'Hotel-Inform': [['internet', 'yes'], ['parking', 'yes']]}
+
+  Turn 1 [SYSTEM]: I have 4 different options for you. I have two cheaper guesthouses and two expensive hotels. Do you have a preference?
+         dialog_act: {'Hotel-Inform': [['choice', '4'], ['pricerange', 'cheaper'], ['pricerange', 'expensive'], ['type', 'guesthouses'], ['type', 'hotels']], 'Hotel-Select': [['none', 'none']]}
+
+  Turn 2 [USER]: No, but I'd really like to be on the south end of the city. Do any of those fit the bill?
+         service: hotel
+         intent: find_hotel
+         slots: {'hotel-area': ['south'], 'hotel-internet': ['yes'], 'hotel-parking': ['yes']}
+         requested: []
+         service: restaurant
+         intent: find_restaurant
+         slots: {}
+         requested: []
+         dialog_act: {'Hotel-Inform': [['area', 'south']]}
+
+  Turn 3 [SYSTEM]: Sure. Does price matter? We can narrow it down and find exactly what you need.
+         dialog_act: {'Hotel-Request': [['pricerange', '?']], 'Restaurant-Request': [['pricerange', '?']]}
+
+  Turn 4 [USER]: No I don't care about the price. Which one do you recommend?
+         service: hotel
+         intent: find_hotel
+         slots: {'hotel-area': ['south'], 'hotel-internet': ['yes'], 'hotel-parking': ['yes']}
+         requested: []
+         service: restaurant
+         intent: find_restaurant
+         slots: {}
+         requested: []
+         dialog_act: {'Hotel-Inform': [['pricerange', 'dontcare']], 'Restaurant-Inform': [['pricerange', 'dontcare']]}
+
+  Turn 5 [SYSTEM]: I would recommend aylesbray lodge guest house. Would you like me to book that for you?
+         dialog_act: {'Booking-Inform': [['none', 'none']], 'Hotel-Inform': [['name', 'aylesbray lodge guest house']], 'Restaurant-Recommend': [['none', 'none']]}
+
+  Turn 6 [USER]: Yes, book it for 4 people and 4 nights starting from tuesday.
+         service: hotel
+         intent: book_hotel
+         slots: {'hotel-area': ['south'], 'hotel-bookday': ['tuesday'], 'hotel-bookpeople': ['4'], 'hotel-bookstay': ['4'], 'hotel-internet': ['yes'], 'hotel-parking': ['yes']}
+         requested: []
+         dialog_act: {'Hotel-Inform': [['bookday', 'tuesday'], ['bookpeople', '4'], ['bookstay', '4']]}
+
+  Turn 7 [SYSTEM]: The booking was unsuccessful. would you like another day or a shorter stay?
+         dialog_act: {'Booking-NoBook': [['none', 'none']], 'Booking-Request': [['bookday', '?'], ['bookstay', '?']]}
+
+  Turn 8 [USER]: How about for 3 nights?
+         service: hotel
+         intent: book_hotel
+         slots: {'hotel-area': ['south'], 'hotel-bookday': ['tuesday'], 'hotel-bookpeople': ['4'], 'hotel-bookstay': ['3'], 'hotel-internet': ['yes'], 'hotel-name': ['aylesbray lodge guest house'], 'hotel-parking': ['yes']}
+         requested: []
+         dialog_act: {'Hotel-Inform': [['bookstay', '3']]}
+
+  Turn 9 [SYSTEM]: Booked! Reference number is: 84ESP6F5
+         dialog_act: {'Booking-Book': [['ref', '84ESP6F5']]}
+
+  Turn 10 [USER]: Great. I am all set then. Have a nice day. Bye.
+         dialog_act: {'general-bye': [['none', 'none']]}
+
+  Turn 11 [SYSTEM]: Have a nice stay. Bye.
+         dialog_act: {'general-bye': [['none', 'none']]}
+
+============================================================
+END OF CONVERSATION EXAMPLES
+============================================================
+
+============================================================
+DIALOGUE COUNTS of ['hotel', 'restaurant']
+============================================================
+
+[train] 8437 total → 2850 kept ['hotel', 'restaurant'] only (33.8%)
+[dev] 1000 total → 171 kept ['hotel', 'restaurant'] only (17.1%)
+[test] 1000 total → 186 kept ['hotel', 'restaurant'] only (18.6%)
+
+============================================================
+END OF DIALOGUE COUNTS
+============================================================
+
+============================================================
+SLOT VALUE DISTRIBUTION of ['hotel', 'restaurant'] of [train]
+============================================================
+
+hotel-area:
+  'north': 1083
+  'centre': 706
+  'east': 629
+  'dontcare': 484
+  'west': 481
+  'south': 361
+
+hotel-bookday:
+  'thursday': 446
+  'wednesday': 442
+  'saturday': 399
+  'friday': 374
+  'monday': 370
+  'sunday': 361
+  'tuesday': 320
+  'dontcare': 2
+
+hotel-bookpeople:
+  '1': 387
+  '6': 383
+  '3': 361
+  '2': 357
+  '5': 315
+  '4': 307
+  '7': 294
+  '8': 282
+
+hotel-bookstay:
+  '2': 678
+  '3': 631
+  '4': 624
+  '5': 605
+  '1': 155
+  '6': 14
+  '8': 2
+  '7': 1
+
+hotel-internet:
+  'yes': 2581
+  'dontcare': 200
+  'no': 47
+
+hotel-name:
+  'acorn guest house': 406
+  'alexander bed and breakfast': 212
+  'university arms hotel': 163
+  'gonville hotel': 161
+  'allenbell': 143
+  'cambridge belfry': 138
+  'autumn house': 136
+  'cityroomz': 115
+  'el shaddai': 113
+  'huntingdon marriott hotel': 110
+  'ashley hotel': 106
+  'express by holiday inn cambridge': 100
+  'hobsons house': 98
+  'avalon': 95
+  'el shaddia guesthouse': 95
+  'lensfield hotel': 91
+  'bridge guest house': 88
+  'hamilton lodge': 86
+  'warkworth house': 82
+  'worth house': 77
+  'rosas bed and breakfast': 76
+  "rosa's": 72
+  'lovell lodge': 70
+  'a and b guest house': 69
+  'finches bed and breakfast': 67
+  'aylesbray lodge guest house': 63
+  'arbury lodge guesthouse': 57
+  'city centre north b and b': 56
+  'archway house': 54
+  'alpha-milton guest house': 53
+  'carolina bed and breakfast': 53
+  'acorn guesthouse': 51
+  'leverton house': 51
+  'limehouse': 47
+  'kirkwood house': 44
+  'home from home': 35
+  'university arms': 33
+  'gonville': 26
+  "hobson's house": 21
+  'huntingdon marriott': 17
+  'the cambridge belfry': 17
+  'acorn': 16
+  'dontcare': 14
+  'lodge guest house': 13
+  'lensfield': 12
+  'arbury lodge': 11
+  'alexander bed & breakfast': 11
+  'alexander': 11
+  'the lensfield hotel': 11
+  'alpha milton guest house': 10
+  'finches': 10
+  'leverton guesthouse': 10
+  'express by holiday inn in cambridge': 10
+  'huntington marriott hotel': 9
+  'express by holiday inn': 8
+  'huntingdon marriot': 8
+  'hobson house': 8
+  'acorn house': 8
+  'a and b quest house': 7
+  'express by holiday inn cambridge,will': 6
+  "rosa's bed and breakfast": 6
+  'belfry': 6
+  'alexander b&b': 6
+  'allen bell': 6
+  'kirkwood guesthouse': 6
+  'el shaddai guesthouse': 6
+  'ashely hotel': 5
+  'university of arms': 5
+  'aylesbray lodge': 5
+  'a and b guesthouse': 5
+  'cambridge belgry': 5
+  'huntingdon marriot hotel': 4
+  'goonville hotel': 4
+  'eraina': 4
+  'guest houses': 4
+  'ashley': 4
+  'city centre b and b': 4
+  'bridge guesthouse': 4
+  'holiday inn cambridge': 4
+  "rosas's bed and breakfast": 3
+  'cote': 3
+  "rosa's b&b": 3
+  'lensdield hotel': 3
+  'alexander bed and breakfastin': 3
+  'alexeander b&b': 3
+  'city centre north b & b': 3
+  'alpha milton guesthouse': 3
+  'huntington marriott': 3
+  'yes': 3
+  'alpha-milton guest': 3
+  'kirkwood': 3
+  "rose's bed and breakfast": 2
+  'b guesthouse': 2
+  'alpha-milton guesthouse': 2
+  'warkworth': 2
+  'marriott hotel': 2
+  'marriot hotel': 2
+  'city centre north b and b.reference': 1
+  'the marriott': 1
+  'the huntingdon marriott hotel': 1
+  'the alexander bed and breakfast': 1
+  'lodge guesthouse': 1
+  'city centre north b&b': 1
+  'lovell': 1
+  'bridge house': 1
+  'holiday inn': 1
+  'citiroomz': 1
+
+hotel-parking:
+  'yes': 2483
+  'dontcare': 271
+  'no': 150
+
+hotel-pricerange:
+  'moderate': 1439
+  'cheap': 1035
+  'expensive': 637
+  'dontcare': 296
+
+hotel-stars:
+  '4': 1916
+  '3': 546
+  '0': 259
+  '2': 187
+  'dontcare': 109
+  '5': 30
+  '1': 21
+
+hotel-type:
+  'guesthouse': 1968
+  'hotel': 1451
+  'dontcare': 130
+
+restaurant-area:
+  'centre': 2372
+  'south': 902
+  'east': 758
+  'west': 753
+  'north': 743
+  'dontcare': 451
+
+restaurant-bookday:
+  'sunday': 441
+  'wednesday': 418
+  'saturday': 412
+  'friday': 368
+  'monday': 359
+  'tuesday': 347
+  'thursday': 347
+
+restaurant-bookpeople:
+  '6': 386
+  '5': 373
+  '3': 338
+  '4': 338
+  '1': 328
+  '8': 325
+  '7': 315
+  '2': 302
+
+restaurant-booktime:
+  '13:45': 108
+  '12:30': 99
+  '18:15': 98
+  '11:00': 97
+  '17:30': 97
+  '19:00': 94
+  '12:00': 92
+  '16:00': 92
+  '17:15': 89
+  '12:15': 86
+  '13:00': 84
+  '17:00': 84
+  '16:45': 83
+  '13:30': 83
+  '11:15': 77
+  '14:00': 76
+  '16:15': 75
+  '19:30': 72
+  '11:45': 71
+  '17:45': 70
+  '11:30': 68
+  '18:00': 68
+  '16:30': 65
+  '13:15': 64
+  '15:00': 62
+  '15:15': 61
+  '15:30': 57
+  '19:45': 57
+  '12:45': 54
+  '15:45': 52
+  '14:30': 52
+  '14:45': 50
+  '19:15': 50
+  '14:15': 46
+  '20:00': 43
+  '18:45': 38
+  '18:30': 32
+  '1330': 10
+  '5pm': 7
+  '5:45 pm': 6
+  '1:45': 5
+  '10:15': 4
+  '10:30': 4
+  '1pm': 3
+  '4:30': 3
+  '12': 3
+  '7:15 pm': 3
+  '7:45': 3
+  '1145': 3
+  '6:15': 3
+  '1815': 3
+  '3:15': 3
+  'at noontime': 2
+  '1200hrs': 2
+  '6pm': 2
+  '1600hrs': 2
+  '1700hrs': 2
+  '10:45': 2
+  '1400': 2
+  '10': 2
+  '10:00': 2
+  '6:45pm': 2
+  'an hour earlier or an hour later': 1
+  'one hour earlier': 1
+  'an hour earlier': 1
+  '3:45 in the afternoon': 1
+  'an hour later': 1
+  '6:00pm': 1
+  '6:30': 1
+  '06:30': 1
+
+restaurant-food:
+  'indian': 920
+  'chinese': 845
+  'italian': 699
+  'british': 450
+  'dontcare': 432
+  'european': 296
+  'asian oriental': 232
+  'international': 195
+  'modern european': 189
+  'turkish': 164
+  'portuguese': 150
+  'gastropub': 144
+  'mediterranean': 124
+  'french': 119
+  'spanish': 114
+  'thai': 113
+  'mexican': 96
+  'vietnamese': 90
+  'korean': 85
+  'japanese': 76
+  'lebanese': 66
+  'north american': 61
+  'african': 44
+  'asian': 29
+  'australian': 21
+  'seafood': 17
+  'corsica': 16
+  'danish': 16
+  'austrian': 15
+  'venetian': 14
+  'irish': 14
+  'malaysian': 14
+  'american': 14
+  'jamaican': 13
+  'kosher': 13
+  'swedish': 13
+  'scottish': 13
+  'vegetarian': 12
+  'cuban': 12
+  'cantonese': 12
+  'caribbean': 11
+  'persian': 11
+  'moroccan': 11
+  'indonesian': 11
+  'russian': 11
+  'english': 10
+  'barbeque': 10
+  'christmas': 10
+  'afghan': 10
+  'modern american': 10
+  'south indian': 10
+  'swiss': 9
+  'hungarian': 9
+  'brazilian': 9
+  'unusual': 9
+  'greek': 9
+  'catalan': 9
+  'americas': 9
+  'fusion': 8
+  'creative': 8
+  'sri lankan': 8
+  'german': 8
+  'welsh': 8
+  'crossover': 8
+  'australasian': 8
+  'basque': 8
+  'north indian': 8
+  'astropub': 8
+  'tuscan': 8
+  'chines': 8
+  'world': 7
+  'panasian': 7
+  'eritrean': 7
+  'traditional': 7
+  'bistro': 6
+  'scandinavian': 6
+  'belgian': 5
+  'canapes': 5
+  'steakhouse': 5
+  'light bites': 5
+  'polish': 5
+  'portugese': 5
+  'polynesian': 4
+  'middle eastern': 4
+  'molecular gastronomy': 4
+  'north african': 4
+  'halal': 4
+  'modern eclectic': 3
+  'the americas': 3
+  'south african': 3
+  'singaporean': 3
+  'romanian': 2
+  'global': 2
+  'modern global': 2
+  'afternoon tea': 2
+  'oriental': 2
+  'latin american': 2
+  'gastropod': 1
+  'new zealand': 1
+  'barbecue': 1
+  'traditional american': 1
+  'sushi': 1
+  'morrocan': 1
+  'bbq': 1
+  'thai and chinese': 1
+  'singapore': 1
+  'portugeuese': 1
+  'eastern european': 1
+
+restaurant-name:
+  'curry prince': 125
+  'nandos': 91
+  'da vinci pizzeria': 89
+  'royal spice': 86
+  'golden wok': 76
+  'yu garden': 72
+  'the missing sock': 72
+  'chiquito restaurant bar': 69
+  'curry garden': 68
+  'thanh binh': 68
+  'yippee noodle bar': 67
+  'dojo noodle bar': 67
+  'bedouin': 66
+  'tandoori palace': 61
+  'frankie and bennys': 61
+  'grafton hotel restaurant': 61
+  'nirala': 60
+  'bloomsbury restaurant': 59
+  'little seoul': 58
+  'meghna': 57
+  'la margherita': 57
+  'the lucky star': 56
+  'charlie chan': 56
+  'anatolia': 56
+  'graffiti': 52
+  'kymmoy': 51
+  'cambridge lodge restaurant': 50
+  'saigon city': 49
+  'peking restaurant': 48
+  'restaurant one seven': 46
+  'kohinoor': 45
+  'eraina': 44
+  'dontcare': 43
+  'ali baba': 41
+  'pizza hut fenditton': 41
+  'prezzo': 40
+  'city stop restaurant': 39
+  'pizza hut cherry': 38
+  'bangkok city': 38
+  'fitzbillies restaurant': 38
+  'pizza hut cherry hilton': 37
+  'gourmet burger kitchen': 37
+  'stazione restaurant and coffee bar': 37
+  'cocum': 37
+  'restaurant two two': 37
+  'the gardenia': 37
+  'hakka': 37
+  'saint johns chop house': 36
+  'golden curry': 36
+  'sala thong': 35
+  'cote': 35
+  'royal standard': 35
+  'rice boat': 35
+  'pizza hut fen ditton': 34
+  'the varsity restaurant': 33
+  'j restaurant': 33
+  'la tasca': 32
+  'lan hong house': 32
+  'rajmahal': 31
+  'saffron brasserie': 31
+  'wagamama': 30
+  'zizzi cambridge': 29
+  'taj tandoori': 29
+  'restaurant alimentum': 29
+  'la raza': 28
+  'travellers rest': 27
+  'backstreet bistro': 27
+  'maharajah tandoori restaurant': 27
+  'darrys cookhouse and wine shop': 27
+  'jinling noodle bar': 27
+  'cotto': 26
+  'pizza hut city centre': 26
+  'the hotpot': 26
+  'hotel du vin and bistro': 26
+  'hk fusion': 26
+  'galleria': 24
+  'ask': 23
+  'the oak bistro': 23
+  'cafe uno': 23
+  'ugly duckling': 23
+  'cambridge chop house': 23
+  'rice house': 23
+  'india house': 22
+  'de luca cucina and bar': 22
+  'riverside brasserie': 21
+  'michaelhouse cafe': 21
+  'cow pizza kitchen and bar': 21
+  'tang chinese': 21
+  'shiraz': 20
+  'the river bar steakhouse and grill': 20
+  'panahar': 19
+  'good luck': 18
+  'alimentum': 18
+  'la mimosa': 17
+  'golden house': 17
+  'the cow pizza kitchen and bar': 16
+  'ian hong house': 16
+  'pizza hut': 15
+  'don pasquale pizzeria': 15
+  'nandos city centre': 15
+  'the slug and lettuce': 15
+  'sesame restaurant and bar': 15
+  'chiquito': 14
+  'lucky star': 14
+  'midsummer house restaurant': 14
+  'pipasha restaurant': 14
+  'loch fyne': 13
+  'fitzbillies': 13
+  'caffe uno': 12
+  'mahal of cambridge': 11
+  'shanghai family restaurant': 11
+  'the good luck chinese food takeaway': 11
+  'oak bistro': 11
+  'copper kettle': 10
+  'pizza express fen ditton': 10
+  'the gandhi': 9
+  'curry': 9
+  'efes restaurant': 9
+  'missing sock': 8
+  'cow pizza kitchen': 8
+  'grafton hotel': 8
+  'gardenia': 8
+  'curry queen': 8
+  'the hotspot': 8
+  'yippee': 7
+  'binh': 7
+  'clowns cafe': 7
+  "'the good luck chinese food takeaway'": 7
+  'sitar tandoori': 7
+  'dojo noodle': 7
+  'good': 6
+  'tandoori': 6
+  'meghana': 6
+  'de luca cicina and bar': 6
+  'nados': 5
+  'pasquale pizzeria': 5
+  'the golden curry': 5
+  'pizza express': 5
+  'curry king': 5
+  'fen ditton': 5
+  'bloomsbury': 5
+  "frankie and benny's": 5
+  'meze bar restaurant': 5
+  'sitar': 4
+  'meze bar': 4
+  'the copper kettle': 4
+  'cambridge chop': 4
+  'zizzi': 4
+  'shiraz restaurant': 4
+  'pizza hut cherry hinton': 4
+  'pizza': 4
+  'efes': 4
+  'brasserie': 3
+  'michael house cafe': 3
+  'one seven': 3
+  'one': 3
+  "anatolia's": 3
+  'river bar steakhouse and grill': 3
+  'da vince pizzeria': 3
+  "la raza's": 3
+  'addenbrookes': 3
+  'adden': 3
+  'hakka,can': 3
+  'the ghandi': 3
+  'shanghai': 3
+  "frankie & benny's": 3
+  'restaurant called two two': 3
+  'ask."': 2
+  'peking': 2
+  'stazione resaurant and coffee bar': 2
+  "loch fyne's": 2
+  'caffe': 2
+  'two two': 2
+  'slug and lettuce': 2
+  'erania': 2
+  'pizza hut city': 2
+  'wagamana': 2
+  "restaurant alimentum's": 2
+  'antolia': 2
+  'wise buddha': 2
+  "yu garden's": 2
+  'maharajah tandoori': 2
+  "curry prince's": 2
+  'chinese': 2
+  'the cambridge chop house': 1
+  "riverside brasserie's": 1
+  'the peking restaurant': 1
+  'indiana restaurants': 1
+  'pizza hut in cherry': 1
+  'bistro': 1
+  'chiquito restaurant': 1
+
+restaurant-pricerange:
+  'expensive': 2202
+  'moderate': 1877
+  'cheap': 1429
+  'dontcare': 402
+
+============================================================
+END OF SLOT VALUE DISTRIBUTION
+============================================================

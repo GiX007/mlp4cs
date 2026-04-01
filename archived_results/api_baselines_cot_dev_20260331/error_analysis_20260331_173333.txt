@@ -1,0 +1,1827 @@
+
+============================================================
+MLP4CS ERROR ANALYSIS
+============================================================
+Loaded 858 turns from exp1_gpt_dev_20260331_191842_turns.json
+Loaded 858 turns from exp1_haiku_dev_20260331_231828_turns.json
+Loaded 858 turns from exp2_hetero_gpt_haiku_dev_20260401_014142_turns.json
+Loaded 858 turns from exp2_hetero_haiku_gpt_dev_20260401_022442_turns.json
+Loaded 858 turns from exp2_homo_gpt_dev_20260401_001718_turns.json
+Loaded 858 turns from exp2_homo_haiku_dev_20260401_005845_turns.json
+
+============================================================
+SUMMARY TABLE
+============================================================
+| Experiment            |   Turns |   DomainP% |   IntentP% |   Action% |   JGA% |   SlotF1% |   Hall% |   PolViol% |   SysCorr% |
+|-----------------------|---------|------------|------------|-----------|--------|-----------|---------|------------|------------|
+| exp1_gpt              |     858 |       99.1 |       89   |      78.5 |   23.2 |      67.9 |     4.8 |        0.9 |       95.8 |
+| exp1_haiku            |     858 |       98.5 |       91.7 |      80.4 |   37.5 |      84   |     5.7 |        1.6 |       93.6 |
+| exp2_hetero_gpt_haiku |     858 |       98.8 |       90.2 |      80.5 |   34   |      78.6 |     2.1 |        2.7 |       96.4 |
+| exp2_hetero_haiku_gpt |     858 |       97.9 |       87.2 |      79.3 |   30.4 |      76   |     3.8 |        1.6 |       96.2 |
+| exp2_homo_gpt         |     858 |       98.9 |       91.7 |      82   |   32.4 |      78   |     2.7 |        2.6 |       95.7 |
+| exp2_homo_haiku       |     858 |       98   |       88.1 |      80.4 |   30.8 |      77   |     4.6 |        2   |       95.6 |
+
+============================================================
+FAILURE: JGA failure
+============================================================
+
+  [exp1_gpt]: 659 failures
+
+  Example 1:
+  Dialogue: MUL1271.json
+  User utterance: No particular type of food but I need it in the moderate price range.
+  LLM Response: I found a restaurant for you in the north: the nirala, located at 7 Milton Road Chesterton, postcode cb41uy. You can contact them at 01223360966.
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate'}
+  Violations: []
+  JGA: False | SlotF1: 0.80 | Hall: False | Valid: True
+
+  Example 2:
+  Dialogue: MUL1271.json
+  User utterance: That sounds great. Can you book me a table for 3 on Friday at 18:30?
+  LLM Response: Your table for 3 at the nirala, located at 7 Milton Road Chesterton, postcode cb41uy has been booked for Friday at 18:30. Your booking reference is [r
+  GT domains: ['restaurant', 'hotel'] | GT intents: ['book_restaurant', 'find_hotel']
+  Pred domain: restaurant | Pred intent: book_restaurant
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'restaurant-name': 'golden wok'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30'}
+  Violations: []
+  JGA: False | SlotF1: 0.83 | Hall: False | Valid: True
+
+  Example 3:
+  Dialogue: MUL1271.json
+  User utterance: Yes, I'm looking for a hotel called the Lovell Lodge.
+  LLM Response: I found a hotel for you: lovell lodge, located at 365 milton road, postcode cb41sr. You can contact them at 01223425478.
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'restaurant-name': 'golden wok', 'hotel-name': 'lovell lodge'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'hotel-name': 'lovell lodge'}
+  Violations: []
+  JGA: False | SlotF1: 0.86 | Hall: False | Valid: True
+
+  [exp1_haiku]: 536 failures
+
+  Example 1:
+  Dialogue: MUL1271.json
+  User utterance: No particular type of food but I need it in the moderate price range.
+  LLM Response: Okay, let me look for a restaurant in the north area that is in the moderate price range. One option is the nirala, located at 7 Milton Road Chesterto
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate'}
+  Violations: []
+  JGA: False | SlotF1: 0.80 | Hall: False | Valid: True
+
+  Example 2:
+  Dialogue: MUL1271.json
+  User utterance: That sounds great. Can you book me a table for 3 on Friday at 18:30?
+  LLM Response: Okay, I've booked a table for 3 at the nirala on Friday at 18:30. Your reference number is [ref].
+  GT domains: ['restaurant', 'hotel'] | GT intents: ['book_restaurant', 'find_hotel']
+  Pred domain: restaurant | Pred intent: book_restaurant
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'restaurant-name': 'golden wok'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate', 'restaurant-name': 'the nirala', 'restaurant-bookday': 'friday', 'restaurant-booktime': '18:30', 'restaurant-bookpeople': '3'}
+  Violations: []
+  JGA: False | SlotF1: 0.77 | Hall: False | Valid: True
+
+  Example 3:
+  Dialogue: MUL1271.json
+  User utterance: Yes, I'm looking for a hotel called the Lovell Lodge.
+  LLM Response: Okay, let me look for the Lovell Lodge hotel. The Lovell Lodge is located at 365 Milton Road, cb41sr. It is a hotel in the north area that is in the m
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'restaurant-name': 'golden wok', 'hotel-name': 'lovell lodge'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate', 'restaurant-name': 'the nirala', 'restaurant-bookday': 'friday', 'restaurant-booktime': '18:30', 'restaurant-bookpeople': '3', 'hotel-name': 'lovell lodge'}
+  Violations: []
+  JGA: False | SlotF1: 0.80 | Hall: False | Valid: True
+
+  [exp2_hetero_gpt_haiku]: 566 failures
+
+  Example 1:
+  Dialogue: MUL1271.json
+  User utterance: That sounds great. Can you book me a table for 3 on Friday at 18:30?
+  LLM Response: I'd be happy to book a table for you at the nirala. Let me confirm the details:
+- Party size: 3 people
+- Date: Friday
+- Time: 18:30
+I've booked a tabl
+  GT domains: ['restaurant', 'hotel'] | GT intents: ['book_restaurant', 'find_hotel']
+  Pred domain: restaurant | Pred intent: book_restaurant
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'restaurant-name': 'golden wok'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate', 'restaurant-food': 'dontcare', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30'}
+  Violations: []
+  JGA: False | SlotF1: 0.92 | Hall: False | Valid: True
+
+  Example 2:
+  Dialogue: MUL1271.json
+  User utterance: Yes, I'm looking for a hotel called the Lovell Lodge.
+  LLM Response: I have found a hotel that matches your request - the lovell lodge. It is located at 365 milton road, cb41sr, and their phone number is 01223425478. Wo
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'restaurant-name': 'golden wok', 'hotel-name': 'lovell lodge'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate', 'restaurant-food': 'dontcare', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'hotel-name': 'lovell lodge'}
+  Violations: []
+  JGA: False | SlotF1: 0.93 | Hall: False | Valid: True
+
+  Example 3:
+  Dialogue: MUL1271.json
+  User utterance: Yes! I'd like to book it for the same group of people and 5 nights starting from the same day.
+  LLM Response: Okay, I'd be happy to book the lovell lodge for you. The booking details are:
+- Party size: 3 people
+- Check-in date: Friday
+- Length of stay: 5 night
+  GT domains: ['hotel'] | GT intents: ['book_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'restaurant-name': 'golden wok', 'hotel-name': 'lovell lodge', 'hotel-bookday': 'friday', 'hotel-bookpeople': '3', 'hotel-bookstay': '5'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate', 'restaurant-food': 'dontcare', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'hotel-name': 'lovell lodge', 'hotel-bookpeople': '3', 'hotel-bookday': 'friday', 'hotel-bookstay': '5'}
+  Violations: []
+  JGA: False | SlotF1: 0.95 | Hall: False | Valid: True
+
+  [exp2_hetero_haiku_gpt]: 597 failures
+
+  Example 1:
+  Dialogue: MUL1271.json
+  User utterance: That sounds great. Can you book me a table for 3 on Friday at 18:30?
+  LLM Response: Your table for 3 at the nirala has been successfully booked for Friday at 18:30. Your booking reference is [ref]. If you have any questions, feel free
+  GT domains: ['restaurant', 'hotel'] | GT intents: ['book_restaurant', 'find_hotel']
+  Pred domain: restaurant | Pred intent: book_restaurant
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'restaurant-name': 'golden wok'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate', 'restaurant-food': 'dontcare', 'restaurant-bookday': 'friday', 'restaurant-booktime': '18:30', 'restaurant-bookpeople': '3'}
+  Violations: []
+  JGA: False | SlotF1: 0.92 | Hall: False | Valid: True
+
+  Example 2:
+  Dialogue: MUL1271.json
+  User utterance: Yes, I'm looking for a hotel called the Lovell Lodge.
+  LLM Response: I found a hotel for you called lovell lodge, located in the north and in the moderate price range. You can reach them at 01223425478 or visit them at 
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'restaurant-name': 'golden wok', 'hotel-name': 'lovell lodge'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate', 'restaurant-food': 'dontcare', 'restaurant-bookday': 'friday', 'restaurant-booktime': '18:30', 'restaurant-bookpeople': '3', 'hotel-name': 'lovell lodge'}
+  Violations: []
+  JGA: False | SlotF1: 0.93 | Hall: False | Valid: True
+
+  Example 3:
+  Dialogue: MUL1271.json
+  User utterance: Yes! I'd like to book it for the same group of people and 5 nights starting from the same day.
+  LLM Response: Your room at lovell lodge has been successfully booked for 5 nights starting from Friday for 3 people. Your booking reference is [ref]. If you have an
+  GT domains: ['hotel'] | GT intents: ['book_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'restaurant-name': 'golden wok', 'hotel-name': 'lovell lodge', 'hotel-bookday': 'friday', 'hotel-bookpeople': '3', 'hotel-bookstay': '5'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate', 'restaurant-food': 'dontcare', 'restaurant-bookday': 'friday', 'restaurant-booktime': '18:30', 'restaurant-bookpeople': '3', 'hotel-name': 'lovell lodge', 'hotel-area': 'north', 'hotel-pricerange': 'moderate', 'hotel-bookday': 'friday', 'hotel-bookpeople': '3', 'hotel-bookstay': '5'}
+  Violations: []
+  JGA: False | SlotF1: 0.87 | Hall: False | Valid: True
+
+  [exp2_homo_gpt]: 580 failures
+
+  Example 1:
+  Dialogue: MUL1271.json
+  User utterance: No particular type of food but I need it in the moderate price range.
+  LLM Response: I found a great option for you! You can try pizza hut cherry hinton, which serves Italian food and is in the moderate price range. It's located at G4 
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate'}
+  Pred slots: {'restaurant-area': 'dontcare', 'restaurant-pricerange': 'moderate'}
+  Violations: []
+  JGA: False | SlotF1: 0.40 | Hall: False | Valid: True
+
+  Example 2:
+  Dialogue: MUL1271.json
+  User utterance: That sounds great. Can you book me a table for 3 on Friday at 18:30?
+  LLM Response: I can book a table for you at pizza hut cherry hinton for 3 people on Friday at 18:30. Your booking reference is [ref]. If you need to make any change
+  GT domains: ['restaurant', 'hotel'] | GT intents: ['book_restaurant', 'find_hotel']
+  Pred domain: restaurant | Pred intent: book_restaurant
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'restaurant-name': 'golden wok'}
+  Pred slots: {'restaurant-area': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30'}
+  Violations: []
+  JGA: False | SlotF1: 0.67 | Hall: False | Valid: True
+
+  Example 3:
+  Dialogue: MUL1271.json
+  User utterance: Yes, I'm looking for a hotel called the Lovell Lodge.
+  LLM Response: I found a hotel for you! You can stay at lovell lodge, which is located in the north and falls within the moderate price range. You can reach them at 
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'restaurant-name': 'golden wok', 'hotel-name': 'lovell lodge'}
+  Pred slots: {'restaurant-area': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'hotel-name': 'the lovell lodge'}
+  Violations: []
+  JGA: False | SlotF1: 0.57 | Hall: False | Valid: True
+
+  [exp2_homo_haiku]: 594 failures
+
+  Example 1:
+  Dialogue: MUL1271.json
+  User utterance: No particular type of food but I need it in the moderate price range.
+  LLM Response: Based on your request for a restaurant in the north area with a moderate price range, I would recommend the nirala. They are located at 7 Milton Road 
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate'}
+  Violations: []
+  JGA: False | SlotF1: 0.80 | Hall: False | Valid: True
+
+  Example 2:
+  Dialogue: MUL1271.json
+  User utterance: That sounds great. Can you book me a table for 3 on Friday at 18:30?
+  LLM Response: I'd be happy to book a table for you at the nirala. I've made a reservation for 3 people on Friday at 18:30. Your reference number is [ref]. Please le
+  GT domains: ['restaurant', 'hotel'] | GT intents: ['book_restaurant', 'find_hotel']
+  Pred domain: restaurant | Pred intent: book_restaurant
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'restaurant-name': 'golden wok'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-booktime': '18:30', 'restaurant-bookpeople': '3'}
+  Violations: []
+  JGA: False | SlotF1: 0.83 | Hall: False | Valid: True
+
+  Example 3:
+  Dialogue: MUL1271.json
+  User utterance: Yes, I'm looking for a hotel called the Lovell Lodge.
+  LLM Response: I'd be happy to help you find a hotel. Based on the information provided, I can recommend lovell lodge. It is located at 365 milton road, cb41sr, and 
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'restaurant-name': 'golden wok', 'hotel-name': 'lovell lodge'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-booktime': '18:30', 'restaurant-bookpeople': '3', 'hotel-name': 'lovell lodge'}
+  Violations: []
+  JGA: False | SlotF1: 0.86 | Hall: False | Valid: True
+
+============================================================
+FAILURE: Slot error
+============================================================
+
+  [exp1_gpt]: 664 failures
+
+  Example 1:
+  Dialogue: MUL1271.json
+  User utterance: No particular type of food but I need it in the moderate price range.
+  LLM Response: I found a restaurant for you in the north: the nirala, located at 7 Milton Road Chesterton, postcode cb41uy. You can contact them at 01223360966.
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate'}
+  Violations: []
+  JGA: False | SlotF1: 0.80 | Hall: False | Valid: True
+
+  Example 2:
+  Dialogue: MUL1271.json
+  User utterance: That sounds great. Can you book me a table for 3 on Friday at 18:30?
+  LLM Response: Your table for 3 at the nirala, located at 7 Milton Road Chesterton, postcode cb41uy has been booked for Friday at 18:30. Your booking reference is [r
+  GT domains: ['restaurant', 'hotel'] | GT intents: ['book_restaurant', 'find_hotel']
+  Pred domain: restaurant | Pred intent: book_restaurant
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'restaurant-name': 'golden wok'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30'}
+  Violations: []
+  JGA: False | SlotF1: 0.83 | Hall: False | Valid: True
+
+  Example 3:
+  Dialogue: MUL1271.json
+  User utterance: Yes, I'm looking for a hotel called the Lovell Lodge.
+  LLM Response: I found a hotel for you: lovell lodge, located at 365 milton road, postcode cb41sr. You can contact them at 01223425478.
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'restaurant-name': 'golden wok', 'hotel-name': 'lovell lodge'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'hotel-name': 'lovell lodge'}
+  Violations: []
+  JGA: False | SlotF1: 0.86 | Hall: False | Valid: True
+
+  [exp1_haiku]: 543 failures
+
+  Example 1:
+  Dialogue: MUL1271.json
+  User utterance: No particular type of food but I need it in the moderate price range.
+  LLM Response: Okay, let me look for a restaurant in the north area that is in the moderate price range. One option is the nirala, located at 7 Milton Road Chesterto
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate'}
+  Violations: []
+  JGA: False | SlotF1: 0.80 | Hall: False | Valid: True
+
+  Example 2:
+  Dialogue: MUL1271.json
+  User utterance: That sounds great. Can you book me a table for 3 on Friday at 18:30?
+  LLM Response: Okay, I've booked a table for 3 at the nirala on Friday at 18:30. Your reference number is [ref].
+  GT domains: ['restaurant', 'hotel'] | GT intents: ['book_restaurant', 'find_hotel']
+  Pred domain: restaurant | Pred intent: book_restaurant
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'restaurant-name': 'golden wok'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate', 'restaurant-name': 'the nirala', 'restaurant-bookday': 'friday', 'restaurant-booktime': '18:30', 'restaurant-bookpeople': '3'}
+  Violations: []
+  JGA: False | SlotF1: 0.77 | Hall: False | Valid: True
+
+  Example 3:
+  Dialogue: MUL1271.json
+  User utterance: Yes, I'm looking for a hotel called the Lovell Lodge.
+  LLM Response: Okay, let me look for the Lovell Lodge hotel. The Lovell Lodge is located at 365 Milton Road, cb41sr. It is a hotel in the north area that is in the m
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'restaurant-name': 'golden wok', 'hotel-name': 'lovell lodge'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate', 'restaurant-name': 'the nirala', 'restaurant-bookday': 'friday', 'restaurant-booktime': '18:30', 'restaurant-bookpeople': '3', 'hotel-name': 'lovell lodge'}
+  Violations: []
+  JGA: False | SlotF1: 0.80 | Hall: False | Valid: True
+
+  [exp2_hetero_gpt_haiku]: 571 failures
+
+  Example 1:
+  Dialogue: MUL1271.json
+  User utterance: That sounds great. Can you book me a table for 3 on Friday at 18:30?
+  LLM Response: I'd be happy to book a table for you at the nirala. Let me confirm the details:
+- Party size: 3 people
+- Date: Friday
+- Time: 18:30
+I've booked a tabl
+  GT domains: ['restaurant', 'hotel'] | GT intents: ['book_restaurant', 'find_hotel']
+  Pred domain: restaurant | Pred intent: book_restaurant
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'restaurant-name': 'golden wok'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate', 'restaurant-food': 'dontcare', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30'}
+  Violations: []
+  JGA: False | SlotF1: 0.92 | Hall: False | Valid: True
+
+  Example 2:
+  Dialogue: MUL1271.json
+  User utterance: Yes, I'm looking for a hotel called the Lovell Lodge.
+  LLM Response: I have found a hotel that matches your request - the lovell lodge. It is located at 365 milton road, cb41sr, and their phone number is 01223425478. Wo
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'restaurant-name': 'golden wok', 'hotel-name': 'lovell lodge'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate', 'restaurant-food': 'dontcare', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'hotel-name': 'lovell lodge'}
+  Violations: []
+  JGA: False | SlotF1: 0.93 | Hall: False | Valid: True
+
+  Example 3:
+  Dialogue: MUL1271.json
+  User utterance: Yes! I'd like to book it for the same group of people and 5 nights starting from the same day.
+  LLM Response: Okay, I'd be happy to book the lovell lodge for you. The booking details are:
+- Party size: 3 people
+- Check-in date: Friday
+- Length of stay: 5 night
+  GT domains: ['hotel'] | GT intents: ['book_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'restaurant-name': 'golden wok', 'hotel-name': 'lovell lodge', 'hotel-bookday': 'friday', 'hotel-bookpeople': '3', 'hotel-bookstay': '5'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate', 'restaurant-food': 'dontcare', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'hotel-name': 'lovell lodge', 'hotel-bookpeople': '3', 'hotel-bookday': 'friday', 'hotel-bookstay': '5'}
+  Violations: []
+  JGA: False | SlotF1: 0.95 | Hall: False | Valid: True
+
+  [exp2_hetero_haiku_gpt]: 601 failures
+
+  Example 1:
+  Dialogue: MUL1271.json
+  User utterance: That sounds great. Can you book me a table for 3 on Friday at 18:30?
+  LLM Response: Your table for 3 at the nirala has been successfully booked for Friday at 18:30. Your booking reference is [ref]. If you have any questions, feel free
+  GT domains: ['restaurant', 'hotel'] | GT intents: ['book_restaurant', 'find_hotel']
+  Pred domain: restaurant | Pred intent: book_restaurant
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'restaurant-name': 'golden wok'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate', 'restaurant-food': 'dontcare', 'restaurant-bookday': 'friday', 'restaurant-booktime': '18:30', 'restaurant-bookpeople': '3'}
+  Violations: []
+  JGA: False | SlotF1: 0.92 | Hall: False | Valid: True
+
+  Example 2:
+  Dialogue: MUL1271.json
+  User utterance: Yes, I'm looking for a hotel called the Lovell Lodge.
+  LLM Response: I found a hotel for you called lovell lodge, located in the north and in the moderate price range. You can reach them at 01223425478 or visit them at 
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'restaurant-name': 'golden wok', 'hotel-name': 'lovell lodge'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate', 'restaurant-food': 'dontcare', 'restaurant-bookday': 'friday', 'restaurant-booktime': '18:30', 'restaurant-bookpeople': '3', 'hotel-name': 'lovell lodge'}
+  Violations: []
+  JGA: False | SlotF1: 0.93 | Hall: False | Valid: True
+
+  Example 3:
+  Dialogue: MUL1271.json
+  User utterance: Yes! I'd like to book it for the same group of people and 5 nights starting from the same day.
+  LLM Response: Your room at lovell lodge has been successfully booked for 5 nights starting from Friday for 3 people. Your booking reference is [ref]. If you have an
+  GT domains: ['hotel'] | GT intents: ['book_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'restaurant-name': 'golden wok', 'hotel-name': 'lovell lodge', 'hotel-bookday': 'friday', 'hotel-bookpeople': '3', 'hotel-bookstay': '5'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate', 'restaurant-food': 'dontcare', 'restaurant-bookday': 'friday', 'restaurant-booktime': '18:30', 'restaurant-bookpeople': '3', 'hotel-name': 'lovell lodge', 'hotel-area': 'north', 'hotel-pricerange': 'moderate', 'hotel-bookday': 'friday', 'hotel-bookpeople': '3', 'hotel-bookstay': '5'}
+  Violations: []
+  JGA: False | SlotF1: 0.87 | Hall: False | Valid: True
+
+  [exp2_homo_gpt]: 585 failures
+
+  Example 1:
+  Dialogue: MUL1271.json
+  User utterance: No particular type of food but I need it in the moderate price range.
+  LLM Response: I found a great option for you! You can try pizza hut cherry hinton, which serves Italian food and is in the moderate price range. It's located at G4 
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate'}
+  Pred slots: {'restaurant-area': 'dontcare', 'restaurant-pricerange': 'moderate'}
+  Violations: []
+  JGA: False | SlotF1: 0.40 | Hall: False | Valid: True
+
+  Example 2:
+  Dialogue: MUL1271.json
+  User utterance: That sounds great. Can you book me a table for 3 on Friday at 18:30?
+  LLM Response: I can book a table for you at pizza hut cherry hinton for 3 people on Friday at 18:30. Your booking reference is [ref]. If you need to make any change
+  GT domains: ['restaurant', 'hotel'] | GT intents: ['book_restaurant', 'find_hotel']
+  Pred domain: restaurant | Pred intent: book_restaurant
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'restaurant-name': 'golden wok'}
+  Pred slots: {'restaurant-area': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30'}
+  Violations: []
+  JGA: False | SlotF1: 0.67 | Hall: False | Valid: True
+
+  Example 3:
+  Dialogue: MUL1271.json
+  User utterance: Yes, I'm looking for a hotel called the Lovell Lodge.
+  LLM Response: I found a hotel for you! You can stay at lovell lodge, which is located in the north and falls within the moderate price range. You can reach them at 
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'restaurant-name': 'golden wok', 'hotel-name': 'lovell lodge'}
+  Pred slots: {'restaurant-area': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'hotel-name': 'the lovell lodge'}
+  Violations: []
+  JGA: False | SlotF1: 0.57 | Hall: False | Valid: True
+
+  [exp2_homo_haiku]: 598 failures
+
+  Example 1:
+  Dialogue: MUL1271.json
+  User utterance: No particular type of food but I need it in the moderate price range.
+  LLM Response: Based on your request for a restaurant in the north area with a moderate price range, I would recommend the nirala. They are located at 7 Milton Road 
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate'}
+  Violations: []
+  JGA: False | SlotF1: 0.80 | Hall: False | Valid: True
+
+  Example 2:
+  Dialogue: MUL1271.json
+  User utterance: That sounds great. Can you book me a table for 3 on Friday at 18:30?
+  LLM Response: I'd be happy to book a table for you at the nirala. I've made a reservation for 3 people on Friday at 18:30. Your reference number is [ref]. Please le
+  GT domains: ['restaurant', 'hotel'] | GT intents: ['book_restaurant', 'find_hotel']
+  Pred domain: restaurant | Pred intent: book_restaurant
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'restaurant-name': 'golden wok'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-booktime': '18:30', 'restaurant-bookpeople': '3'}
+  Violations: []
+  JGA: False | SlotF1: 0.83 | Hall: False | Valid: True
+
+  Example 3:
+  Dialogue: MUL1271.json
+  User utterance: Yes, I'm looking for a hotel called the Lovell Lodge.
+  LLM Response: I'd be happy to help you find a hotel. Based on the information provided, I can recommend lovell lodge. It is located at 365 milton road, cb41sr, and 
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-area': 'north', 'restaurant-food': 'dontcare', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '18:30', 'restaurant-name': 'golden wok', 'hotel-name': 'lovell lodge'}
+  Pred slots: {'restaurant-area': 'north', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'friday', 'restaurant-booktime': '18:30', 'restaurant-bookpeople': '3', 'hotel-name': 'lovell lodge'}
+  Violations: []
+  JGA: False | SlotF1: 0.86 | Hall: False | Valid: True
+
+============================================================
+FAILURE: Hallucination
+============================================================
+
+  [exp1_gpt]: 29 failures
+
+  Example 1:
+  Dialogue: SNG02071.json
+  User utterance: Could you tell me where Cotto is located?
+  LLM Response: Cotto is located at 183 East Road City Centre, postcode cb11bg. You can reach them at 01223302010.
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-name': 'cotto'}
+  Pred slots: {}
+  Violations: []
+  JGA: False | SlotF1: 0.00 | Hall: True | Valid: False
+  DB results: [{'address': 'Regent Street City Centre', 'area': 'centre', 'food': 'italian', 'id': '19210', 'introduction': 'Pizza hut is a large chain with restaurants nationwide offering convenience pizzas pasta and salads to eat in or take away', 'location': [52.20103, 0.126023], 'name': 'pizza hut city centre', 'phone': '01223323737', 'postcode': 'cb21ab', 'pricerange': 'cheap', 'type': 'restaurant'}]
+
+  Example 2:
+  Dialogue: SNG02071.json
+  User utterance: Great! Do you know what price range they are in?
+  LLM Response: Cotto is in the expensive price range.
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-name': 'cotto'}
+  Pred slots: {}
+  Violations: []
+  JGA: False | SlotF1: 0.00 | Hall: True | Valid: False
+  DB results: [{'address': 'Regent Street City Centre', 'area': 'centre', 'food': 'italian', 'id': '19210', 'introduction': 'Pizza hut is a large chain with restaurants nationwide offering convenience pizzas pasta and salads to eat in or take away', 'location': [52.20103, 0.126023], 'name': 'pizza hut city centre', 'phone': '01223323737', 'postcode': 'cb21ab', 'pricerange': 'cheap', 'type': 'restaurant'}]
+
+  Example 3:
+  Dialogue: PMUL0287.json
+  User utterance: What can you tell me about the Riverside Brasserie?
+  LLM Response: The Riverside Brasserie is a modern European restaurant located at Regent Street City Centre, cb21ab. You can contact them at 01223323737.
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-name': 'riverside brasserie'}
+  Pred slots: {}
+  Violations: []
+  JGA: False | SlotF1: 0.00 | Hall: True | Valid: False
+  DB results: [{'address': 'Regent Street City Centre', 'area': 'centre', 'food': 'italian', 'id': '19210', 'introduction': 'Pizza hut is a large chain with restaurants nationwide offering convenience pizzas pasta and salads to eat in or take away', 'location': [52.20103, 0.126023], 'name': 'pizza hut city centre', 'phone': '01223323737', 'postcode': 'cb21ab', 'pricerange': 'cheap', 'type': 'restaurant'}]
+
+  [exp1_haiku]: 41 failures
+
+  Example 1:
+  Dialogue: SNG02071.json
+  User utterance: Could you tell me where Cotto is located?
+  LLM Response: Cotto is located at 183 East Road in the city centre area of Cambridge.
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-name': 'cotto'}
+  Pred slots: {}
+  Violations: []
+  JGA: False | SlotF1: 0.00 | Hall: True | Valid: False
+  DB results: [{'address': 'Regent Street City Centre', 'area': 'centre', 'food': 'italian', 'id': '19210', 'introduction': 'Pizza hut is a large chain with restaurants nationwide offering convenience pizzas pasta and salads to eat in or take away', 'location': [52.20103, 0.126023], 'name': 'pizza hut city centre', 'phone': '01223323737', 'postcode': 'cb21ab', 'pricerange': 'cheap', 'type': 'restaurant'}]
+
+  Example 2:
+  Dialogue: SNG02071.json
+  User utterance: Great! Do you know what price range they are in?
+  LLM Response: According to the information provided, Cotto is located at 183 East Road in the city centre area of Cambridge. As for the price range, the database do
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-name': 'cotto'}
+  Pred slots: {}
+  Violations: []
+  JGA: False | SlotF1: 0.00 | Hall: True | Valid: False
+  DB results: [{'address': 'Regent Street City Centre', 'area': 'centre', 'food': 'italian', 'id': '19210', 'introduction': 'Pizza hut is a large chain with restaurants nationwide offering convenience pizzas pasta and salads to eat in or take away', 'location': [52.20103, 0.126023], 'name': 'pizza hut city centre', 'phone': '01223323737', 'postcode': 'cb21ab', 'pricerange': 'cheap', 'type': 'restaurant'}]
+
+  Example 3:
+  Dialogue: SNG0759.json
+  User utterance: Hi. Is there a hotel named Home from Home? I think I have heard of that.
+  LLM Response: Yes, there is a hotel called Home from Home in the north area of Cambridge. It has 4 stars and offers internet and parking. The address is 124 tenison
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'hotel-name': 'home from home'}
+  Pred slots: {}
+  Violations: []
+  JGA: False | SlotF1: 0.00 | Hall: True | Valid: False
+  DB results: [{'address': '124 tenison road', 'area': 'east', 'internet': 'yes', 'parking': 'no', 'id': '0', 'location': [52.1963733, 0.1987426], 'name': 'a and b guest house', 'phone': '01223315702', 'postcode': 'cb12dp', 'price': {'double': '70', 'family': '90', 'single': '50'}, 'pricerange': 'moderate', 'stars': '4', 'takesbookings': 'yes', 'type': 'guesthouse'}]
+
+  [exp2_hetero_gpt_haiku]: 12 failures
+
+  Example 1:
+  Dialogue: PMUL3735.json
+  User utterance: I actually need a place to stay too. I want a hotel for sure, and something near the restaurant, please.
+  LLM Response: Okay, let me help you find a hotel near the restaurant you booked at La Margherita. Based on the information provided, the huntingdon marriott hotel l
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-area': 'west', 'restaurant-pricerange': 'cheap', 'restaurant-bookday': 'tuesday', 'restaurant-bookpeople': '1', 'restaurant-booktime': '11:45', 'restaurant-name': 'la margherita', 'hotel-area': 'west', 'hotel-type': 'hotel'}
+  Pred slots: {'restaurant-area': 'west', 'restaurant-pricerange': 'cheap', 'restaurant-name': 'la margherita', 'restaurant-bookpeople': '1', 'restaurant-booktime': '11:45', 'restaurant-bookday': 'tuesday', 'hotel-type': 'hotel', 'hotel-area': 'west'}
+  Violations: []
+  JGA: True | SlotF1: 1.00 | Hall: True | Valid: False
+  DB results: [{'address': 'kingfisher way, hinchinbrook business park, huntingdon', 'area': 'west', 'internet': 'yes', 'parking': 'yes', 'id': '22', 'location': [52.3386166666667, -0.210897222222222], 'name': 'huntingdon marriott hotel', 'phone': '01480446000', 'postcode': 'pe296fl', 'price': {'double': '145', 'family': '145', 'single': '125'}, 'pricerange': 'expensive', 'stars': '4', 'takesbookings': 'yes', 'type': 'hotel'}]
+
+  Example 2:
+  Dialogue: PMUL3466.json
+  User utterance: I actually just need information on the kirkwood house. What is the postcode and phone number please?
+  LLM Response: Unfortunately I do not have any information about a hotel called "Kirkwood House" in my database. Could you please provide me with some additional det
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'hotel-area': 'north', 'hotel-stars': '4', 'hotel-parking': 'yes', 'hotel-pricerange': 'moderate', 'hotel-name': 'kirkwood house'}
+  Pred slots: {'hotel-area': 'north', 'hotel-stars': 'four', 'hotel-parking': 'yes', 'hotel-name': 'kirkwood house'}
+  Violations: []
+  JGA: False | SlotF1: 0.67 | Hall: True | Valid: False
+  DB results: empty
+
+  Example 3:
+  Dialogue: SNG0896.json
+  User utterance: Thank you. How many stars does the Autumn House have?
+  LLM Response: I'm afraid I don't have any information about the Autumn House hotel, as I couldn't find any matching hotels in the east part of town that met your cr
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'hotel-area': 'east', 'hotel-internet': 'yes', 'hotel-pricerange': 'cheap', 'hotel-parking': 'yes', 'hotel-name': 'autumn house', 'hotel-type': 'guesthouse'}
+  Pred slots: {'hotel-area': 'east', 'hotel-internet': 'free', 'hotel-pricerange': 'cheap', 'hotel-parking': 'dontcare', 'hotel-name': 'autumn house'}
+  Violations: []
+  JGA: False | SlotF1: 0.55 | Hall: True | Valid: False
+  DB results: empty
+
+  [exp2_hetero_haiku_gpt]: 20 failures
+
+  Example 1:
+  Dialogue: PMUL0287.json
+  User utterance: Can I get the postcode for both of them?
+  LLM Response: The postcode for the riverside brasserie is not available, but for the aylesbray lodge guest house, the postcode is cb17sr. If you need any more infor
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-name': 'riverside brasserie', 'restaurant-area': 'centre', 'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'restaurant-food': 'modern european', 'restaurant-pricerange': 'moderate', 'hotel-area': 'south', 'hotel-stars': '4', 'hotel-type': 'guesthouse'}
+  Pred slots: {'restaurant-name': 'riverside brasserie', 'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'hotel-area': 'south', 'hotel-stars': '4'}
+  Violations: []
+  JGA: False | SlotF1: 0.75 | Hall: True | Valid: False
+  DB results: [{'address': '5 mowbray road', 'area': 'south', 'internet': 'yes', 'parking': 'yes', 'id': '10', 'location': [52.1815361111111, 0.150375], 'name': 'aylesbray lodge guest house', 'phone': '01223240089', 'postcode': 'cb17sr', 'price': {'double': '75', 'family': '95', 'single': '65'}, 'pricerange': 'moderate', 'stars': '4', 'takesbookings': 'yes', 'type': 'guesthouse'}]
+
+  Example 2:
+  Dialogue: MUL1368.json
+  User utterance: I need to find a hotel in Cambridge called Finches bed and breakfast please.
+  LLM Response: I'm sorry, but I couldn't find any hotels in Cambridge called Finches Bed and Breakfast. Would you like to try searching for hotels in a different are
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'hotel-name': 'finches bed and breakfast'}
+  Pred slots: {'hotel-name': 'finches bed and breakfast', 'hotel-area': 'cambridge'}
+  Violations: []
+  JGA: False | SlotF1: 0.67 | Hall: True | Valid: False
+  DB results: empty
+
+  Example 3:
+  Dialogue: PMUL3072.json
+  User utterance: Yes, reserve for 1 at 17:00. What is the address and phone number of cotto?Also, can you find a guesthouse in the same area that has 4 stars for two nights?
+  LLM Response: I can help with that! Your reservation at Cotto for 1 at 17:00 is confirmed. The address is 56 saint barnabas road and the phone number is 01223525725
+  GT domains: ['restaurant', 'hotel'] | GT intents: ['book_restaurant', 'find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-area': 'centre', 'restaurant-pricerange': 'moderate', 'restaurant-food': 'dontcare', 'restaurant-bookday': 'monday', 'restaurant-bookpeople': '1', 'restaurant-booktime': '17:00', 'restaurant-name': 'cotto', 'hotel-area': 'centre', 'hotel-stars': '4', 'hotel-type': 'guesthouse'}
+  Pred slots: {'restaurant-pricerange': 'moderate', 'restaurant-area': 'centre', 'restaurant-name': 'cotto', 'hotel-area': 'centre', 'hotel-stars': '4'}
+  Violations: []
+  JGA: False | SlotF1: 0.67 | Hall: True | Valid: False
+  DB results: [{'address': '56 saint barnabas road', 'area': 'centre', 'internet': 'yes', 'parking': 'yes', 'id': '2', 'location': [52.1986444444444, 0.138133333333333], 'name': 'alexander bed and breakfast', 'phone': '01223525725', 'postcode': 'cb12de', 'price': {'double': '50', 'single': '40'}, 'pricerange': 'cheap', 'stars': '4', 'takesbookings': 'yes', 'type': 'guesthouse'}]
+
+  [exp2_homo_gpt]: 16 failures
+
+  Example 1:
+  Dialogue: PMUL0287.json
+  User utterance: Can I get the postcode for both of them?
+  LLM Response: The postcode for the riverside brasserie is not available, but for the aylesbray lodge guest house, the postcode is cb17sr. If you need any more infor
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-name': 'riverside brasserie', 'restaurant-area': 'centre', 'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'restaurant-food': 'modern european', 'restaurant-pricerange': 'moderate', 'hotel-area': 'south', 'hotel-stars': '4', 'hotel-type': 'guesthouse'}
+  Pred slots: {'restaurant-name': 'riverside brasserie', 'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'hotel-area': 'south', 'hotel-stars': '4'}
+  Violations: []
+  JGA: False | SlotF1: 0.75 | Hall: True | Valid: False
+  DB results: [{'address': '5 mowbray road', 'area': 'south', 'internet': 'yes', 'parking': 'yes', 'id': '10', 'location': [52.1815361111111, 0.150375], 'name': 'aylesbray lodge guest house', 'phone': '01223240089', 'postcode': 'cb17sr', 'price': {'double': '75', 'family': '95', 'single': '65'}, 'pricerange': 'moderate', 'stars': '4', 'takesbookings': 'yes', 'type': 'guesthouse'}]
+
+  Example 2:
+  Dialogue: PMUL3072.json
+  User utterance: Yes, reserve for 1 at 17:00. What is the address and phone number of cotto?Also, can you find a guesthouse in the same area that has 4 stars for two nights?
+  LLM Response: I can reserve a table for you at Cotto for 1 at 17:00. The address is 56 saint barnabas road and the phone number is 01223525725. Additionally, I foun
+  GT domains: ['restaurant', 'hotel'] | GT intents: ['book_restaurant', 'find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-area': 'centre', 'restaurant-pricerange': 'moderate', 'restaurant-food': 'dontcare', 'restaurant-bookday': 'monday', 'restaurant-bookpeople': '1', 'restaurant-booktime': '17:00', 'restaurant-name': 'cotto', 'hotel-area': 'centre', 'hotel-stars': '4', 'hotel-type': 'guesthouse'}
+  Pred slots: {'restaurant-area': 'dontcare', 'restaurant-pricerange': 'dontcare', 'restaurant-food': 'dontcare', 'hotel-area': 'centre', 'hotel-stars': '4'}
+  Violations: []
+  JGA: False | SlotF1: 0.40 | Hall: True | Valid: False
+  DB results: [{'address': '56 saint barnabas road', 'area': 'centre', 'internet': 'yes', 'parking': 'yes', 'id': '2', 'location': [52.1986444444444, 0.138133333333333], 'name': 'alexander bed and breakfast', 'phone': '01223525725', 'postcode': 'cb12de', 'price': {'double': '50', 'single': '40'}, 'pricerange': 'cheap', 'stars': '4', 'takesbookings': 'yes', 'type': 'guesthouse'}]
+
+  Example 3:
+  Dialogue: PMUL3466.json
+  User utterance: I actually just need information on the kirkwood house. What is the postcode and phone number please?
+  LLM Response: I couldn't find specific information on Kirkwood House at the moment. Would you like to adjust your search criteria, such as the area or star rating, 
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'hotel-area': 'north', 'hotel-stars': '4', 'hotel-parking': 'yes', 'hotel-pricerange': 'moderate', 'hotel-name': 'kirkwood house'}
+  Pred slots: {'hotel-area': 'north', 'hotel-stars': 'four', 'hotel-parking': 'yes', 'hotel-name': 'kirkwood house'}
+  Violations: []
+  JGA: False | SlotF1: 0.67 | Hall: True | Valid: False
+  DB results: empty
+
+  [exp2_homo_haiku]: 25 failures
+
+  Example 1:
+  Dialogue: MUL1379.json
+  User utterance: I'm looking for a hotel that is a type of hotel in the same price range as the restaurant.
+  LLM Response: I apologize, but I could not find any hotels that match the same price range and type as the Fitzbillies Restaurant you mentioned. Would you be open t
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-food': 'british', 'restaurant-pricerange': 'expensive', 'restaurant-area': 'centre', 'restaurant-name': 'fitzbillies restaurant', 'hotel-pricerange': 'expensive', 'hotel-type': 'hotel'}
+  Pred slots: {'restaurant-pricerange': 'dontcare', 'restaurant-food': 'british', 'restaurant-area': 'centre', 'restaurant-name': 'fitzbillies restaurant', 'hotel-pricerange': 'same as restaurant', 'hotel-type': 'same as restaurant'}
+  Violations: []
+  JGA: False | SlotF1: 0.50 | Hall: True | Valid: False
+  DB results: empty
+
+  Example 2:
+  Dialogue: MUL1379.json
+  User utterance: I need it to be a hotel type with free parking and four stars, please.
+  LLM Response: Okay, let me check for a 4-star hotel with free parking in the same price range as the Fitzbillies Restaurant. I found [hotel_name] at [hotel_address]
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-food': 'british', 'restaurant-pricerange': 'expensive', 'restaurant-area': 'centre', 'restaurant-name': 'fitzbillies restaurant', 'hotel-pricerange': 'expensive', 'hotel-type': 'hotel', 'hotel-parking': 'yes', 'hotel-stars': '4'}
+  Pred slots: {'restaurant-pricerange': 'dontcare', 'restaurant-food': 'british', 'restaurant-area': 'centre', 'restaurant-name': 'fitzbillies restaurant', 'hotel-pricerange': 'same as restaurant', 'hotel-type': 'dontcare', 'hotel-stars': '4', 'hotel-parking': 'yes'}
+  Violations: []
+  JGA: False | SlotF1: 0.62 | Hall: True | Valid: False
+  DB results: empty
+
+  Example 3:
+  Dialogue: MUL1379.json
+  User utterance: Preferably the one in the centre. Is it available for 4 people and 5 nights starting on Sunday?
+  LLM Response: Unfortunately I could not find any 4-star hotels with free parking in the centre area that match the same price range as the Fitzbillies Restaurant. W
+  GT domains: ['restaurant', 'hotel'] | GT intents: ['find_restaurant', 'book_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-food': 'british', 'restaurant-pricerange': 'expensive', 'restaurant-area': 'centre', 'restaurant-name': 'fitzbillies restaurant', 'hotel-pricerange': 'expensive', 'hotel-type': 'hotel', 'hotel-parking': 'yes', 'hotel-stars': '4', 'hotel-area': 'centre', 'hotel-bookday': 'sunday', 'hotel-bookpeople': '4', 'hotel-bookstay': '5'}
+  Pred slots: {'restaurant-pricerange': 'dontcare', 'restaurant-food': 'british', 'restaurant-area': 'centre', 'restaurant-name': 'fitzbillies restaurant', 'hotel-pricerange': 'same as restaurant', 'hotel-type': 'dontcare', 'hotel-stars': '4', 'hotel-parking': 'yes', 'hotel-area': 'centre'}
+  Violations: []
+  JGA: False | SlotF1: 0.57 | Hall: True | Valid: False
+  DB results: empty
+
+============================================================
+FAILURE: Policy violation
+============================================================
+
+  [exp1_gpt]: 8 failures
+
+  Example 1:
+  Dialogue: PMUL0289.json
+  User utterance: That would be great. Could you please give me a reference number?
+  LLM Response: Your reservation at avalon is confirmed. You can contact them at 01223353071 or visit them at 62 gilbert road, postcode cb43pd. Reference: [ref].
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'restaurant-area': 'centre', 'restaurant-pricerange': 'expensive', 'restaurant-food': 'italian', 'restaurant-name': 'stazione restaurant and coffee bar', 'restaurant-bookday': 'tuesday', 'restaurant-bookpeople': '2', 'restaurant-booktime': '20:00', 'hotel-name': 'avalon'}
+  Pred slots: {'restaurant-bookday': 'tuesday', 'restaurant-bookpeople': '2', 'restaurant-booktime': '20:00', 'hotel-name': 'avalon', 'hotel-bookday': 'tuesday', 'hotel-bookpeople': '2'}
+  Violations: ['hotel-bookstay']
+  JGA: False | SlotF1: 0.57 | Hall: False | Valid: False
+
+  Example 2:
+  Dialogue: SNG0893.json
+  User utterance: Yes, please book me a room.
+  LLM Response: Please provide the booking day, number of people, and length of stay for your reservation at the lensfield hotel, located at 53-57 lensfield road, pos
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'hotel-area': 'south', 'hotel-pricerange': 'expensive'}
+  Pred slots: {'hotel-area': 'south', 'hotel-pricerange': 'expensive'}
+  Violations: ['hotel-bookday', 'hotel-bookpeople', 'hotel-bookstay']
+  JGA: True | SlotF1: 1.00 | Hall: False | Valid: False
+
+  Example 3:
+  Dialogue: MUL1249.json
+  User utterance: I am looking for Restaurant Alimentum. I would like to make a reservation.
+  LLM Response: I found Restaurant Alimentum. Please provide the following details to make a reservation: the date you would like to book, the number of people, and t
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: restaurant | Pred intent: book_restaurant
+  GT slots: {'restaurant-name': 'restaurant alimentum'}
+  Pred slots: {}
+  Violations: ['restaurant-bookday', 'restaurant-bookpeople', 'restaurant-booktime']
+  JGA: False | SlotF1: 0.00 | Hall: True | Valid: False
+
+  [exp1_haiku]: 14 failures
+
+  Example 1:
+  Dialogue: PMUL0032.json
+  User utterance: I prefer the expensive hotel. Can you book it for me for the same group of people?
+  LLM Response: Okay, let me book a reservation for you at [hotel_name], located at [hotel_address], [hotel_postcode]. They have a phone number of [hotel_phone] if yo
+  GT domains: ['restaurant', 'hotel'] | GT intents: ['book_restaurant', 'find_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'restaurant-area': 'centre', 'restaurant-pricerange': 'expensive', 'restaurant-food': 'chinese', 'restaurant-bookday': 'friday', 'restaurant-bookpeople': '7', 'restaurant-booktime': '14:00', 'restaurant-name': 'ugly duckling', 'hotel-internet': 'yes', 'hotel-type': 'hotel', 'hotel-pricerange': 'expensive', 'hotel-stars': '2'}
+  Pred slots: {'restaurant-area': 'centre', 'restaurant-pricerange': 'expensive', 'restaurant-food': 'chinese', 'restaurant-bookday': 'friday', 'restaurant-booktime': '14:00', 'restaurant-bookpeople': '7', 'hotel-area': 'centre', 'hotel-internet': 'yes', 'hotel-pricerange': 'expensive', 'hotel-stars': '2', 'hotel-type': 'dontcare'}
+  Violations: ['hotel-bookday', 'hotel-bookpeople', 'hotel-bookstay']
+  JGA: False | SlotF1: 0.82 | Hall: False | Valid: False
+
+  Example 2:
+  Dialogue: SNG0883.json
+  User utterance: Yes, can you book that for 7 people on Saturday?
+  LLM Response: Okay, I've booked a stay for 7 people at the a and b guest house on Saturday. Your reference number is [ref].
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'hotel-internet': 'yes', 'hotel-type': 'guesthouse', 'hotel-pricerange': 'moderate', 'hotel-name': 'archway house', 'hotel-parking': 'yes', 'hotel-stars': '4'}
+  Pred slots: {'hotel-internet': 'yes', 'hotel-type': 'guesthouse', 'hotel-pricerange': 'moderate', 'hotel-bookday': 'saturday', 'hotel-bookpeople': '7', 'hotel-name': 'a and b guest house'}
+  Violations: ['hotel-bookstay']
+  JGA: False | SlotF1: 0.50 | Hall: False | Valid: False
+
+  Example 3:
+  Dialogue: PMUL0348.json
+  User utterance: I would like to try for a reservation on Thursday.
+  LLM Response: Okay, let me check for restaurant availability on Thursday. What time would you like to make the reservation for?
+  GT domains: ['restaurant'] | GT intents: ['book_restaurant']
+  Pred domain: restaurant | Pred intent: book_restaurant
+  GT slots: {'restaurant-name': 'lan hong house', 'restaurant-bookday': 'thursday'}
+  Pred slots: {'restaurant-bookday': 'thursday'}
+  Violations: ['restaurant-bookpeople', 'restaurant-booktime']
+  JGA: False | SlotF1: 0.67 | Hall: False | Valid: False
+
+  [exp2_hetero_gpt_haiku]: 23 failures
+
+  Example 1:
+  Dialogue: SNG1049.json
+  User utterance: Yes please. There are 8 of us and we'll be arriving on Saturday.
+  LLM Response: Okay, I've found a 4-star guesthouse that matches your requirements. I can book you into [hotel_name] located at [hotel_address], [hotel_postcode]. Th
+  GT domains: ['hotel'] | GT intents: ['book_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'hotel-parking': 'yes', 'hotel-type': 'guesthouse', 'hotel-stars': '4', 'hotel-area': 'dontcare', 'hotel-bookday': 'saturday', 'hotel-bookpeople': '8'}
+  Pred slots: {'hotel-parking': 'yes', 'hotel-stars': '4', 'hotel-type': 'guesthouse', 'hotel-bookpeople': '8', 'hotel-bookday': 'saturday'}
+  Violations: ['hotel-bookstay']
+  JGA: False | SlotF1: 0.91 | Hall: False | Valid: False
+
+  Example 2:
+  Dialogue: MUL1379.json
+  User utterance: Fitzbillies Restaurant sounds good,will you book it for me ?
+  LLM Response: Okay, let me go ahead and book a reservation for you at [restaurant_name]. What day and time would you like the reservation for, and how many people w
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: restaurant | Pred intent: book_restaurant
+  GT slots: {'restaurant-food': 'british', 'restaurant-pricerange': 'expensive', 'restaurant-area': 'centre'}
+  Pred slots: {'restaurant-pricerange': 'expensive', 'restaurant-food': 'british', 'restaurant-area': 'centre', 'restaurant-name': 'fitzbillies restaurant'}
+  Violations: ['restaurant-bookday', 'restaurant-bookpeople', 'restaurant-booktime']
+  JGA: False | SlotF1: 0.86 | Hall: False | Valid: False
+
+  Example 3:
+  Dialogue: SNG0922.json
+  User utterance: The price range doesn't matter. I need to book a room for Monday.
+  LLM Response: Okay, based on the updated requirements, I would recommend [hotel_name], a 4-star guesthouse located in the east area. They offer free WiFi. To book a
+  GT domains: ['hotel'] | GT intents: ['book_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'hotel-internet': 'yes', 'hotel-type': 'guesthouse', 'hotel-area': 'east', 'hotel-stars': '4', 'hotel-bookday': 'monday', 'hotel-pricerange': 'dontcare'}
+  Pred slots: {'hotel-internet': 'yes', 'hotel-area': 'east', 'hotel-stars': '4', 'hotel-bookday': 'monday'}
+  Violations: ['hotel-bookpeople', 'hotel-bookstay']
+  JGA: False | SlotF1: 0.80 | Hall: False | Valid: False
+
+  [exp2_hetero_haiku_gpt]: 14 failures
+
+  Example 1:
+  Dialogue: MUL1379.json
+  User utterance: Fitzbillies Restaurant sounds good,will you book it for me ?
+  LLM Response: I can help you with that! Could you please provide the date, time, and number of people for your booking at [restaurant_name]?
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: restaurant | Pred intent: book_restaurant
+  GT slots: {'restaurant-food': 'british', 'restaurant-pricerange': 'expensive', 'restaurant-area': 'centre'}
+  Pred slots: {'restaurant-pricerange': 'expensive', 'restaurant-food': 'british', 'restaurant-area': 'centre', 'restaurant-name': 'fitzbillies restaurant'}
+  Violations: ['restaurant-bookday', 'restaurant-bookpeople', 'restaurant-booktime']
+  JGA: False | SlotF1: 0.86 | Hall: False | Valid: False
+
+  Example 2:
+  Dialogue: SNG1047.json
+  User utterance: Yes please. I need to book a room for three days starting on tuesday.
+  LLM Response: To proceed with your booking at [hotel_name] for three days starting on Tuesday, could you please let me know how many people will be staying?
+  GT domains: ['hotel'] | GT intents: ['book_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'hotel-area': 'south', 'hotel-stars': '3', 'hotel-pricerange': 'expensive', 'hotel-name': 'lensfield hotel', 'hotel-bookday': 'tuesday', 'hotel-bookstay': '3', 'hotel-internet': 'yes', 'hotel-parking': 'yes'}
+  Pred slots: {'hotel-area': 'south', 'hotel-stars': '3', 'hotel-pricerange': 'expensive', 'hotel-name': 'lensfield hotel', 'hotel-bookday': 'tuesday', 'hotel-bookstay': '3'}
+  Violations: ['hotel-bookpeople']
+  JGA: False | SlotF1: 0.86 | Hall: False | Valid: False
+
+  Example 3:
+  Dialogue: SNG0893.json
+  User utterance: Yes, please book me a room.
+  LLM Response: To proceed with your booking at [hotel_name], I need to know your desired check-in date, the number of guests, and the length of your stay. Could you 
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'hotel-area': 'south', 'hotel-pricerange': 'expensive'}
+  Pred slots: {'hotel-pricerange': 'expensive', 'hotel-area': 'south'}
+  Violations: ['hotel-bookday', 'hotel-bookpeople', 'hotel-bookstay']
+  JGA: True | SlotF1: 1.00 | Hall: False | Valid: False
+
+  [exp2_homo_gpt]: 22 failures
+
+  Example 1:
+  Dialogue: MUL1379.json
+  User utterance: Fitzbillies Restaurant sounds good,will you book it for me ?
+  LLM Response: I can help you with that! Could you please provide the date, time, and number of people for your booking at [restaurant_name]?
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: restaurant | Pred intent: book_restaurant
+  GT slots: {'restaurant-food': 'british', 'restaurant-pricerange': 'expensive', 'restaurant-area': 'centre'}
+  Pred slots: {'restaurant-pricerange': 'expensive', 'restaurant-food': 'british', 'restaurant-area': 'centre', 'restaurant-name': 'fitzbillies restaurant'}
+  Violations: ['restaurant-bookday', 'restaurant-bookpeople', 'restaurant-booktime']
+  JGA: False | SlotF1: 0.86 | Hall: False | Valid: False
+
+  Example 2:
+  Dialogue: SNG1047.json
+  User utterance: Yes please. I need to book a room for three days starting on tuesday.
+  LLM Response: To proceed with your booking for three days starting on Tuesday, could you please provide the number of people staying?
+  GT domains: ['hotel'] | GT intents: ['book_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'hotel-area': 'south', 'hotel-stars': '3', 'hotel-pricerange': 'expensive', 'hotel-name': 'lensfield hotel', 'hotel-bookday': 'tuesday', 'hotel-bookstay': '3', 'hotel-internet': 'yes', 'hotel-parking': 'yes'}
+  Pred slots: {'hotel-area': 'south', 'hotel-stars': '3', 'hotel-pricerange': 'expensive', 'hotel-bookstay': '3', 'hotel-bookday': 'tuesday'}
+  Violations: ['hotel-bookpeople']
+  JGA: False | SlotF1: 0.77 | Hall: False | Valid: False
+
+  Example 3:
+  Dialogue: SNG1011.json
+  User utterance: That's awesome. Can you book one of them for me?
+  LLM Response: I can help with that! Could you please provide the check-in date, number of guests, and length of stay for your booking at [hotel_name]?
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'hotel-stars': '0', 'hotel-type': 'guesthouse', 'hotel-internet': 'yes', 'hotel-parking': 'yes'}
+  Pred slots: {'hotel-stars': '0', 'hotel-parking': 'dontcare', 'hotel-internet': 'dontcare'}
+  Violations: ['hotel-bookday', 'hotel-bookpeople', 'hotel-bookstay']
+  JGA: False | SlotF1: 0.29 | Hall: False | Valid: False
+
+  [exp2_homo_haiku]: 17 failures
+
+  Example 1:
+  Dialogue: SNG1049.json
+  User utterance: Yes please. There are 8 of us and we'll be arriving on Saturday.
+  LLM Response: Okay, I've booked the 4-star [hotel_name] guesthouse for your group of 8 arriving on Saturday. The booking reference is [ref]. Please let me know if y
+  GT domains: ['hotel'] | GT intents: ['book_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'hotel-parking': 'yes', 'hotel-type': 'guesthouse', 'hotel-stars': '4', 'hotel-area': 'dontcare', 'hotel-bookday': 'saturday', 'hotel-bookpeople': '8'}
+  Pred slots: {'hotel-parking': 'yes', 'hotel-stars': '4', 'hotel-type': 'guesthouse', 'hotel-bookday': 'saturday', 'hotel-bookpeople': '8'}
+  Violations: ['hotel-bookstay']
+  JGA: False | SlotF1: 0.91 | Hall: False | Valid: False
+
+  Example 2:
+  Dialogue: MUL1379.json
+  User utterance: Fitzbillies Restaurant sounds good,will you book it for me ?
+  LLM Response: Okay, let me go ahead and book a table for you at [restaurant_name]. What day and time would you like to make the reservation for, and how many people
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: restaurant | Pred intent: book_restaurant
+  GT slots: {'restaurant-food': 'british', 'restaurant-pricerange': 'expensive', 'restaurant-area': 'centre'}
+  Pred slots: {'restaurant-pricerange': 'dontcare', 'restaurant-food': 'british', 'restaurant-area': 'centre', 'restaurant-name': 'fitzbillies restaurant'}
+  Violations: ['restaurant-bookday', 'restaurant-bookpeople', 'restaurant-booktime']
+  JGA: False | SlotF1: 0.57 | Hall: False | Valid: False
+
+  Example 3:
+  Dialogue: PMUL0142.json
+  User utterance: It sound's good, please book a room for two nights for one person.
+  LLM Response: Okay, let me go ahead and book that 2-star hotel in the East area for you. I've booked a room for 2 nights for 1 person at the [hotel_name] hotel. The
+  GT domains: ['hotel'] | GT intents: ['book_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'hotel-area': 'east', 'hotel-pricerange': 'dontcare', 'hotel-stars': '2', 'hotel-bookpeople': '1', 'hotel-bookstay': '2'}
+  Pred slots: {'hotel-area': 'east', 'hotel-stars': '2', 'hotel-bookday': '2', 'hotel-bookpeople': '1'}
+  Violations: ['hotel-bookstay']
+  JGA: False | SlotF1: 0.67 | Hall: False | Valid: False
+
+============================================================
+FAILURE: Action error
+============================================================
+
+  [exp1_gpt]: 170 failures
+
+  Example 1:
+  Dialogue: PMUL4833.json
+  User utterance: I'd like Indonesian food located in the city's centre. Do you have anything like that?
+  LLM Response: I'm sorry, but I couldn't find any Indonesian restaurants located in the city's centre.
+  GT domains: ['restaurant', 'hotel'] | GT intents: ['find_restaurant', 'find_hotel']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-pricerange': 'cheap', 'restaurant-area': 'centre', 'restaurant-food': 'indonesian'}
+  Pred slots: {}
+  Violations: []
+  JGA: False | SlotF1: 0.00 | Hall: False | Valid: True
+  GT action: request | Pred action: inform
+
+  Example 2:
+  Dialogue: PMUL0287.json
+  User utterance: I'm also looking for a place to stay. In the south preferably.
+  LLM Response: I found a hotel for you in the south. It's called aylesbray lodge guest house, located at 5 mowbray road, cb17sr. You can contact them at 01223240089.
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-name': 'riverside brasserie', 'restaurant-area': 'centre', 'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'restaurant-food': 'modern european', 'restaurant-pricerange': 'moderate', 'hotel-area': 'south'}
+  Pred slots: {'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'hotel-area': 'south'}
+  Violations: []
+  JGA: False | SlotF1: 0.67 | Hall: False | Valid: True
+  GT action: request | Pred action: inform
+
+  Example 3:
+  Dialogue: PMUL0287.json
+  User utterance: No particular price range, but I would like it to be a 4 star hotel.
+  LLM Response: I found a suitable hotel for you. It's called aylesbray lodge guest house, located at 5 mowbray road, cb17sr. You can contact them at 01223240089. Wou
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'restaurant-name': 'riverside brasserie', 'restaurant-area': 'centre', 'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'restaurant-food': 'modern european', 'restaurant-pricerange': 'moderate', 'hotel-area': 'south', 'hotel-stars': '4'}
+  Pred slots: {'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'hotel-area': 'south', 'hotel-stars': '4', 'hotel-bookday': 'sunday', 'hotel-bookpeople': '6', 'hotel-bookstay': '1'}
+  Violations: []
+  JGA: False | SlotF1: 0.59 | Hall: False | Valid: True
+  GT action: inform | Pred action: book
+
+  [exp1_haiku]: 154 failures
+
+  Example 1:
+  Dialogue: PMUL4833.json
+  User utterance: I'd like Indonesian food located in the city's centre. Do you have anything like that?
+  LLM Response: Unfortunately I could not find any Indonesian restaurants located in the city centre that match your budget. Would you like me to look for a different
+  GT domains: ['restaurant', 'hotel'] | GT intents: ['find_restaurant', 'find_hotel']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-pricerange': 'cheap', 'restaurant-area': 'centre', 'restaurant-food': 'indonesian'}
+  Pred slots: {'restaurant-pricerange': 'cheap', 'restaurant-area': 'centre', 'restaurant-food': 'indonesian'}
+  Violations: []
+  JGA: True | SlotF1: 1.00 | Hall: False | Valid: True
+  GT action: request | Pred action: inform
+
+  Example 2:
+  Dialogue: PMUL0287.json
+  User utterance: I'm also looking for a place to stay. In the south preferably.
+  LLM Response: Okay, let me check for hotels in the south area. One moment please...
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-name': 'riverside brasserie', 'restaurant-area': 'centre', 'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'restaurant-food': 'modern european', 'restaurant-pricerange': 'moderate', 'hotel-area': 'south'}
+  Pred slots: {'restaurant-name': 'riverside brasserie', 'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'hotel-area': 'south'}
+  Violations: []
+  JGA: False | SlotF1: 0.77 | Hall: False | Valid: True
+  GT action: request | Pred action: inform
+
+  Example 3:
+  Dialogue: PMUL1591.json
+  User utterance: Yes, please recommend one that can accommodate 8 people for 2 nights starting on Thursday
+  LLM Response: Okay, let me check for a cheap hotel in the east area that can accommodate 8 people for 2 nights starting on Thursday. The best match is allenbell at 
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'hotel-area': 'east', 'hotel-pricerange': 'cheap', 'hotel-stars': '4'}
+  Pred slots: {'hotel-area': 'east', 'hotel-pricerange': 'cheap', 'hotel-bookday': 'thursday', 'hotel-bookpeople': '8', 'hotel-bookstay': '2'}
+  Violations: []
+  JGA: False | SlotF1: 0.50 | Hall: False | Valid: True
+  GT action: inform | Pred action: book
+
+  [exp2_hetero_gpt_haiku]: 154 failures
+
+  Example 1:
+  Dialogue: PMUL4833.json
+  User utterance: I'd like Indonesian food located in the city's centre. Do you have anything like that?
+  LLM Response: I apologize, but I could not find any matching Indonesian restaurants located in the city centre within your budget. Would you be open to considering 
+  GT domains: ['restaurant', 'hotel'] | GT intents: ['find_restaurant', 'find_hotel']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-pricerange': 'cheap', 'restaurant-area': 'centre', 'restaurant-food': 'indonesian'}
+  Pred slots: {'restaurant-pricerange': 'cheap', 'restaurant-area': 'centre', 'restaurant-food': 'indonesian'}
+  Violations: []
+  JGA: True | SlotF1: 1.00 | Hall: False | Valid: True
+  GT action: request | Pred action: inform
+
+  Example 2:
+  Dialogue: PMUL0287.json
+  User utterance: I'm also looking for a place to stay. In the south preferably.
+  LLM Response: Okay, I can help you with a hotel in the south area. Based on the information available, I would recommend aylesbray lodge guest house, which is a 4-s
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-name': 'riverside brasserie', 'restaurant-area': 'centre', 'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'restaurant-food': 'modern european', 'restaurant-pricerange': 'moderate', 'hotel-area': 'south'}
+  Pred slots: {'restaurant-name': 'riverside brasserie', 'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'hotel-area': 'south'}
+  Violations: []
+  JGA: False | SlotF1: 0.77 | Hall: False | Valid: True
+  GT action: request | Pred action: inform
+
+  Example 3:
+  Dialogue: PMUL0287.json
+  User utterance: Sure, that will work. Can you tell me more about them?
+  LLM Response: Certainly, let me provide you with more details about [hotel_name]. It is a 4-star hotel located at [hotel_address], [hotel_postcode]. The hotel phone
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'restaurant-name': 'riverside brasserie', 'restaurant-area': 'centre', 'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'restaurant-food': 'modern european', 'restaurant-pricerange': 'moderate', 'hotel-area': 'south', 'hotel-stars': '4'}
+  Pred slots: {'restaurant-name': 'riverside brasserie', 'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'hotel-area': 'south', 'hotel-stars': '4'}
+  Violations: ['hotel-bookday', 'hotel-bookpeople', 'hotel-bookstay']
+  JGA: False | SlotF1: 0.80 | Hall: False | Valid: True
+  GT action: inform | Pred action: request
+
+  [exp2_hetero_haiku_gpt]: 160 failures
+
+  Example 1:
+  Dialogue: PMUL4833.json
+  User utterance: I'd like Indonesian food located in the city's centre. Do you have anything like that?
+  LLM Response: I'm sorry, but I couldn't find any Indonesian restaurants in the city centre. Would you be open to exploring options in a different area or perhaps a 
+  GT domains: ['restaurant', 'hotel'] | GT intents: ['find_restaurant', 'find_hotel']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-pricerange': 'cheap', 'restaurant-area': 'centre', 'restaurant-food': 'indonesian'}
+  Pred slots: {'restaurant-pricerange': 'cheap', 'restaurant-area': 'centre', 'restaurant-food': 'indonesian'}
+  Violations: []
+  JGA: True | SlotF1: 1.00 | Hall: False | Valid: True
+  GT action: request | Pred action: inform
+
+  Example 2:
+  Dialogue: PMUL0287.json
+  User utterance: I'm also looking for a place to stay. In the south preferably.
+  LLM Response: I found a great option for you in the south! You can consider aylesbray lodge guest house, a 4-star guesthouse with moderate pricing. You can reach th
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-name': 'riverside brasserie', 'restaurant-area': 'centre', 'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'restaurant-food': 'modern european', 'restaurant-pricerange': 'moderate', 'hotel-area': 'south'}
+  Pred slots: {'restaurant-name': 'riverside brasserie', 'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'hotel-area': 'south'}
+  Violations: []
+  JGA: False | SlotF1: 0.77 | Hall: False | Valid: True
+  GT action: request | Pred action: inform
+
+  Example 3:
+  Dialogue: SNG0759.json
+  User utterance: All right, could you book a room for me? There will be 8 people for 4 nights, arriving Monday.
+  LLM Response: Your booking for 8 people at home from home for 4 nights starting Monday has been successfully made. Your booking reference is [ref]. If you need any 
+  GT domains: ['hotel'] | GT intents: ['book_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'hotel-name': 'home from home', 'hotel-bookday': 'monday', 'hotel-bookpeople': '8', 'hotel-bookstay': '4', 'hotel-stars': '4'}
+  Pred slots: {'hotel-name': 'home from home', 'hotel-bookday': 'monday', 'hotel-bookpeople': '8', 'hotel-bookstay': '4'}
+  Violations: []
+  JGA: False | SlotF1: 0.89 | Hall: False | Valid: True
+  GT action: request | Pred action: book
+
+  [exp2_homo_gpt]: 142 failures
+
+  Example 1:
+  Dialogue: PMUL4833.json
+  User utterance: I'd like Indonesian food located in the city's centre. Do you have anything like that?
+  LLM Response: I'm sorry, but I couldn't find any Indonesian restaurants in the city centre. Would you be open to exploring options in a different area or perhaps a 
+  GT domains: ['restaurant', 'hotel'] | GT intents: ['find_restaurant', 'find_hotel']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-pricerange': 'cheap', 'restaurant-area': 'centre', 'restaurant-food': 'indonesian'}
+  Pred slots: {'restaurant-pricerange': 'cheap', 'restaurant-area': 'centre', 'restaurant-food': 'indonesian'}
+  Violations: []
+  JGA: True | SlotF1: 1.00 | Hall: False | Valid: True
+  GT action: request | Pred action: inform
+
+  Example 2:
+  Dialogue: PMUL0287.json
+  User utterance: I'm also looking for a place to stay. In the south preferably.
+  LLM Response: I found a great option for you in the south! You can consider aylesbray lodge guest house, a 4-star guesthouse with moderate pricing. For more details
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-name': 'riverside brasserie', 'restaurant-area': 'centre', 'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'restaurant-food': 'modern european', 'restaurant-pricerange': 'moderate', 'hotel-area': 'south'}
+  Pred slots: {'restaurant-name': 'riverside brasserie', 'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'hotel-area': 'south'}
+  Violations: []
+  JGA: False | SlotF1: 0.77 | Hall: False | Valid: True
+  GT action: request | Pred action: inform
+
+  Example 3:
+  Dialogue: SNG0759.json
+  User utterance: All right, could you book a room for me? There will be 8 people for 4 nights, arriving Monday.
+  LLM Response: I can help you with that! I will book a room at home from home for 8 people for 4 nights, arriving Monday. Please hold on while I finalize the booking
+  GT domains: ['hotel'] | GT intents: ['book_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'hotel-name': 'home from home', 'hotel-bookday': 'monday', 'hotel-bookpeople': '8', 'hotel-bookstay': '4', 'hotel-stars': '4'}
+  Pred slots: {'hotel-name': 'home from home', 'hotel-bookpeople': '8', 'hotel-bookstay': '4', 'hotel-bookday': 'monday'}
+  Violations: []
+  JGA: False | SlotF1: 0.89 | Hall: False | Valid: True
+  GT action: request | Pred action: book
+
+  [exp2_homo_haiku]: 152 failures
+
+  Example 1:
+  Dialogue: PMUL4833.json
+  User utterance: I'd like Indonesian food located in the city's centre. Do you have anything like that?
+  LLM Response: I apologize, but I could not find any matching Indonesian restaurants located in the city centre within your budget. Would you be open to considering 
+  GT domains: ['restaurant', 'hotel'] | GT intents: ['find_restaurant', 'find_hotel']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-pricerange': 'cheap', 'restaurant-area': 'centre', 'restaurant-food': 'indonesian'}
+  Pred slots: {'restaurant-pricerange': 'cheap', 'restaurant-area': 'centre', 'restaurant-food': 'indonesian'}
+  Violations: []
+  JGA: True | SlotF1: 1.00 | Hall: False | Valid: True
+  GT action: request | Pred action: inform
+
+  Example 2:
+  Dialogue: PMUL0287.json
+  User utterance: I'm also looking for a place to stay. In the south preferably.
+  LLM Response: Okay, I can help you with a hotel in the south area. Based on the information available, I would recommend aylesbray lodge guest house, which is a 4-s
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-name': 'riverside brasserie', 'restaurant-area': 'centre', 'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'restaurant-food': 'modern european', 'restaurant-pricerange': 'moderate', 'hotel-area': 'south'}
+  Pred slots: {'restaurant-name': 'riverside brasserie', 'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'hotel-area': 'south'}
+  Violations: []
+  JGA: False | SlotF1: 0.77 | Hall: False | Valid: True
+  GT action: request | Pred action: inform
+
+  Example 3:
+  Dialogue: PMUL1591.json
+  User utterance: Yes, please recommend one that can accommodate 8 people for 2 nights starting on Thursday
+  LLM Response: I'd be happy to help you book a hotel that can accommodate 8 people for 2 nights starting on Thursday. Based on the available options, I recommend all
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'hotel-area': 'east', 'hotel-pricerange': 'cheap', 'hotel-stars': '4'}
+  Pred slots: {'hotel-area': 'east', 'hotel-pricerange': 'cheap', 'hotel-parking': 'dontcare', 'hotel-bookday': 'thursday', 'hotel-bookpeople': '8', 'hotel-bookstay': '2'}
+  Violations: []
+  JGA: False | SlotF1: 0.44 | Hall: False | Valid: True
+  GT action: inform | Pred action: book
+
+============================================================
+FAILURE: System incorrect
+============================================================
+
+  [exp1_gpt]: 36 failures
+
+  Example 1:
+  Dialogue: SNG02071.json
+  User utterance: Could you tell me where Cotto is located?
+  LLM Response: Cotto is located at 183 East Road City Centre, postcode cb11bg. You can reach them at 01223302010.
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-name': 'cotto'}
+  Pred slots: {}
+  Violations: []
+  JGA: False | SlotF1: 0.00 | Hall: True | Valid: False
+
+  Example 2:
+  Dialogue: SNG02071.json
+  User utterance: Great! Do you know what price range they are in?
+  LLM Response: Cotto is in the expensive price range.
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-name': 'cotto'}
+  Pred slots: {}
+  Violations: []
+  JGA: False | SlotF1: 0.00 | Hall: True | Valid: False
+
+  Example 3:
+  Dialogue: PMUL0287.json
+  User utterance: What can you tell me about the Riverside Brasserie?
+  LLM Response: The Riverside Brasserie is a modern European restaurant located at Regent Street City Centre, cb21ab. You can contact them at 01223323737.
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-name': 'riverside brasserie'}
+  Pred slots: {}
+  Violations: []
+  JGA: False | SlotF1: 0.00 | Hall: True | Valid: False
+
+  [exp1_haiku]: 55 failures
+
+  Example 1:
+  Dialogue: SNG02071.json
+  User utterance: Could you tell me where Cotto is located?
+  LLM Response: Cotto is located at 183 East Road in the city centre area of Cambridge.
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-name': 'cotto'}
+  Pred slots: {}
+  Violations: []
+  JGA: False | SlotF1: 0.00 | Hall: True | Valid: False
+
+  Example 2:
+  Dialogue: SNG02071.json
+  User utterance: Great! Do you know what price range they are in?
+  LLM Response: According to the information provided, Cotto is located at 183 East Road in the city centre area of Cambridge. As for the price range, the database do
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-name': 'cotto'}
+  Pred slots: {}
+  Violations: []
+  JGA: False | SlotF1: 0.00 | Hall: True | Valid: False
+
+  Example 3:
+  Dialogue: SNG0759.json
+  User utterance: Hi. Is there a hotel named Home from Home? I think I have heard of that.
+  LLM Response: Yes, there is a hotel called Home from Home in the north area of Cambridge. It has 4 stars and offers internet and parking. The address is 124 tenison
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'hotel-name': 'home from home'}
+  Pred slots: {}
+  Violations: []
+  JGA: False | SlotF1: 0.00 | Hall: True | Valid: False
+
+  [exp2_hetero_gpt_haiku]: 31 failures
+
+  Example 1:
+  Dialogue: SNG1049.json
+  User utterance: Yes please. There are 8 of us and we'll be arriving on Saturday.
+  LLM Response: Okay, I've found a 4-star guesthouse that matches your requirements. I can book you into [hotel_name] located at [hotel_address], [hotel_postcode]. Th
+  GT domains: ['hotel'] | GT intents: ['book_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'hotel-parking': 'yes', 'hotel-type': 'guesthouse', 'hotel-stars': '4', 'hotel-area': 'dontcare', 'hotel-bookday': 'saturday', 'hotel-bookpeople': '8'}
+  Pred slots: {'hotel-parking': 'yes', 'hotel-stars': '4', 'hotel-type': 'guesthouse', 'hotel-bookpeople': '8', 'hotel-bookday': 'saturday'}
+  Violations: ['hotel-bookstay']
+  JGA: False | SlotF1: 0.91 | Hall: False | Valid: False
+
+  Example 2:
+  Dialogue: MUL1379.json
+  User utterance: Fitzbillies Restaurant sounds good,will you book it for me ?
+  LLM Response: Okay, let me go ahead and book a reservation for you at [restaurant_name]. What day and time would you like the reservation for, and how many people w
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: restaurant | Pred intent: book_restaurant
+  GT slots: {'restaurant-food': 'british', 'restaurant-pricerange': 'expensive', 'restaurant-area': 'centre'}
+  Pred slots: {'restaurant-pricerange': 'expensive', 'restaurant-food': 'british', 'restaurant-area': 'centre', 'restaurant-name': 'fitzbillies restaurant'}
+  Violations: ['restaurant-bookday', 'restaurant-bookpeople', 'restaurant-booktime']
+  JGA: False | SlotF1: 0.86 | Hall: False | Valid: False
+
+  Example 3:
+  Dialogue: SNG0922.json
+  User utterance: The price range doesn't matter. I need to book a room for Monday.
+  LLM Response: Okay, based on the updated requirements, I would recommend [hotel_name], a 4-star guesthouse located in the east area. They offer free WiFi. To book a
+  GT domains: ['hotel'] | GT intents: ['book_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'hotel-internet': 'yes', 'hotel-type': 'guesthouse', 'hotel-area': 'east', 'hotel-stars': '4', 'hotel-bookday': 'monday', 'hotel-pricerange': 'dontcare'}
+  Pred slots: {'hotel-internet': 'yes', 'hotel-area': 'east', 'hotel-stars': '4', 'hotel-bookday': 'monday'}
+  Violations: ['hotel-bookpeople', 'hotel-bookstay']
+  JGA: False | SlotF1: 0.80 | Hall: False | Valid: False
+
+  [exp2_hetero_haiku_gpt]: 33 failures
+
+  Example 1:
+  Dialogue: PMUL0287.json
+  User utterance: Can I get the postcode for both of them?
+  LLM Response: The postcode for the riverside brasserie is not available, but for the aylesbray lodge guest house, the postcode is cb17sr. If you need any more infor
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-name': 'riverside brasserie', 'restaurant-area': 'centre', 'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'restaurant-food': 'modern european', 'restaurant-pricerange': 'moderate', 'hotel-area': 'south', 'hotel-stars': '4', 'hotel-type': 'guesthouse'}
+  Pred slots: {'restaurant-name': 'riverside brasserie', 'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'hotel-area': 'south', 'hotel-stars': '4'}
+  Violations: []
+  JGA: False | SlotF1: 0.75 | Hall: True | Valid: False
+
+  Example 2:
+  Dialogue: MUL1379.json
+  User utterance: Fitzbillies Restaurant sounds good,will you book it for me ?
+  LLM Response: I can help you with that! Could you please provide the date, time, and number of people for your booking at [restaurant_name]?
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: restaurant | Pred intent: book_restaurant
+  GT slots: {'restaurant-food': 'british', 'restaurant-pricerange': 'expensive', 'restaurant-area': 'centre'}
+  Pred slots: {'restaurant-pricerange': 'expensive', 'restaurant-food': 'british', 'restaurant-area': 'centre', 'restaurant-name': 'fitzbillies restaurant'}
+  Violations: ['restaurant-bookday', 'restaurant-bookpeople', 'restaurant-booktime']
+  JGA: False | SlotF1: 0.86 | Hall: False | Valid: False
+
+  Example 3:
+  Dialogue: SNG1047.json
+  User utterance: Yes please. I need to book a room for three days starting on tuesday.
+  LLM Response: To proceed with your booking at [hotel_name] for three days starting on Tuesday, could you please let me know how many people will be staying?
+  GT domains: ['hotel'] | GT intents: ['book_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'hotel-area': 'south', 'hotel-stars': '3', 'hotel-pricerange': 'expensive', 'hotel-name': 'lensfield hotel', 'hotel-bookday': 'tuesday', 'hotel-bookstay': '3', 'hotel-internet': 'yes', 'hotel-parking': 'yes'}
+  Pred slots: {'hotel-area': 'south', 'hotel-stars': '3', 'hotel-pricerange': 'expensive', 'hotel-name': 'lensfield hotel', 'hotel-bookday': 'tuesday', 'hotel-bookstay': '3'}
+  Violations: ['hotel-bookpeople']
+  JGA: False | SlotF1: 0.86 | Hall: False | Valid: False
+
+  [exp2_homo_gpt]: 37 failures
+
+  Example 1:
+  Dialogue: PMUL0287.json
+  User utterance: Can I get the postcode for both of them?
+  LLM Response: The postcode for the riverside brasserie is not available, but for the aylesbray lodge guest house, the postcode is cb17sr. If you need any more infor
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-name': 'riverside brasserie', 'restaurant-area': 'centre', 'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'restaurant-food': 'modern european', 'restaurant-pricerange': 'moderate', 'hotel-area': 'south', 'hotel-stars': '4', 'hotel-type': 'guesthouse'}
+  Pred slots: {'restaurant-name': 'riverside brasserie', 'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'hotel-area': 'south', 'hotel-stars': '4'}
+  Violations: []
+  JGA: False | SlotF1: 0.75 | Hall: True | Valid: False
+
+  Example 2:
+  Dialogue: MUL1379.json
+  User utterance: Fitzbillies Restaurant sounds good,will you book it for me ?
+  LLM Response: I can help you with that! Could you please provide the date, time, and number of people for your booking at [restaurant_name]?
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: restaurant | Pred intent: book_restaurant
+  GT slots: {'restaurant-food': 'british', 'restaurant-pricerange': 'expensive', 'restaurant-area': 'centre'}
+  Pred slots: {'restaurant-pricerange': 'expensive', 'restaurant-food': 'british', 'restaurant-area': 'centre', 'restaurant-name': 'fitzbillies restaurant'}
+  Violations: ['restaurant-bookday', 'restaurant-bookpeople', 'restaurant-booktime']
+  JGA: False | SlotF1: 0.86 | Hall: False | Valid: False
+
+  Example 3:
+  Dialogue: SNG1047.json
+  User utterance: Yes please. I need to book a room for three days starting on tuesday.
+  LLM Response: To proceed with your booking for three days starting on Tuesday, could you please provide the number of people staying?
+  GT domains: ['hotel'] | GT intents: ['book_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'hotel-area': 'south', 'hotel-stars': '3', 'hotel-pricerange': 'expensive', 'hotel-name': 'lensfield hotel', 'hotel-bookday': 'tuesday', 'hotel-bookstay': '3', 'hotel-internet': 'yes', 'hotel-parking': 'yes'}
+  Pred slots: {'hotel-area': 'south', 'hotel-stars': '3', 'hotel-pricerange': 'expensive', 'hotel-bookstay': '3', 'hotel-bookday': 'tuesday'}
+  Violations: ['hotel-bookpeople']
+  JGA: False | SlotF1: 0.77 | Hall: False | Valid: False
+
+  [exp2_homo_haiku]: 38 failures
+
+  Example 1:
+  Dialogue: SNG1049.json
+  User utterance: Yes please. There are 8 of us and we'll be arriving on Saturday.
+  LLM Response: Okay, I've booked the 4-star [hotel_name] guesthouse for your group of 8 arriving on Saturday. The booking reference is [ref]. Please let me know if y
+  GT domains: ['hotel'] | GT intents: ['book_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'hotel-parking': 'yes', 'hotel-type': 'guesthouse', 'hotel-stars': '4', 'hotel-area': 'dontcare', 'hotel-bookday': 'saturday', 'hotel-bookpeople': '8'}
+  Pred slots: {'hotel-parking': 'yes', 'hotel-stars': '4', 'hotel-type': 'guesthouse', 'hotel-bookday': 'saturday', 'hotel-bookpeople': '8'}
+  Violations: ['hotel-bookstay']
+  JGA: False | SlotF1: 0.91 | Hall: False | Valid: False
+
+  Example 2:
+  Dialogue: MUL1379.json
+  User utterance: Fitzbillies Restaurant sounds good,will you book it for me ?
+  LLM Response: Okay, let me go ahead and book a table for you at [restaurant_name]. What day and time would you like to make the reservation for, and how many people
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: restaurant | Pred intent: book_restaurant
+  GT slots: {'restaurant-food': 'british', 'restaurant-pricerange': 'expensive', 'restaurant-area': 'centre'}
+  Pred slots: {'restaurant-pricerange': 'dontcare', 'restaurant-food': 'british', 'restaurant-area': 'centre', 'restaurant-name': 'fitzbillies restaurant'}
+  Violations: ['restaurant-bookday', 'restaurant-bookpeople', 'restaurant-booktime']
+  JGA: False | SlotF1: 0.57 | Hall: False | Valid: False
+
+  Example 3:
+  Dialogue: MUL1379.json
+  User utterance: I'm looking for a hotel that is a type of hotel in the same price range as the restaurant.
+  LLM Response: I apologize, but I could not find any hotels that match the same price range and type as the Fitzbillies Restaurant you mentioned. Would you be open t
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-food': 'british', 'restaurant-pricerange': 'expensive', 'restaurant-area': 'centre', 'restaurant-name': 'fitzbillies restaurant', 'hotel-pricerange': 'expensive', 'hotel-type': 'hotel'}
+  Pred slots: {'restaurant-pricerange': 'dontcare', 'restaurant-food': 'british', 'restaurant-area': 'centre', 'restaurant-name': 'fitzbillies restaurant', 'hotel-pricerange': 'same as restaurant', 'hotel-type': 'same as restaurant'}
+  Violations: []
+  JGA: False | SlotF1: 0.50 | Hall: True | Valid: False
+
+============================================================
+FAILURE: Domain error
+============================================================
+
+  [exp1_gpt]: 8 failures
+
+  Example 1:
+  Dialogue: PMUL4993.json
+  User utterance: the same group of people at 16:15 on the same day.
+  LLM Response: Please confirm the booking for 8 people for 3 nights starting Tuesday at allenbell, located at 517a coldham lane, cb13js. You can contact them at 0122
+  GT domains: ['restaurant'] | GT intents: ['book_restaurant']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'hotel-parking': 'yes', 'hotel-type': 'guesthouse', 'hotel-pricerange': 'cheap', 'hotel-stars': '4', 'hotel-area': 'east', 'hotel-bookday': 'tuesday', 'hotel-bookpeople': '8', 'hotel-bookstay': '3', 'hotel-name': 'allenbell', 'restaurant-food': 'british', 'restaurant-pricerange': 'expensive', 'restaurant-area': 'west', 'restaurant-bookday': 'tuesday', 'restaurant-bookpeople': '8', 'restaurant-booktime': '16:15', 'restaurant-name': 'graffiti'}
+  Pred slots: {'hotel-parking': 'yes', 'hotel-stars': '4', 'hotel-area': 'east', 'hotel-pricerange': 'cheap', 'hotel-bookday': 'tuesday', 'hotel-bookpeople': '8', 'hotel-bookstay': '3', 'restaurant-pricerange': 'expensive', 'restaurant-food': 'british', 'restaurant-area': 'west'}
+  Violations: []
+  JGA: False | SlotF1: 0.77 | Hall: False | Valid: True
+  DomainP: 0.00
+
+  Example 2:
+  Dialogue: MUL0065.json
+  User utterance: Is this acceptable? Is there anything else I can help you with?
+  LLM Response: Your booking at acorn guest house for 8 people for 3 nights starting Wednesday is confirmed. Reference: [ref].
+  GT domains: ['restaurant'] | GT intents: ['book_restaurant']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'restaurant-area': 'south', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'wednesday', 'restaurant-bookpeople': '8', 'restaurant-booktime': '16:30', 'restaurant-name': 'restaurant alimentum', 'hotel-type': 'guesthouse', 'hotel-internet': 'yes', 'hotel-parking': 'yes', 'hotel-bookday': 'wednesday', 'hotel-bookpeople': '8', 'hotel-bookstay': '3', 'hotel-name': 'allenbell'}
+  Pred slots: {'restaurant-area': 'south', 'restaurant-pricerange': 'moderate', 'restaurant-name': 'restaurant alimentum', 'restaurant-bookday': 'wednesday', 'restaurant-bookpeople': '8', 'restaurant-booktime': '16:30', 'hotel-type': 'guesthouse', 'hotel-parking': 'yes', 'hotel-internet': 'yes', 'hotel-bookday': 'wednesday', 'hotel-bookpeople': '8', 'hotel-bookstay': '3'}
+  Violations: []
+  JGA: False | SlotF1: 0.96 | Hall: False | Valid: True
+  DomainP: 0.00
+
+  Example 3:
+  Dialogue: PMUL0289.json
+  User utterance: Please book it for 7 people for 4 nights starting Wednesday.
+  LLM Response: I can help you with that. However, I need to confirm the reservation for 7 people for 4 nights starting Wednesday. Please hold on.
+  GT domains: ['hotel'] | GT intents: ['book_hotel']
+  Pred domain: restaurant | Pred intent: book_restaurant
+  GT slots: {'restaurant-area': 'centre', 'restaurant-pricerange': 'expensive', 'restaurant-food': 'italian', 'restaurant-name': 'stazione restaurant and coffee bar', 'restaurant-bookday': 'tuesday', 'restaurant-bookpeople': '2', 'restaurant-booktime': '20:00', 'hotel-name': 'avalon', 'hotel-bookday': 'wednesday', 'hotel-bookpeople': '7', 'hotel-bookstay': '4', 'hotel-stars': '4'}
+  Pred slots: {'restaurant-bookday': 'wednesday', 'restaurant-bookpeople': '7', 'restaurant-booktime': '20:00', 'hotel-name': 'avalon', 'hotel-bookday': 'tuesday', 'hotel-bookpeople': '2'}
+  Violations: []
+  JGA: False | SlotF1: 0.22 | Hall: False | Valid: True
+  DomainP: 0.00
+
+  [exp1_haiku]: 13 failures
+
+  Example 1:
+  Dialogue: PMUL4993.json
+  User utterance: Yes, I would prefer the west please.
+  LLM Response: Okay, let me search for a 4 star expensive hotel with free parking in the west area. The best match is huntingdon marriott hotel, located at kingfishe
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'hotel-parking': 'yes', 'hotel-type': 'guesthouse', 'hotel-pricerange': 'cheap', 'hotel-stars': '4', 'hotel-area': 'east', 'hotel-bookday': 'tuesday', 'hotel-bookpeople': '8', 'hotel-bookstay': '3', 'hotel-name': 'allenbell', 'restaurant-food': 'british', 'restaurant-pricerange': 'expensive', 'restaurant-area': 'west'}
+  Pred slots: {'hotel-parking': 'yes', 'hotel-stars': '4', 'hotel-area': 'west', 'hotel-pricerange': 'expensive', 'hotel-bookday': 'tuesday', 'hotel-bookpeople': '8', 'hotel-bookstay': '3', 'restaurant-pricerange': 'expensive', 'restaurant-food': 'british'}
+  Violations: []
+  JGA: False | SlotF1: 0.67 | Hall: False | Valid: True
+  DomainP: 0.00
+
+  Example 2:
+  Dialogue: PMUL4993.json
+  User utterance: the same group of people at 16:15 on the same day.
+  LLM Response: Okay, let me book the huntingdon marriott hotel for you. The address is kingfisher way, hinchinbrook business park, huntingdon, pe296fl and the phone 
+  GT domains: ['restaurant'] | GT intents: ['book_restaurant']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'hotel-parking': 'yes', 'hotel-type': 'guesthouse', 'hotel-pricerange': 'cheap', 'hotel-stars': '4', 'hotel-area': 'east', 'hotel-bookday': 'tuesday', 'hotel-bookpeople': '8', 'hotel-bookstay': '3', 'hotel-name': 'allenbell', 'restaurant-food': 'british', 'restaurant-pricerange': 'expensive', 'restaurant-area': 'west', 'restaurant-bookday': 'tuesday', 'restaurant-bookpeople': '8', 'restaurant-booktime': '16:15', 'restaurant-name': 'graffiti'}
+  Pred slots: {'hotel-parking': 'yes', 'hotel-stars': '4', 'hotel-area': 'west', 'hotel-pricerange': 'expensive', 'hotel-bookday': 'tuesday', 'hotel-bookpeople': '8', 'hotel-bookstay': '3', 'restaurant-pricerange': 'expensive', 'restaurant-food': 'british'}
+  Violations: []
+  JGA: False | SlotF1: 0.56 | Hall: False | Valid: True
+  DomainP: 0.00
+
+  Example 3:
+  Dialogue: MUL0065.json
+  User utterance: Is this acceptable? Is there anything else I can help you with?
+  LLM Response: Okay, let me book a stay for 8 people for 3 nights starting on Wednesday at aylesbray lodge guest house, located at 5 mowbray road, cb17sr. They can b
+  GT domains: ['restaurant'] | GT intents: ['book_restaurant']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'restaurant-area': 'south', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'wednesday', 'restaurant-bookpeople': '8', 'restaurant-booktime': '16:30', 'restaurant-name': 'restaurant alimentum', 'hotel-type': 'guesthouse', 'hotel-internet': 'yes', 'hotel-parking': 'yes', 'hotel-bookday': 'wednesday', 'hotel-bookpeople': '8', 'hotel-bookstay': '3', 'hotel-name': 'allenbell'}
+  Pred slots: {'restaurant-area': 'south', 'restaurant-pricerange': 'moderate', 'restaurant-name': 'restaurant alimentum', 'restaurant-bookday': 'wednesday', 'restaurant-bookpeople': '8', 'restaurant-booktime': '16:30', 'hotel-area': 'south', 'hotel-pricerange': 'moderate', 'hotel-type': 'guesthouse', 'hotel-internet': 'yes', 'hotel-parking': 'yes', 'hotel-bookday': 'wednesday', 'hotel-bookpeople': '8', 'hotel-bookstay': '3'}
+  Violations: []
+  JGA: False | SlotF1: 0.89 | Hall: False | Valid: True
+  DomainP: 0.00
+
+  [exp2_hetero_gpt_haiku]: 10 failures
+
+  Example 1:
+  Dialogue: PMUL4993.json
+  User utterance: Yes, I would prefer the west please.
+  LLM Response: I apologize, but I could not find any 4-star guesthouses in the west area that have free parking and are in the cheap price range. Would you be open t
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'hotel-parking': 'yes', 'hotel-type': 'guesthouse', 'hotel-pricerange': 'cheap', 'hotel-stars': '4', 'hotel-area': 'east', 'hotel-bookday': 'tuesday', 'hotel-bookpeople': '8', 'hotel-bookstay': '3', 'hotel-name': 'allenbell', 'restaurant-food': 'british', 'restaurant-pricerange': 'expensive', 'restaurant-area': 'west'}
+  Pred slots: {'hotel-parking': 'yes', 'hotel-stars': '4', 'hotel-area': 'west', 'hotel-pricerange': 'cheap', 'hotel-name': 'allenbell', 'hotel-bookpeople': '8', 'hotel-bookstay': '3', 'hotel-bookday': 'tuesday', 'restaurant-pricerange': 'expensive', 'restaurant-food': 'british'}
+  Violations: []
+  JGA: False | SlotF1: 0.82 | Hall: False | Valid: True
+  DomainP: 0.00
+
+  Example 2:
+  Dialogue: MUL0065.json
+  User utterance: Is this acceptable? Is there anything else I can help you with?
+  LLM Response: The acorn guest house located at 154 chesterton road, cb41da seems to match your requirements. They have free parking and free wifi. Would you like me
+  GT domains: ['restaurant'] | GT intents: ['book_restaurant']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'restaurant-area': 'south', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'wednesday', 'restaurant-bookpeople': '8', 'restaurant-booktime': '16:30', 'restaurant-name': 'restaurant alimentum', 'hotel-type': 'guesthouse', 'hotel-internet': 'yes', 'hotel-parking': 'yes', 'hotel-bookday': 'wednesday', 'hotel-bookpeople': '8', 'hotel-bookstay': '3', 'hotel-name': 'allenbell'}
+  Pred slots: {'restaurant-area': 'south', 'restaurant-pricerange': 'moderate', 'restaurant-name': 'restaurant alimentum', 'restaurant-bookday': 'wednesday', 'restaurant-bookpeople': '8', 'restaurant-booktime': '16:30', 'hotel-type': 'guesthouse', 'hotel-parking': 'yes', 'hotel-internet': 'dontcare', 'hotel-bookpeople': '8', 'hotel-bookstay': '3', 'hotel-bookday': 'wednesday'}
+  Violations: []
+  JGA: False | SlotF1: 0.88 | Hall: False | Valid: True
+  DomainP: 0.00
+
+  Example 3:
+  Dialogue: SNG1023.json
+  User utterance: Is there a place on the east side of town with free parking?
+  LLM Response: Based on the information provided, I would recommend the restaurant the missing sock located in the east area of town. It has free parking available. 
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'hotel-area': 'east', 'hotel-parking': 'yes'}
+  Pred slots: {'restaurant-area': 'east', 'restaurant-parking': 'yes'}
+  Violations: []
+  JGA: False | SlotF1: 0.00 | Hall: False | Valid: True
+  DomainP: 0.00
+
+  [exp2_hetero_haiku_gpt]: 18 failures
+
+  Example 1:
+  Dialogue: PMUL4833.json
+  User utterance: No, I don't need a booking, just the address.
+  LLM Response: The address for the Spanish restaurant is 4 - 6 Rose Crescent, located in the city centre. If you need any further assistance, feel free to ask!
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-pricerange': 'cheap', 'restaurant-area': 'centre', 'restaurant-food': 'spanish', 'restaurant-bookday': 'monday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '13:00', 'restaurant-name': 'la raza', 'hotel-area': 'centre', 'hotel-type': 'guesthouse', 'hotel-parking': 'yes', 'hotel-stars': '4'}
+  Pred slots: {'restaurant-pricerange': 'cheap', 'restaurant-area': 'centre', 'restaurant-food': 'spanish', 'restaurant-name': 'la raza', 'restaurant-bookday': 'monday', 'restaurant-booktime': '13:00', 'restaurant-bookpeople': '3', 'hotel-area': 'centre', 'hotel-type': 'guesthouse', 'hotel-stars': '4', 'hotel-parking': 'yes'}
+  Violations: []
+  JGA: True | SlotF1: 1.00 | Hall: False | Valid: True
+  DomainP: 0.00
+
+  Example 2:
+  Dialogue: MUL0126.json
+  User utterance: Yes, please broaden the price search.
+  LLM Response: Thank you for your flexibility! I will search for Italian restaurants in Cambridge with a broader price range. Please hold on for a moment.
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-food': 'italian', 'restaurant-pricerange': 'expensive', 'restaurant-bookday': 'wednesday', 'restaurant-bookpeople': '8', 'restaurant-booktime': '19:00', 'restaurant-name': 'frankie and bennys', 'hotel-type': 'guesthouse', 'hotel-internet': 'yes', 'hotel-pricerange': 'expensive', 'hotel-stars': '4'}
+  Pred slots: {'restaurant-area': 'cambridge', 'restaurant-pricerange': 'expensive', 'restaurant-food': 'italian', 'restaurant-bookday': 'wednesday', 'restaurant-bookpeople': '8', 'restaurant-booktime': '19:00', 'hotel-area': 'cambridge', 'hotel-pricerange': 'expensive', 'hotel-internet': 'yes', 'hotel-stars': '4'}
+  Violations: []
+  JGA: False | SlotF1: 0.80 | Hall: False | Valid: True
+  DomainP: 0.00
+
+  Example 3:
+  Dialogue: PMUL3735.json
+  User utterance: book for 1 people and 4 nights starting teusday
+  LLM Response: Your reservation at la margherita for 1 person at 11:45 on Tuesday has been successfully booked! Your booking reference is [ref]. For your hotel stay,
+  GT domains: ['hotel'] | GT intents: ['book_hotel']
+  Pred domain: restaurant | Pred intent: book_restaurant
+  GT slots: {'restaurant-area': 'west', 'restaurant-pricerange': 'cheap', 'restaurant-bookday': 'tuesday', 'restaurant-bookpeople': '1', 'restaurant-booktime': '11:45', 'restaurant-name': 'la margherita', 'hotel-area': 'west', 'hotel-type': 'hotel', 'hotel-parking': 'yes', 'hotel-bookday': 'tuesday', 'hotel-bookpeople': '1', 'hotel-bookstay': '4'}
+  Pred slots: {'restaurant-pricerange': 'cheap', 'restaurant-area': 'west', 'restaurant-name': 'la margherita', 'restaurant-bookday': 'tuesday', 'restaurant-booktime': '11:45', 'restaurant-bookpeople': '1', 'hotel-area': 'west', 'hotel-pricerange': 'cheap', 'hotel-parking': 'yes', 'hotel-bookday': 'tuesday', 'hotel-bookpeople': '1', 'hotel-bookstay': '4'}
+  Violations: []
+  JGA: False | SlotF1: 0.92 | Hall: False | Valid: True
+  DomainP: 0.00
+
+  [exp2_homo_gpt]: 9 failures
+
+  Example 1:
+  Dialogue: MUL0065.json
+  User utterance: Is this acceptable? Is there anything else I can help you with?
+  LLM Response: I couldn't find a guesthouse that meets your requirements for 8 people for 3 nights starting Wednesday with free parking and free Wi-Fi. Would you be 
+  GT domains: ['restaurant'] | GT intents: ['book_restaurant']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'restaurant-area': 'south', 'restaurant-pricerange': 'moderate', 'restaurant-bookday': 'wednesday', 'restaurant-bookpeople': '8', 'restaurant-booktime': '16:30', 'restaurant-name': 'restaurant alimentum', 'hotel-type': 'guesthouse', 'hotel-internet': 'yes', 'hotel-parking': 'yes', 'hotel-bookday': 'wednesday', 'hotel-bookpeople': '8', 'hotel-bookstay': '3', 'hotel-name': 'allenbell'}
+  Pred slots: {'restaurant-area': 'south', 'restaurant-pricerange': 'moderate', 'restaurant-name': 'restaurant alimentum', 'restaurant-bookpeople': '8', 'restaurant-bookday': 'wednesday', 'restaurant-booktime': '16:30', 'hotel-type': 'guesthouse', 'hotel-parking': 'yes', 'hotel-internet': 'free', 'hotel-bookpeople': '8', 'hotel-bookstay': '3', 'hotel-bookday': 'wednesday'}
+  Violations: []
+  JGA: False | SlotF1: 0.88 | Hall: False | Valid: True
+  DomainP: 0.00
+
+  Example 2:
+  Dialogue: SNG1023.json
+  User utterance: Is there a place on the east side of town with free parking?
+  LLM Response: I found a restaurant on the east side of town with free parking. You can check out the missing sock at Finders Corner Newmarket Road, postcode cb259aq
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'hotel-area': 'east', 'hotel-parking': 'yes'}
+  Pred slots: {'restaurant-area': 'east', 'restaurant-parking': 'yes'}
+  Violations: []
+  JGA: False | SlotF1: 0.00 | Hall: False | Valid: True
+  DomainP: 0.00
+
+  Example 3:
+  Dialogue: PMUL0348.json
+  User utterance: Hello, is lan hong house still in operation?
+  LLM Response: I'm sorry, but I couldn't find any information on [hotel_name]. Could you please provide a different area or price range to help narrow down the searc
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {}
+  Pred slots: {'hotel-name': 'lan hong house'}
+  Violations: []
+  JGA: False | SlotF1: 0.00 | Hall: False | Valid: True
+  DomainP: 0.00
+
+  [exp2_homo_haiku]: 17 failures
+
+  Example 1:
+  Dialogue: PMUL4833.json
+  User utterance: I would also like it to have a 4 star rating and free parking
+  LLM Response: Unfortunately I could not find any restaurants in the city centre that meet all your criteria, including a 4 star rating and free parking. Would you b
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-pricerange': 'cheap', 'restaurant-area': 'centre', 'restaurant-food': 'spanish', 'restaurant-bookday': 'monday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '13:00', 'restaurant-name': 'la raza', 'hotel-area': 'centre', 'hotel-type': 'guesthouse', 'hotel-parking': 'yes', 'hotel-stars': '4'}
+  Pred slots: {'restaurant-pricerange': 'cheap', 'restaurant-area': 'centre', 'restaurant-food': 'spanish', 'restaurant-bookday': 'monday', 'restaurant-booktime': '13:00', 'restaurant-bookpeople': '3', 'hotel-area': 'centre', 'hotel-type': 'guesthouse'}
+  Violations: []
+  JGA: False | SlotF1: 0.84 | Hall: False | Valid: True
+  DomainP: 0.00
+
+  Example 2:
+  Dialogue: MUL1379.json
+  User utterance: That's all I needed, thanks so much!
+  LLM Response: Okay, I've found the fitzbillies restaurant at 51 Trumpington Street City Centre, cb21rg. Would you like me to go ahead and make a reservation for you
+  GT domains: ['hotel'] | GT intents: ['book_hotel']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-food': 'british', 'restaurant-pricerange': 'expensive', 'restaurant-area': 'centre', 'restaurant-name': 'fitzbillies restaurant', 'hotel-pricerange': 'expensive', 'hotel-type': 'hotel', 'hotel-parking': 'yes', 'hotel-stars': '4', 'hotel-area': 'centre', 'hotel-bookday': 'sunday', 'hotel-bookpeople': '4', 'hotel-bookstay': '5', 'hotel-name': 'university arms hotel'}
+  Pred slots: {'restaurant-pricerange': 'dontcare', 'restaurant-food': 'british', 'restaurant-area': 'centre', 'restaurant-name': 'fitzbillies restaurant', 'hotel-pricerange': 'same as restaurant', 'hotel-type': 'dontcare', 'hotel-stars': '4', 'hotel-parking': 'yes', 'hotel-area': 'centre'}
+  Violations: []
+  JGA: False | SlotF1: 0.55 | Hall: False | Valid: True
+  DomainP: 0.00
+
+  Example 3:
+  Dialogue: MUL1370.json
+  User utterance: it doesn't matter
+  LLM Response: I've booked a table for 2 people at pizza hut city centre on Wednesday at 12:45. The booking reference is [ref]. Let me know if you'd also like me to 
+  GT domains: ['hotel'] | GT intents: ['book_hotel']
+  Pred domain: restaurant | Pred intent: book_restaurant
+  GT slots: {'restaurant-area': 'centre', 'restaurant-pricerange': 'cheap', 'restaurant-bookday': 'wednesday', 'restaurant-bookpeople': '2', 'restaurant-booktime': '12:45', 'restaurant-name': 'river bar steakhouse and grill', 'hotel-area': 'centre', 'hotel-parking': 'yes', 'hotel-pricerange': 'cheap', 'hotel-bookday': 'wednesday', 'hotel-bookpeople': '2', 'hotel-bookstay': '1'}
+  Pred slots: {'restaurant-pricerange': 'cheap', 'restaurant-area': 'centre', 'restaurant-bookday': 'wednesday', 'restaurant-bookpeople': '2', 'restaurant-booktime': '12:45', 'hotel-pricerange': 'cheap', 'hotel-parking': 'yes'}
+  Violations: []
+  JGA: False | SlotF1: 0.74 | Hall: False | Valid: True
+  DomainP: 0.00
+
+============================================================
+FAILURE: Intent error
+============================================================
+
+  [exp1_gpt]: 94 failures
+
+  Example 1:
+  Dialogue: PMUL0287.json
+  User utterance: No particular price range, but I would like it to be a 4 star hotel.
+  LLM Response: I found a suitable hotel for you. It's called aylesbray lodge guest house, located at 5 mowbray road, cb17sr. You can contact them at 01223240089. Wou
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'restaurant-name': 'riverside brasserie', 'restaurant-area': 'centre', 'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'restaurant-food': 'modern european', 'restaurant-pricerange': 'moderate', 'hotel-area': 'south', 'hotel-stars': '4'}
+  Pred slots: {'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'hotel-area': 'south', 'hotel-stars': '4', 'hotel-bookday': 'sunday', 'hotel-bookpeople': '6', 'hotel-bookstay': '1'}
+  Violations: []
+  JGA: False | SlotF1: 0.59 | Hall: False | Valid: True
+  IntentP: 0.00
+
+  Example 2:
+  Dialogue: PMUL0287.json
+  User utterance: Sure, that will work. Can you tell me more about them?
+  LLM Response: The aylesbray lodge guest house is a 4-star hotel located at 5 mowbray road, cb17sr. You can contact them at 01223240089. Would you like me to proceed
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'restaurant-name': 'riverside brasserie', 'restaurant-area': 'centre', 'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'restaurant-food': 'modern european', 'restaurant-pricerange': 'moderate', 'hotel-area': 'south', 'hotel-stars': '4'}
+  Pred slots: {'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'hotel-area': 'south', 'hotel-stars': '4', 'hotel-bookday': 'sunday', 'hotel-bookpeople': '6', 'hotel-bookstay': '1'}
+  Violations: []
+  JGA: False | SlotF1: 0.59 | Hall: False | Valid: True
+  IntentP: 0.00
+
+  Example 3:
+  Dialogue: SNG0759.json
+  User utterance: Sure. I could stay for 1 night.
+  LLM Response: I couldn't find a hotel named Home from Home. Would you like to search for something else?
+  GT domains: ['hotel'] | GT intents: ['book_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'hotel-name': 'home from home', 'hotel-bookday': 'monday', 'hotel-bookpeople': '8', 'hotel-bookstay': '1', 'hotel-stars': '4'}
+  Pred slots: {'hotel-name': 'home from home', 'hotel-bookday': 'monday', 'hotel-bookpeople': '8', 'hotel-bookstay': '4'}
+  Violations: []
+  JGA: False | SlotF1: 0.67 | Hall: False | Valid: True
+  IntentP: 0.00
+
+  [exp1_haiku]: 71 failures
+
+  Example 1:
+  Dialogue: PMUL1591.json
+  User utterance: Yes, please recommend one that can accommodate 8 people for 2 nights starting on Thursday
+  LLM Response: Okay, let me check for a cheap hotel in the east area that can accommodate 8 people for 2 nights starting on Thursday. The best match is allenbell at 
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'hotel-area': 'east', 'hotel-pricerange': 'cheap', 'hotel-stars': '4'}
+  Pred slots: {'hotel-area': 'east', 'hotel-pricerange': 'cheap', 'hotel-bookday': 'thursday', 'hotel-bookpeople': '8', 'hotel-bookstay': '2'}
+  Violations: []
+  JGA: False | SlotF1: 0.50 | Hall: False | Valid: True
+  IntentP: 0.00
+
+  Example 2:
+  Dialogue: PMUL4993.json
+  User utterance: Yes, I would prefer the west please.
+  LLM Response: Okay, let me search for a 4 star expensive hotel with free parking in the west area. The best match is huntingdon marriott hotel, located at kingfishe
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'hotel-parking': 'yes', 'hotel-type': 'guesthouse', 'hotel-pricerange': 'cheap', 'hotel-stars': '4', 'hotel-area': 'east', 'hotel-bookday': 'tuesday', 'hotel-bookpeople': '8', 'hotel-bookstay': '3', 'hotel-name': 'allenbell', 'restaurant-food': 'british', 'restaurant-pricerange': 'expensive', 'restaurant-area': 'west'}
+  Pred slots: {'hotel-parking': 'yes', 'hotel-stars': '4', 'hotel-area': 'west', 'hotel-pricerange': 'expensive', 'hotel-bookday': 'tuesday', 'hotel-bookpeople': '8', 'hotel-bookstay': '3', 'restaurant-pricerange': 'expensive', 'restaurant-food': 'british'}
+  Violations: []
+  JGA: False | SlotF1: 0.67 | Hall: False | Valid: True
+  IntentP: 0.00
+
+  Example 3:
+  Dialogue: PMUL4993.json
+  User utterance: the same group of people at 16:15 on the same day.
+  LLM Response: Okay, let me book the huntingdon marriott hotel for you. The address is kingfisher way, hinchinbrook business park, huntingdon, pe296fl and the phone 
+  GT domains: ['restaurant'] | GT intents: ['book_restaurant']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'hotel-parking': 'yes', 'hotel-type': 'guesthouse', 'hotel-pricerange': 'cheap', 'hotel-stars': '4', 'hotel-area': 'east', 'hotel-bookday': 'tuesday', 'hotel-bookpeople': '8', 'hotel-bookstay': '3', 'hotel-name': 'allenbell', 'restaurant-food': 'british', 'restaurant-pricerange': 'expensive', 'restaurant-area': 'west', 'restaurant-bookday': 'tuesday', 'restaurant-bookpeople': '8', 'restaurant-booktime': '16:15', 'restaurant-name': 'graffiti'}
+  Pred slots: {'hotel-parking': 'yes', 'hotel-stars': '4', 'hotel-area': 'west', 'hotel-pricerange': 'expensive', 'hotel-bookday': 'tuesday', 'hotel-bookpeople': '8', 'hotel-bookstay': '3', 'restaurant-pricerange': 'expensive', 'restaurant-food': 'british'}
+  Violations: []
+  JGA: False | SlotF1: 0.56 | Hall: False | Valid: True
+  IntentP: 0.00
+
+  [exp2_hetero_gpt_haiku]: 84 failures
+
+  Example 1:
+  Dialogue: PMUL0287.json
+  User utterance: Sure, that will work. Can you tell me more about them?
+  LLM Response: Certainly, let me provide you with more details about [hotel_name]. It is a 4-star hotel located at [hotel_address], [hotel_postcode]. The hotel phone
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'restaurant-name': 'riverside brasserie', 'restaurant-area': 'centre', 'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'restaurant-food': 'modern european', 'restaurant-pricerange': 'moderate', 'hotel-area': 'south', 'hotel-stars': '4'}
+  Pred slots: {'restaurant-name': 'riverside brasserie', 'restaurant-bookday': 'sunday', 'restaurant-bookpeople': '6', 'restaurant-booktime': '14:30', 'hotel-area': 'south', 'hotel-stars': '4'}
+  Violations: ['hotel-bookday', 'hotel-bookpeople', 'hotel-bookstay']
+  JGA: False | SlotF1: 0.80 | Hall: False | Valid: True
+  IntentP: 0.00
+
+  Example 2:
+  Dialogue: PMUL4993.json
+  User utterance: Yes, I would prefer the west please.
+  LLM Response: I apologize, but I could not find any 4-star guesthouses in the west area that have free parking and are in the cheap price range. Would you be open t
+  GT domains: ['restaurant'] | GT intents: ['find_restaurant']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'hotel-parking': 'yes', 'hotel-type': 'guesthouse', 'hotel-pricerange': 'cheap', 'hotel-stars': '4', 'hotel-area': 'east', 'hotel-bookday': 'tuesday', 'hotel-bookpeople': '8', 'hotel-bookstay': '3', 'hotel-name': 'allenbell', 'restaurant-food': 'british', 'restaurant-pricerange': 'expensive', 'restaurant-area': 'west'}
+  Pred slots: {'hotel-parking': 'yes', 'hotel-stars': '4', 'hotel-area': 'west', 'hotel-pricerange': 'cheap', 'hotel-name': 'allenbell', 'hotel-bookpeople': '8', 'hotel-bookstay': '3', 'hotel-bookday': 'tuesday', 'restaurant-pricerange': 'expensive', 'restaurant-food': 'british'}
+  Violations: []
+  JGA: False | SlotF1: 0.82 | Hall: False | Valid: True
+  IntentP: 0.00
+
+  Example 3:
+  Dialogue: PMUL1653.json
+  User utterance: Yes please. 1 person for 3 nights starting Thursday.
+  LLM Response: I apologize, but I still do not have any hotels that match your criteria of being in the expensive price range, having a 2-star rating, and offering b
+  GT domains: ['hotel'] | GT intents: ['book_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'hotel-internet': 'yes', 'hotel-parking': 'yes', 'hotel-pricerange': 'expensive', 'hotel-stars': '2', 'hotel-bookday': 'thursday', 'hotel-bookpeople': '1', 'hotel-bookstay': '3', 'hotel-name': 'express by holiday inn cambridge'}
+  Pred slots: {'hotel-internet': 'free', 'hotel-parking': 'yes', 'hotel-pricerange': 'expensive', 'hotel-stars': '2'}
+  Violations: []
+  JGA: False | SlotF1: 0.50 | Hall: False | Valid: True
+  IntentP: 0.00
+
+  [exp2_hetero_haiku_gpt]: 110 failures
+
+  Example 1:
+  Dialogue: PMUL4833.json
+  User utterance: No, I don't need a booking, just the address.
+  LLM Response: The address for the Spanish restaurant is 4 - 6 Rose Crescent, located in the city centre. If you need any further assistance, feel free to ask!
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-pricerange': 'cheap', 'restaurant-area': 'centre', 'restaurant-food': 'spanish', 'restaurant-bookday': 'monday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '13:00', 'restaurant-name': 'la raza', 'hotel-area': 'centre', 'hotel-type': 'guesthouse', 'hotel-parking': 'yes', 'hotel-stars': '4'}
+  Pred slots: {'restaurant-pricerange': 'cheap', 'restaurant-area': 'centre', 'restaurant-food': 'spanish', 'restaurant-name': 'la raza', 'restaurant-bookday': 'monday', 'restaurant-booktime': '13:00', 'restaurant-bookpeople': '3', 'hotel-area': 'centre', 'hotel-type': 'guesthouse', 'hotel-stars': '4', 'hotel-parking': 'yes'}
+  Violations: []
+  JGA: True | SlotF1: 1.00 | Hall: False | Valid: True
+  IntentP: 0.00
+
+  Example 2:
+  Dialogue: MUL0126.json
+  User utterance: Yes, please broaden the price search.
+  LLM Response: Thank you for your flexibility! I will search for Italian restaurants in Cambridge with a broader price range. Please hold on for a moment.
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-food': 'italian', 'restaurant-pricerange': 'expensive', 'restaurant-bookday': 'wednesday', 'restaurant-bookpeople': '8', 'restaurant-booktime': '19:00', 'restaurant-name': 'frankie and bennys', 'hotel-type': 'guesthouse', 'hotel-internet': 'yes', 'hotel-pricerange': 'expensive', 'hotel-stars': '4'}
+  Pred slots: {'restaurant-area': 'cambridge', 'restaurant-pricerange': 'expensive', 'restaurant-food': 'italian', 'restaurant-bookday': 'wednesday', 'restaurant-bookpeople': '8', 'restaurant-booktime': '19:00', 'hotel-area': 'cambridge', 'hotel-pricerange': 'expensive', 'hotel-internet': 'yes', 'hotel-stars': '4'}
+  Violations: []
+  JGA: False | SlotF1: 0.80 | Hall: False | Valid: True
+  IntentP: 0.00
+
+  Example 3:
+  Dialogue: SNG1049.json
+  User utterance: Yes please. There are 8 of us and we'll be arriving on Saturday.
+  LLM Response: I can help you with that! I have a four-star guesthouse that offers free parking available for your group of 8 arriving on Saturday. The details are a
+  GT domains: ['hotel'] | GT intents: ['book_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'hotel-parking': 'yes', 'hotel-type': 'guesthouse', 'hotel-stars': '4', 'hotel-area': 'dontcare', 'hotel-bookday': 'saturday', 'hotel-bookpeople': '8'}
+  Pred slots: {'hotel-parking': 'yes', 'hotel-stars': '4', 'hotel-type': 'guesthouse'}
+  Violations: []
+  JGA: False | SlotF1: 0.67 | Hall: False | Valid: True
+  IntentP: 0.00
+
+  [exp2_homo_gpt]: 71 failures
+
+  Example 1:
+  Dialogue: SNG1046.json
+  User utterance: That is great, I'm so excited. Thanks for you help. Bye.
+  LLM Response: I'm glad to hear you're excited! Unfortunately, I couldn't find a hotel that meets your criteria. Would you be open to relaxing one of your requiremen
+  GT domains: ['hotel'] | GT intents: ['book_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'hotel-internet': 'yes', 'hotel-stars': '3', 'hotel-bookday': 'monday', 'hotel-bookpeople': '3', 'hotel-bookstay': '2', 'hotel-name': 'gonville hotel'}
+  Pred slots: {'hotel-stars': '3', 'hotel-internet': 'free', 'hotel-type': 'hotel', 'hotel-bookstay': '2', 'hotel-bookday': 'monday', 'hotel-bookpeople': '3'}
+  Violations: []
+  JGA: False | SlotF1: 0.67 | Hall: False | Valid: True
+  IntentP: 0.00
+
+  Example 2:
+  Dialogue: SNG0807.json
+  User utterance: I would need a hotel for 6 people, starting from Thursday and lasting 4 nights. Is there anything available?
+  LLM Response: I found a guesthouse that can accommodate your group of 6 for 4 nights starting from Thursday. You can contact them at 01223210353 or visit them at 51
+  GT domains: ['hotel'] | GT intents: ['book_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'hotel-area': 'east', 'hotel-pricerange': 'cheap', 'hotel-parking': 'yes', 'hotel-bookday': 'thursday', 'hotel-bookpeople': '6', 'hotel-bookstay': '4'}
+  Pred slots: {'hotel-area': 'east', 'hotel-pricerange': 'cheap', 'hotel-parking': 'dontcare'}
+  Violations: []
+  JGA: False | SlotF1: 0.44 | Hall: False | Valid: True
+  IntentP: 0.00
+
+  Example 3:
+  Dialogue: SNG0807.json
+  User utterance: Great, that's all I need today. Thank you!
+  LLM Response: You're welcome! If you need any further assistance or want to proceed with the booking at allenbell, feel free to reach out. Have a great day!
+  GT domains: ['hotel'] | GT intents: ['book_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'hotel-area': 'east', 'hotel-pricerange': 'cheap', 'hotel-parking': 'yes', 'hotel-bookday': 'thursday', 'hotel-bookpeople': '6', 'hotel-bookstay': '4', 'hotel-name': 'allenbell'}
+  Pred slots: {'hotel-area': 'east', 'hotel-pricerange': 'cheap', 'hotel-parking': 'dontcare'}
+  Violations: []
+  JGA: False | SlotF1: 0.40 | Hall: False | Valid: True
+  IntentP: 0.00
+
+  [exp2_homo_haiku]: 102 failures
+
+  Example 1:
+  Dialogue: PMUL4833.json
+  User utterance: I would also like it to have a 4 star rating and free parking
+  LLM Response: Unfortunately I could not find any restaurants in the city centre that meet all your criteria, including a 4 star rating and free parking. Would you b
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: restaurant | Pred intent: find_restaurant
+  GT slots: {'restaurant-pricerange': 'cheap', 'restaurant-area': 'centre', 'restaurant-food': 'spanish', 'restaurant-bookday': 'monday', 'restaurant-bookpeople': '3', 'restaurant-booktime': '13:00', 'restaurant-name': 'la raza', 'hotel-area': 'centre', 'hotel-type': 'guesthouse', 'hotel-parking': 'yes', 'hotel-stars': '4'}
+  Pred slots: {'restaurant-pricerange': 'cheap', 'restaurant-area': 'centre', 'restaurant-food': 'spanish', 'restaurant-bookday': 'monday', 'restaurant-booktime': '13:00', 'restaurant-bookpeople': '3', 'hotel-area': 'centre', 'hotel-type': 'guesthouse'}
+  Violations: []
+  JGA: False | SlotF1: 0.84 | Hall: False | Valid: True
+  IntentP: 0.00
+
+  Example 2:
+  Dialogue: PMUL1591.json
+  User utterance: Yes, please recommend one that can accommodate 8 people for 2 nights starting on Thursday
+  LLM Response: I'd be happy to help you book a hotel that can accommodate 8 people for 2 nights starting on Thursday. Based on the available options, I recommend all
+  GT domains: ['hotel'] | GT intents: ['find_hotel']
+  Pred domain: hotel | Pred intent: book_hotel
+  GT slots: {'hotel-area': 'east', 'hotel-pricerange': 'cheap', 'hotel-stars': '4'}
+  Pred slots: {'hotel-area': 'east', 'hotel-pricerange': 'cheap', 'hotel-parking': 'dontcare', 'hotel-bookday': 'thursday', 'hotel-bookpeople': '8', 'hotel-bookstay': '2'}
+  Violations: []
+  JGA: False | SlotF1: 0.44 | Hall: False | Valid: True
+  IntentP: 0.00
+
+  Example 3:
+  Dialogue: PMUL1653.json
+  User utterance: Yes please. 1 person for 3 nights starting Thursday.
+  LLM Response: I was able to find a 2-star hotel in the moderate price range that offers free WiFi and free parking. The hotel details are:
+
+[hotel_name]
+[hotel_phon
+  GT domains: ['hotel'] | GT intents: ['book_hotel']
+  Pred domain: hotel | Pred intent: find_hotel
+  GT slots: {'hotel-internet': 'yes', 'hotel-parking': 'yes', 'hotel-pricerange': 'expensive', 'hotel-stars': '2', 'hotel-bookday': 'thursday', 'hotel-bookpeople': '1', 'hotel-bookstay': '3', 'hotel-name': 'express by holiday inn cambridge'}
+  Pred slots: {'hotel-internet': 'free', 'hotel-parking': 'yes', 'hotel-pricerange': 'moderate', 'hotel-stars': '2'}
+  Violations: []
+  JGA: False | SlotF1: 0.33 | Hall: False | Valid: True
+  IntentP: 0.00
+
+============================================================
+END OF ERROR ANALYSIS
+============================================================

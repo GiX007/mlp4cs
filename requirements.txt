@@ -1,0 +1,34 @@
+# Data
+datasets
+tqdm
+
+# Pytorch
+--extra-index-url https://download.pytorch.org/whl/cu118
+torch==2.7.0+cu118
+torchvision
+torchaudio
+
+
+# API Clients (local development only)
+openai
+anthropic
+tenacity
+python-dotenv
+tabulate
+
+# Model Loading & Inference
+transformers
+accelerate
+bitsandbytes
+protobuf
+
+# Fine-tuning (EuroHPC / GPU only)
+unsloth
+peft
+trl
+
+# Testing
+pytest
+
+# Tomiinek Evaluator
+git+https://github.com/Tomiinek/MultiWOZ_Evaluation.git@master

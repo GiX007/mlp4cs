@@ -1,0 +1,43 @@
+DATE: 2026-03-30
+EXPERIMENT: baseline_gpt_dev
+
+
+SYSTEM_PROMPT:
+f"You are an end-to-end customer service assistant for {', '.join(TARGET_DOMAINS)} bookings.\n\n"
+        f"HOTEL DATABASE:\n{json.dumps(_HOTEL_DB, indent=2)}\n\n"
+        f"RESTAURANT DATABASE:\n{json.dumps(_RESTAURANT_DB, indent=2)}"
+
+
+USER_PROMPT:
+f"{history_str}\n"
+        f"USER: {user_utterance}\n\n"
+        f"Current belief state: {slots_str}\n\n"
+        f"Valid domains: {', '.join(TARGET_DOMAINS)}\n"
+        f"Valid intents: find_hotel, book_hotel, find_restaurant, book_restaurant\n"
+        f"Valid slots: {slot_list}\n\n"
+        f"Booking policy — required slots:\n"
+        f"- book_hotel: {', '.join(BOOKING_REQUIRED_SLOTS['book_hotel'])}\n"
+        f"- book_restaurant: {', '.join(BOOKING_REQUIRED_SLOTS['book_restaurant'])}\n\n"
+        f"Extraction rules:\n"
+        f"- ONLY extract slot values EXPLICITLY stated by the user.\n"
+        f"- DO NOT infer or assume missing values.\n\n"
+        f"Response rules:\n"
+        f"1. Find the best matching entity from the DATABASE in the system prompt based on the current belief state constraints.\n"
+        f"2. If no matching entity found, tell user nothing was found.\n"
+        f"3. If booking intent and ALL required slots present, confirm booking with [ref] placeholder.\n"
+        f"4. If booking intent but required slots MISSING, ask ONLY for those missing slots.\n"
+        f"5. NEVER use real entity names or details — ALWAYS use placeholders:\n"
+        f"   [hotel_name], [hotel_phone], [hotel_address], [hotel_postcode]\n"
+        f"   [restaurant_name], [restaurant_phone], [restaurant_address], [restaurant_postcode]\n"
+        f"   [ref] for booking reference.\n\n"
+        f"6. Recommend ONE entity only and use each placeholder ONCE.\n"
+        f"7. If user says goodbye or thanks, respond with a farewell message. Set intent to None.\n"
+        f"Respond with valid JSON only:\n"
+        f'{{"domain": "...", "intent": "...", "slots": {{}}, "response": "..."}}'
+
+
+
+CONFIG:
+MAX_DIALOGUES: None (full dev set)
+LLM_TEMPERATURE: 0.0
+LLM_MAX_TOKENS: 512
