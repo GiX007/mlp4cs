@@ -1001,3 +1001,39 @@ restaurant-pricerange:
 ============================================================
 END OF SLOT VALUE DISTRIBUTION
 ============================================================
+
+============================================================
+INSPECTING FINE-TUNING DATASETS
+============================================================
+
+File: dst_train.json
+Type: list
+Count: 10846 examples
+Keys in each example: ['dialogue_id', 'turn_id', 'instruction', 'input', 'output']
+
+First Example:
+{
+  "dialogue_id": "PMUL4398.json",
+  "turn_id": "0",
+  "instruction": "You are a dialogue state tracker for a task-oriented dialogue system. Extract ONLY slots explicitly mentioned by the user. Always output in the exact format requested. Never add explanations.",
+  "input": "\nUSER: i need a place to dine in the center thats expensive\n\nValid domains: hotel, restaurant\nValid intents: find_hotel, book_hotel, find_restaurant, book_restaurant\nValid slots: hotel-area, hotel-pricerange, hotel-type, hotel-stars, hotel-internet, hotel-parking, hotel-name, hotel-bookday, hotel-bookpeople, hotel-bookstay, restaurant-area, restaurant-pricerange, restaurant-food, restaurant-name, restaurant-bookday, restaurant-bookpeople, restaurant-booktime\n\nThink step by step:\n1. What is the user asking about? (domain)\n2. What action do they want: find or book? (intent)\n3. What specific values did they explicitly mention? (slots)\n\nThen output ONLY:\nDOMAIN: <domain>\nINTENT: <intent>\nSLOTS: <slot1=value1, slot2=value2> or SLOTS: none\n\n\nRules:\n- ONLY extract slot values EXPLICITLY stated by the user.\n- If user expresses no preference for a specific attribute (e.g. 'any food', 'no particular type', 'doesn't matter') → identify WHICH slot they refer to and extract slot=dontcare.\n  Example: 'no particular food type' → restaurant-food=dontcare\n  Example: 'any area is fine' → hotel-area=dontcare\n  Example: 'no preference on price' → restaurant-pricerange=dontcare\n  Example: 'No particular type of food' → restaurant-food=dontcare\n  Example: 'any hotel type is fine' → hotel-type=dontcare\n- When user mentions BOTH a preference AND a non-preference in the same sentence, extract BOTH.\n  Example: 'No particular food type but moderate price' → restaurant-food=dontcare, restaurant-pricerange=moderate\n  Example: 'Any area is fine but I need cheap price' → restaurant-area=dontcare, restaurant-pricerange=cheap\n- Valid area values: north, south, east, west, centre, dontcare. DO NOT extract city names as area values.\n- Only extract a slot when user is PROVIDING information, not REQUESTING it.\n  Example: 'what price range are they?' → do NOT extract pricerange.\n  Example: 'I want a cheap restaurant' → extract restaurant-pricerange=cheap.\n- If user references previous context without mentioning a domain explicitly (e.g. 'same group', 'same day', 'same people', 'it', 'there', 'that one') → keep the PREVIOUS domain from conversation history.\n- DO NOT infer or assume missing values.\n\n",
+  "output": "DOMAIN: restaurant\nINTENT: find_restaurant\nSLOTS: restaurant-area=centre, restaurant-pricerange=expensive"
+}
+
+File: respgen_train.json
+Type: list
+Count: 13174 examples
+Keys in each example: ['dialogue_id', 'turn_id', 'instruction', 'input', 'output']
+
+First Example:
+{
+  "dialogue_id": "PMUL4398.json",
+  "turn_id": "1",
+  "instruction": "Generate a response for the customer service system based on the conversation context.",
+  "input": "<history>\nUSER: i need a place to dine in the center thats expensive\n</history>\nDOMAIN: restaurant\nINTENT: find_restaurant\nSLOTS: restaurant-area=centre, restaurant-pricerange=expensive\n\nDB results:\n1. name=curry garden | area=centre | pricerange=expensive | phone=01223302330 | address=106 Regent Street City Centre | postcode=cb21dp | food=indian\n\nUser message: \"I have several options for you; do you prefer African, Asian, or British food?\"\nRules:\n1. CRITICAL: NEVER use real entity names, addresses, phone numbers or any real values in your response.\n   ALWAYS use ONLY these placeholders:\n   [restaurant_name], [restaurant_phone], [restaurant_address], [restaurant_postcode], [ref]\n2. If DB results are available, recommend the first entity using placeholders only.\n3. If no DB results found, do not just say 'nothing found'. Ask user to relax one constraint (e.g. area, price range).\n4. If booking reference [ref] is available, confirm the booking using [ref] placeholder.\n5. If missing required information is listed, ask ONLY for those missing details.\n6. Keep your response concise with 1-2 sentences maximum.\n",
+  "output": "I have several options for you; do you prefer African, Asian, or British food?"
+}
+
+============================================================
+END OF INSPECTING FINE-TUNING DATASETS
+============================================================
