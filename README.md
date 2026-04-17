@@ -114,25 +114,48 @@ Results are saved to `results/` with three files per run: dataset-level, dialogu
 
 ---
 
+## Models
+
+*API baselines represent the most cost-effective commercial options available at the time of evaluation (February 2026). The goal is to maximize performance under realistic budget constraints, as would be the case in a production customer service deployment.*
+
+| Model                | Provider  | Release  | Params      | Quantization | Context | Training Data | Open Source      | Cost (in/out per 1K tokens) |
+|----------------------|-----------|----------|-------------|--------------|---------|---------------|------------------|-----------------------------|
+| GPT-4o-mini          | OpenAI    | Jul 2024 | Undisclosed | N/A          | 128K    | Undisclosed   | No               | $0.15 / $0.60               |
+| Claude 3 Haiku       | Anthropic | Mar 2024 | Undisclosed | N/A          | 200K    | Undisclosed   | No               | $0.25 / $1.25               |
+| Qwen2.5-14B-Instruct | Alibaba   | Sep 2024 | 14.7B       | 4-bit (bnb)  | 128K    | 18T tokens    | Yes (Apache 2.0) | Free                        |
+| Qwen3-8B             | Alibaba   | Apr 2025 | 8.2B        | 4-bit (bnb)  | 32K     | 36T tokens    | Yes (Apache 2.0) | Free                        |
+| Qwen3-14B            | Alibaba   | Apr 2025 | 14.8B       | 4-bit (bnb)  | 32K     | 36T tokens    | Yes (Apache 2.0) | Free                        |
+
+---
+
 ## Results
 
 *Results on MultiWOZ 2.2 dev set (hotel + restaurant domains only). Tomiinek metrics cover 2 of 5 leaderboard domains so they are not directly comparable to official MultiWOZ leaderboard scores.*
 
 ### Experiment 1: Single-LLM Baseline
 
-| Config | DomainP% | IntentP% | Action% | JGA% | SlotR% | SlotF1% | Hall% | PolViol% | SysCorr% | Book% | Inform% | Success% | BLEU | Combined | Cost($) | Latency(s) |
-|--------|----------|----------|---------|------|--------|---------|-------|----------|----------|-------|---------|----------|------|----------|---------|------------|
-| gpt    | 99.1     | 89.0     | 78.5    | 23.2 | 61.5   | 67.9    | 4.8   | 0.9      | 95.8     | 55.2  | 53.8    | 42.1     | 2.80 | 50.75    | $2.6459 | 5.90s      |
-| haiku  | 98.5     | 91.7     | 80.4    | 37.5 | 80.4   | 84.0    | 5.7   | 1.6      | 93.6     | 74.8  | 78.4    | 65.5     | 2.95 | 74.90    | $5.0387 | 13.91s     |
+| Config     | DomainP% | IntentP% | Action% | JGA% | SlotR% | SlotF1% | Hall% | PolViol% | SysCorr% | Book% | Inform% | Success% | BLEU | Combined | Cost($) | Latency(s) |
+|------------|----------|----------|---------|------|--------|---------|-------|----------|----------|-------|---------|----------|------|----------|---------|------------|
+| gpt        | 99.1     | 89.0     | 78.5    | 23.2 | 61.5   | 67.9    | 4.8   | 0.9      | 95.8     | 55.2  | 53.8    | 42.1     | 2.80 | 50.75    | $2.6459 | 5.90s      |
+| haiku      | 98.5     | 91.7     | 80.4    | 37.5 | 80.4   | 84.0    | 5.7   | 1.6      | 93.6     | 74.8  | 78.4    | 65.5     | 2.95 | 74.90    | $5.0387 | 13.91s     |
+| qwen3_8b   | 99.3     | 87.3     | 75.5    | 35.2 | 79.7   | 82.6    | 9.8   | 2.7      | 94.1     | 61.4  | 44.4    | 34.5     | 4.39 | 43.84    | $0.0000 | 7.79s      |
+| qwen25_14b | 97.8     | 92.7     | 78.8    | 23.3 | 66.7   | 73.7    | 6.8   | 0.2      | 93.8     | 55.8  | 66.7    | 46.2     | 3.28 | 59.73    | $0.0000 | 13.30s     |
+| qwen3_14b  | 98.3     | 90.1     | 79.5    | 37.8 | 80.4   | 84.2    | 0.6   | 2.3      | 97.2     | 72.9  | 81.9    | 70.2     | 3.74 | 79.79    | $0.0000 | 12.21s     |
 
 Per-Domain Breakdown
 
-| Config | Domain     | DomainP% | IntentP% | Action% | JGA% | SlotR% | SlotF1% | Hall% | PolViol% | SysCorr% | Book% | Cost($) | Latency(s) |
-|--------|------------|----------|----------|---------|------|--------|---------|-------|----------|----------|-------|---------|------------|
-| gpt    | hotel      | 98.9     | 87.6     | 80.1    | 17.3 | 61.3   | 69.0    | 4.3   | 1.3      | 95.5     | 52.6  | $1.4486 | 5.88s      |
-| gpt    | restaurant | 99.5     | 91.0     | 76.4    | 30.2 | 61.8   | 66.8    | 5.5   | 0.5      | 96.1     | 52.6  | $1.1943 | 5.92s      |
-| haiku  | hotel      | 97.9     | 90.0     | 82.6    | 27.9 | 77.4   | 82.6    | 5.5   | 2.3      | 93.0     | 68.1  | $2.7641 | 13.43s     |
-| haiku  | restaurant | 99.2     | 93.7     | 77.6    | 49.3 | 84.7   | 86.3    | 6.1   | 0.8      | 94.3     | 79.3  | $2.2447 | 14.59s     |
+| Config     | Domain     | DomainP% | IntentP% | Action% | JGA% | SlotR% | SlotF1% | Hall% | PolViol% | SysCorr% | Book% | Cost($) | Latency(s) |
+|------------|------------|----------|----------|---------|------|--------|---------|-------|----------|----------|-------|---------|------------|
+| gpt        | hotel      | 98.9     | 87.6     | 80.1    | 17.3 | 61.3   | 69.0    | 4.3   | 1.3      | 95.5     | 52.6  | $1.4486 | 5.88s      |
+| gpt        | restaurant | 99.5     | 91.0     | 76.4    | 30.2 | 61.8   | 66.8    | 5.5   | 0.5      | 96.1     | 52.6  | $1.1943 | 5.92s      |
+| haiku      | hotel      | 97.9     | 90.0     | 82.6    | 27.9 | 77.4   | 82.6    | 5.5   | 2.3      | 93.0     | 68.1  | $2.7641 | 13.43s     |
+| haiku      | restaurant | 99.2     | 93.7     | 77.6    | 49.3 | 84.7   | 86.3    | 6.1   | 0.8      | 94.3     | 79.3  | $2.2447 | 14.59s     |
+| qwen3_8b   | hotel      | 98.9     | 85.6     | 74.5    | 24.3 | 76.6   | 80.2    | 8.8   | 3.2      | 93.9     | 62.6  | $0.0000 | 7.90s      |
+| qwen3_8b   | restaurant | 100      | 89.6     | 76.7    | 48.6 | 83.6   | 85.8    | 11.1  | 2.1      | 94.3     | 54.1  | $0.0000 | 7.67s      |
+| qwen25_14b | hotel      | 99.3     | 90.9     | 80.9    | 16.6 | 64.2   | 71.9    | 5.1   | 0.4      | 94.9     | 46.3  | $0.0000 | 13.41s     |
+| qwen25_14b | restaurant | 99.2     | 95.1     | 77.8    | 31.8 | 69.5   | 75.7    | 9     | 0.0      | 92.3     | 61.2  | $0.0000 | 13.10s     |
+| qwen3_14b  | hotel      | 98.9     | 90.9     | 82      | 27.0 | 75.7   | 81.5    | 0.3   | 1.3      | 98.5     | 71.8  | $0.0000 | 12.49s     |
+| qwen3_14b  | restaurant | 99.2     | 90.8     | 76.5    | 50.9 | 86.1   | 87.7    | 0.6   | 3.6      | 95.9     | 71.7  | $0.0000 | 11.98s     |
 
 
 ---

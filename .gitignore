@@ -17,8 +17,9 @@ __pycache__/
 data/
 !src/data/
 
-# Exclude large JSON files from archived results, keep only summary txt files
-archived_results/**/*.json
+# Exclude large JSON files from archived results, and also summary txt files
+#archived_results/**/*.json
+archived_results/
 
 # Hugging Face dataset and model cache (large files)
 hf_cache/

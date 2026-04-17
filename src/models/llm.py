@@ -162,15 +162,25 @@ def _call_unsloth(model_name: str, prompt: str, system_prompt: str = "", max_tok
         messages.append({"role": "system", "content": system_prompt})
     messages.append({"role": "user", "content": prompt})
 
+    # Gemma3 is multimodal and expects content as list of dicts
+    if "gemma" in model_name.lower():
+        messages = [
+            {"role": m["role"], "content": [{"type": "text", "text": m["content"]}]} for m in messages
+        ]
+
     inputs = tokenizer.apply_chat_template(
         messages,
         tokenize=True,
         add_generation_prompt=True,
         return_tensors="pt",
+        enable_thinking=False,  # Disable "thinking..." placeholder to avoid extra tokens and simplify generation output parsing
     ).to("cuda")
 
     # Legacy tokenizer returns BatchEncoding, not a raw tensor so we extract input_ids explicitly
-    input_ids = inputs["input_ids"].to("cuda")
+    # input_ids = inputs["input_ids"].to("cuda")
+
+    # apply_chat_template returns a raw tensor, not a dict
+    input_ids = inputs
     input_length = input_ids.shape[1]
 
     # Use correct generate path depending on model type (base vs LoRA fine-tuned)
@@ -186,7 +196,7 @@ def _call_unsloth(model_name: str, prompt: str, system_prompt: str = "", max_tok
         max_new_tokens=max_tokens,
         do_sample=temperature > 0.0,
         temperature=temperature if temperature > 0.0 else None,
-        use_cache=False,  # Disables KV cache to prevent shape mismatch errors in Unsloth's fast attention kernel when called repeatedly with growing prompts
+        use_cache=True,
     )
     elapsed = time.time() - start
 

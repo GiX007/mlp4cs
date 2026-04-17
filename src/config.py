@@ -33,11 +33,11 @@ LLM_MAX_TOKENS: int = 512
 LLM_TEMPERATURE: float = 0.0  # deterministic outputs for task-oriented pipeline
 
 # Local model loading settings
-LOCAL_MAX_SEQ_LENGTH: int = 8192  # Kaggle T4 (15GB VRAM), safe up to 8192
-# LOCAL_MAX_SEQ_LENGTH: int = 32768  # EuroHPC A100 40GB
-# LOCAL_MAX_SEQ_LENGTH: int = 65536  # EuroHPC A100 80GB
+# LOCAL_MAX_SEQ_LENGTH: int = 8192
+LOCAL_MAX_SEQ_LENGTH: int = 32768  # EuroHPC A100 40GB
+# LOCAL_MAX_SEQ_LENGTH: int = 65536
 LOCAL_LOAD_IN_4BIT: bool = True  # matches bnb-4bit downloaded models
-LOCAL_DTYPE = None  # auto-detect: float16 on A100, float16 on T4
+LOCAL_DTYPE = None  # auto-detect: float16 on A100, T4
 
 # Fine-tuning instructions
 DST_INSTRUCTION = "You are a dialogue state tracker for a task-oriented dialogue system. Extract ONLY slots explicitly mentioned by the user. Always output in the exact format requested. Never add explanations."
@@ -47,7 +47,7 @@ RESPGEN_INSTRUCTION = "Generate a response for the customer service system based
 FINETUNE_EPOCHS: int = 3
 
 # Set to an integer to limit dialogues processed, None = full split
-MAX_DIALOGUES: int | None = None
+MAX_DIALOGUES: int | None = 1 # None
 
 # DB
 MAX_DB_RESULTS: int = 5
@@ -121,14 +121,19 @@ API_MODELS: list[str] = [
 
 # Open-source models
 OPEN_SOURCE_MODELS: dict[str, str] = {
-    "llama31_8b": "unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit",
-    "llama32_3b": "unsloth/Llama-3.2-3B-Instruct-bnb-4bit",
-    "qwen25_7b": "unsloth/Qwen2.5-7B-Instruct-bnb-4bit",
-    "mistral_12b": "unsloth/Mistral-Nemo-Instruct-2407-bnb-4bit",
-
-    "qwen3_8b": "unsloth/Qwen3-8B-bnb-4bit",
     "phi4_mini": "unsloth/Phi-4-mini-instruct-bnb-4bit",
+    "llama32_3b": "unsloth/Llama-3.2-3B-Instruct-bnb-4bit",
+    "llama3_8b": "unsloth/llama-3-8b-Instruct-bnb-4bit",
+    "llama31_8b": "unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit",
+    "qwen25_7b": "unsloth/Qwen2.5-7B-Instruct-bnb-4bit",
+    "qwen25_14b": "unsloth/Qwen2.5-14B-Instruct-bnb-4bit",
+    "qwen3_4b": "unsloth/Qwen3-4B-unsloth-bnb-4bit",
+    "qwen3_8b": "unsloth/Qwen3-8B-bnb-4bit",
     "qwen3_14b": "unsloth/Qwen3-14B-bnb-4bit",
+    "mistral_12b": "unsloth/Mistral-Nemo-Instruct-2407-bnb-4bit",
+    # "gemma4_e4b": "unsloth/gemma-4-E4B-it",
+    "gemma3_12b": "unsloth/gemma-3-12b-it-bnb-4bit",
+
 }
 
 
@@ -140,17 +145,17 @@ EXP1_CONFIGS: dict[str, dict[str, str]] = {
     "haiku": {
         "single": "claude-3-haiku-20240307",
     },
-    # "llama31_8b": {
-    #     "single": str(MODELS_DIR / "llama31_8b"),
+    # "qwen3_8b": {
+    #     "single": str(MODELS_DIR / "qwen3_8b"),
     # },
-    # "llama32_3b": {
-    #     "single": str(MODELS_DIR / "llama32_3b"),
+    # "gemma3_12b": {
+    #     "single": str(MODELS_DIR / "gemma3_12b"),
     # },
-    # "qwen25_7b": {
-    #     "single": str(MODELS_DIR / "qwen25_7b"),
+    # "qwen25_14b": {
+    #     "single": str(MODELS_DIR / "qwen25_14b"),
     # },
-    # "mistral_12b": {
-    #     "single": str(MODELS_DIR / "mistral_12b"),
+    # "qwen3_14b": {
+    #     "single": str(MODELS_DIR / "qwen3_14b"),
     # },
 }
 
