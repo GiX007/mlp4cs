@@ -116,7 +116,9 @@ def parse_dst_output(raw: str, accumulated_slots: dict[str, str]) -> tuple[str |
                         k, v = pair.split("=", 1)
                         k, v = k.strip(), normalize_slot_value(v.strip().lower())
                         if k in ("hotel-bookstay", "hotel-bookpeople", "restaurant-bookpeople", "restaurant-bookstay"):
-                            v = v.split()[0]  # "2 nights" → "2"
+                            # v = v.split()[0]  # "2 nights" → "2"
+                            parts = v.split()
+                            v = parts[0] if parts else v
 
                         # Slot-specific normalization
                         if k in ("hotel-parking", "restaurant-parking", "hotel-internet") and v in ["free", "free wifi", "free internet"]:

@@ -179,25 +179,21 @@ EXP2_CONFIGS: dict[str, dict[str, str]] = {
         "response_generator": "gpt-4o-mini",
     },
 
-    # "homo_llama32_3b": {
-    #     "dst": str(MODELS_DIR / "llama32_3b"),
-    #     "response_generator": str(MODELS_DIR / "llama32_3b"),
+    # "homo_qwen3_14b": {
+    #     "dst": str(MODELS_DIR / "qwen3_14b"),
+    #     "response_generator": str(MODELS_DIR / "qwen3_14b"),
     # },
-    # "homo_llama31_8b": {
-    #     "dst": str(MODELS_DIR / "llama31_8b"),
-    #     "response_generator": str(MODELS_DIR / "llama31_8b"),
+    # "hetero_qwen25_qwen3_14b": {
+    #     "dst": str(MODELS_DIR / "qwen25_14b"),
+    #     "response_generator": str(MODELS_DIR / "qwen3_14b"),
     # },
     # "homo_qwen3_8b": {
     #     "dst": str(MODELS_DIR / "qwen3_8b"),
     #     "response_generator": str(MODELS_DIR / "qwen3_8b"),
     # },
-    # "hetero_qwen3_phi4": {
-    #     "dst": str(MODELS_DIR / "qwen3_8b"),
-    #     "response_generator": str(MODELS_DIR / "phi4_mini"),
-    # },
-    # "hetero_llama31_qwen25": {
-    #     "dst": str(MODELS_DIR / "llama31_8b"),
-    #     "response_generator": str(MODELS_DIR / "qwen25_7b"),
+    # "hetero_qwen3_14b_qwen3_8b": {
+    #     "dst": str(MODELS_DIR / "qwen3_14b"),
+    #     "response_generator": str(MODELS_DIR / "qwen3_8b"),
     # },
 }
 

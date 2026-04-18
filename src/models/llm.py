@@ -1,5 +1,6 @@
 """LLM routing: single entry point for OpenAI, Anthropic, and local Unsloth models."""
 import os
+import re
 import time
 from dataclasses import dataclass
 from dotenv import load_dotenv
@@ -202,6 +203,10 @@ def _call_unsloth(model_name: str, prompt: str, system_prompt: str = "", max_tok
 
     decoded = tokenizer.batch_decode(outputs, skip_special_tokens=True)[0]
     generated_text = decoded.split("assistant")[-1].strip()
+
+        # Strip Qwen3 thinking tags if present (harmless no-op if absent)
+    generated_text = re.sub(r"<think>.*?</think>", "", generated_text, flags=re.DOTALL).strip()
+
 
     input_tokens = input_length
     output_tokens = len(outputs[0]) - input_length

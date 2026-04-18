@@ -10,8 +10,12 @@ from mwzeval.metrics import Evaluator
 # r"C:\Users\giorg\Downloads\results\exp1_qwen3_8b\exp1_qwen3_8b_tomiinek_input.json"
 # r"C:\Users\giorg\Downloads\results\exp1_qwen3_14b\exp1_qwen3_14b_tomiinek_input.json"
 # r"C:\Users\giorg\Downloads\results\exp1_qwen25_14b\exp1_qwen25_14b_tomiinek_input.json"
+# r"C:\Users\giorg\Downloads\results\exp2_homo_qwen3_14b\exp2_homo_qwen3_14b_tomiinek_input.json"
+# r"C:\Users\giorg\Downloads\results\exp2_hetero_qwen25_qwen3_14b\exp2_hetero_qwen25_qwen3_14b_tomiinek_input.json"
+# r"C:\Users\giorg\Downloads\results\exp2_homo_qwen3_8b\exp2_homo_qwen3_8b_tomiinek_input.json"
+# "C:\Users\giorg\Downloads\results\exp2_hetero_qwen3_14b_qwen3_8b\exp2_hetero_qwen3_14b_qwen3_8b_tomiinek_input.json"
 
-with open() as f:
+with open(r) as f:
     data = json.load(f)
 
 print(f"Dialogues: {len(data)}")
