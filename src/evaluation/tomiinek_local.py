@@ -7,15 +7,19 @@ Run with: python src/evaluation/tomiinek_local.py
 import json
 from mwzeval.metrics import Evaluator
 
-# r"C:\Users\giorg\Downloads\results\exp1_qwen3_8b\exp1_qwen3_8b_tomiinek_input.json"
 # r"C:\Users\giorg\Downloads\results\exp1_qwen3_14b\exp1_qwen3_14b_tomiinek_input.json"
 # r"C:\Users\giorg\Downloads\results\exp1_qwen25_14b\exp1_qwen25_14b_tomiinek_input.json"
+
 # r"C:\Users\giorg\Downloads\results\exp2_homo_qwen3_14b\exp2_homo_qwen3_14b_tomiinek_input.json"
 # r"C:\Users\giorg\Downloads\results\exp2_hetero_qwen25_qwen3_14b\exp2_hetero_qwen25_qwen3_14b_tomiinek_input.json"
 # r"C:\Users\giorg\Downloads\results\exp2_homo_qwen3_8b\exp2_homo_qwen3_8b_tomiinek_input.json"
 # "C:\Users\giorg\Downloads\results\exp2_hetero_qwen3_14b_qwen3_8b\exp2_hetero_qwen3_14b_qwen3_8b_tomiinek_input.json"
 
-with open(r) as f:
+# r"C:\Users\giorg\Downloads\results\exp3_ft_homo_llama32_3b\exp3_ft_homo_llama32_3b_tomiinek_input.json"
+# r"C:\Users\giorg\Downloads\results\exp3_ft_homo_qwen3_8b\exp3_ft_homo_qwen3_8b_tomiinek_input.json"
+# r"C:\Users\giorg\Downloads\results\exp3_ft_homo_qwen3_14b\exp3_ft_homo_qwen3_14b_tomiinek_input.json"
+
+with open(r"C:\Users\giorg\Downloads\results\exp1_qwen3_8b\exp1_qwen3_8b_tomiinek_input.json") as f:
     data = json.load(f)
 
 print(f"Dialogues: {len(data)}")

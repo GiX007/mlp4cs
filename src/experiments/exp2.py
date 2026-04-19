@@ -7,7 +7,7 @@ from src.evaluation.tomiinek import run_tomiinek
 from src.evaluation.reporter import save_results, print_table
 
 
-def run_experiment_2(split: str = "dev") -> None:
+def run_experiment_2(split: str = "test") -> None:
     """
     Run Experiment 2: Modular pipeline with zero-shot LLMs.
 

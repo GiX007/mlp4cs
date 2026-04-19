@@ -52,7 +52,7 @@ def build_respgen_prompt(history: list[dict], user_utterance: str, domain: str, 
         domain_slots: belief state filtered to active domain only
         db_results: list of matching entities from DB
         violations: list of missing required slot names from policy
-        zeroshot: if False, use fine-tuning format (no DB results, no violations)
+        zeroshot: if True, include DB results, user message, and rules (used by both Exp2 inference and Exp3 training data build + inference). If False, return minimal history+slots format only (unused in current pipeline)
         feedback: supervisor feedback from previous attempt, None on first try
     Returns:
         tuple of (system_prompt, user_prompt)

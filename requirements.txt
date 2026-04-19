@@ -1,6 +1,7 @@
-# Data
+# Data & Visualization
 datasets
 tqdm
+matplotlib
 
 # Pytorch
 --extra-index-url https://download.pytorch.org/whl/cu118

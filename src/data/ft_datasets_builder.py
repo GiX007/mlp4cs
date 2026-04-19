@@ -1,4 +1,4 @@
-"""Builds fine-tuning datasets from MultiWOZ 2.2 for Exp3."""
+"""Builds datasets for fine-tuning for Exp3."""
 import json
 from pathlib import Path
 from src.config import TARGET_DOMAINS, DST_INSTRUCTION, RESPGEN_INSTRUCTION
@@ -155,8 +155,11 @@ def build_respgen_sample(turn: dict, history: list[dict], dialogue_id: str, last
     #               f"INTENT: {intent}\n"
     #               f"SLOTS: {format_slots(slots)}")
 
+    # history[-1] is always the USER turn preceding this SYSTEM turn (using the system utterance here would leak the target into the input)
+    user_utt = history[-1]["utterance"] if history else ""
+
     _, input_str = build_respgen_prompt(
-        history, turn["utterance"], domain, intent,
+        history, user_utt, domain, intent,
         flat_slots, db_results=[entity] if entity else [],
         violations=[], zeroshot=True
     )

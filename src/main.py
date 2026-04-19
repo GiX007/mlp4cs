@@ -38,5 +38,3 @@ if __name__ == "__main__":
 
     # Error analysis
     capture_and_save(func=run_analysis, output_path=RESULTS_DIR / f"error_analysis_{timestamp}.txt")
-
-

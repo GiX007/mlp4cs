@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 from src.utils import print_separator
 from src.data.loader import load_split
-from src.config import DB_DIR, TARGET_DOMAINS
+from src.config import DB_DIR, TARGET_DOMAINS, OPEN_SOURCE_MODELS, FINETUNE_DST_TRAIN_FILE, FINETUNE_RESPGEN_TRAIN_FILE, FINETUNE_DST_DEV_FILE, FINETUNE_RESPGEN_DEV_FILE
 from src.utils import capture_and_save
 
 
@@ -287,6 +287,56 @@ def inspect_json_file(filepath: str) -> None:
     print(json.dumps(data[0], indent=2, ensure_ascii=False))
 
 
+def explore_finetune_token_lengths(model_alias: str = "qwen3_8b") -> None:
+    """
+    Print token-length distribution of DST and RespGen fine-tuning datasets.
+
+    Args:
+        model_alias: key from OPEN_SOURCE_MODELS used to pick a tokenizer
+    """
+    from transformers import AutoTokenizer
+
+    tokenizer = AutoTokenizer.from_pretrained(OPEN_SOURCE_MODELS[model_alias])
+
+    print_separator(f"TOKEN LENGTHS of FINETUNE TRAIN DATASETS (tokenizer={model_alias})")
+
+    for role, path in [("dst", FINETUNE_DST_TRAIN_FILE), ("respgen", FINETUNE_RESPGEN_TRAIN_FILE)]:
+        with open(path, "r", encoding="utf-8") as f:
+            examples = json.load(f)
+
+        lengths = []
+        for ex in examples:
+            # Reconstruct the exact training text (Alpaca + EOS) to get a true count
+            text = (
+                f"### Instruction:\n{ex['instruction']}\n\n"
+                f"### Input:\n{ex['input']}\n\n"
+                f"### Response:\n{ex['output']}{tokenizer.eos_token}"
+            )
+            lengths.append(len(tokenizer.encode(text, add_special_tokens=False)))
+
+        lengths.sort()
+        n = len(lengths)
+        print(f"\n{role} ({n} examples):")
+        print(f"  min: {lengths[0]}")
+        print(f"  max: {lengths[-1]}")
+        print(f"  mean: {sum(lengths) / n:.0f}")
+        print(f"  median: {lengths[n // 2]}")
+        print(f"  p95: {lengths[int(n * 0.95)]}") # 95% of examples are shorter than this
+        print(f"  p99: {lengths[int(n * 0.99)]}") # 99% of examples are shorter than this
+
+    print_separator("END OF TOKEN LENGTHS")
+
+
+def inspect_finetune_datasets() -> None:
+    """Inspect fine-tuning dataset files with counts, keys, and first example."""
+    print_separator("INSPECTING FINE-TUNING DATASETS")
+    inspect_json_file(str(FINETUNE_DST_TRAIN_FILE))
+    inspect_json_file(str(FINETUNE_RESPGEN_TRAIN_FILE))
+    inspect_json_file(str(FINETUNE_DST_DEV_FILE))
+    inspect_json_file(str(FINETUNE_RESPGEN_DEV_FILE))
+    print_separator("END OF INSPECTING FINE-TUNING DATASETS")
+
+
 def main() -> None:
     """Exploration workflow. It runs all explore functions in order."""
     explore_basic_structure()
@@ -296,12 +346,7 @@ def main() -> None:
     explore_conversation_examples()
     count_dialogues_per_split()
     explore_slot_values()
-
-    # Inspect fine-tuning dataset files
-    print_separator("INSPECTING FINE-TUNING DATASETS")
-    inspect_json_file("data/finetune_data/dst_train.json")
-    inspect_json_file("data/finetune_data/respgen_train.json")
-    print_separator("END OF INSPECTING FINE-TUNING DATASETS")
+    inspect_finetune_datasets()
 
 
 # Run with: python -m src.data.dataset_explorer

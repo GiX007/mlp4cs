@@ -110,7 +110,6 @@ Results are saved to `results/` with three files per run: dataset-level, dialogu
 - `scripts/` - Fine-tuning data generation and LoRA training scripts
 - `data/` - MultiWOZ 2.2 dataset, base models, fine-tuned adapters (not in repo)
 - `docs/` - Documentation and notes
-- `archived_results/` - Experiment runs with detailed results
 
 ---
 
@@ -118,44 +117,46 @@ Results are saved to `results/` with three files per run: dataset-level, dialogu
 
 *API baselines represent the most cost-effective commercial options available at the time of evaluation (February 2026). The goal is to maximize performance under realistic budget constraints, as would be the case in a production customer service deployment.*
 
-| Model                | Provider  | Release  | Params      | Quantization | Context | Training Data | Open Source      | Cost (in/out per 1K tokens) |
-|----------------------|-----------|----------|-------------|--------------|---------|---------------|------------------|-----------------------------|
-| GPT-4o-mini          | OpenAI    | Jul 2024 | Undisclosed | N/A          | 128K    | Undisclosed   | No               | $0.15 / $0.60               |
-| Claude 3 Haiku       | Anthropic | Mar 2024 | Undisclosed | N/A          | 200K    | Undisclosed   | No               | $0.25 / $1.25               |
-| Qwen2.5-14B-Instruct | Alibaba   | Sep 2024 | 14.7B       | 4-bit (bnb)  | 128K    | 18T tokens    | Yes (Apache 2.0) | Free                        |
-| Qwen3-8B             | Alibaba   | Apr 2025 | 8.2B        | 4-bit (bnb)  | 32K     | 36T tokens    | Yes (Apache 2.0) | Free                        |
-| Qwen3-14B            | Alibaba   | Apr 2025 | 14.8B       | 4-bit (bnb)  | 32K     | 36T tokens    | Yes (Apache 2.0) | Free                        |
+| Model                 | Provider  | Release  | Params      | Quantization | Context | Training Data | Open Source      | Cost (in/out per 1K tokens) |
+|-----------------------|-----------|----------|-------------|--------------|---------|---------------|------------------|-----------------------------|
+| GPT-4o-mini           | OpenAI    | Jul 2024 | Undisclosed | N/A          | 128K    | Undisclosed   | No               | $0.15 / $0.60               |
+| Claude 3 Haiku        | Anthropic | Mar 2024 | Undisclosed | N/A          | 200K    | Undisclosed   | No               | $0.25 / $1.25               |
+| Llama-3.2-3B-Instruct | Meta      | Sep 2024 | 3.2B        | 4-bit (bnb)  | 128K    | 9T+ tokens    | Yes (Llama 3.2)  | Free                        |
+| Qwen2.5-14B-Instruct  | Alibaba   | Sep 2024 | 14.7B       | 4-bit (bnb)  | 128K    | 18T tokens    | Yes (Apache 2.0) | Free                        |
+| Qwen3-8B              | Alibaba   | Apr 2025 | 8.2B        | 4-bit (bnb)  | 32K     | 36T tokens    | Yes (Apache 2.0) | Free                        |
+| Qwen3-14B             | Alibaba   | Apr 2025 | 14.8B       | 4-bit (bnb)  | 32K     | 36T tokens    | Yes (Apache 2.0) | Free                        |
 
 ---
 
 ## Results
 
-*Results on MultiWOZ 2.2 dev set (hotel + restaurant domains only). Tomiinek metrics cover 2 of 5 leaderboard domains so they are not directly comparable to official MultiWOZ leaderboard scores.*
+*Results on MultiWOZ 2.2 test set (hotel + restaurant domains only). Tomiinek metrics cover 2 of 5 leaderboard domains so they are not directly comparable to official MultiWOZ leaderboard scores.*
 
 ### Experiment 1: Single-LLM Baseline
 
+
 | Config                  | DomainP% | IntentP% | Action% | JGA% | SlotR% | SlotF1% | Hall% | PolViol% | SysCorr% | Book% | Inform% | Success% | BLEU | Combined | Cost($) | Latency(s) |
 |-------------------------|----------|----------|---------|------|--------|---------|-------|----------|----------|-------|---------|----------|------|----------|---------|------------|
-| gpt                     | 99.1     | 89.0     | 78.5    | 23.2 | 61.5   | 67.9    | 4.8   | 0.9      | 95.8     | 55.2  | 53.8    | 42.1     | 2.80 | 50.75    | $2.6459 | 5.90s      |
-| haiku                   | 98.5     | 91.7     | 80.4    | 37.5 | 80.4   | 84.0    | 5.7   | 1.6      | 93.6     | 74.8  | 78.4    | 65.5     | 2.95 | 74.90    | $5.0387 | 13.91s     |
-| qwen3_8b                | 99.3     | 87.3     | 75.5    | 35.2 | 79.7   | 82.6    | 9.8   | 2.7      | 94.1     | 61.4  | 44.4    | 34.5     | 4.39 | 43.84    | $0.0000 | 7.79s      |
-| qwen25_14b              | 97.8     | 92.7     | 78.8    | 23.3 | 66.7   | 73.7    | 6.8   | 0.2      | 93.8     | 55.8  | 66.7    | 46.2     | 3.28 | 59.73    | $0.0000 | 13.30s     |
-| qwen3_14b               | 98.3     | 90.1     | 79.5    | 37.8 | 80.4   | 84.2    | 0.6   | 2.3      | 97.2     | 72.9  | 81.9    | 70.2     | 3.74 | 79.79    | $0.0000 | 12.21s     |
+| gpt                     | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —        | —    | —        | —       | —          |
+| haiku                   | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —        | —    | —        | —       | —          |
+| qwen3_8b                | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —        | —    | —        | —       | —          |
+| qwen25_14b              | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —        | —    | —        | —       | —          |
+| qwen3_14b               | 98.7     | 89.3     | 78.4    | 33.3 | 78.6   | 83.0    | 2.7   | 1.9      | 96.0     | 75.8  | 82.3    | 72.0     | 3.69 | 80.84    | $0.0000 | 12.40s     |
 
 Per-Domain Breakdown
 
 | Config                  | Domain     | DomainP% | IntentP% | Action% | JGA% | SlotR% | SlotF1% | Hall% | PolViol% | SysCorr% | Book% | Cost($) | Latency(s) |
 |-------------------------|------------|----------|----------|---------|------|--------|---------|-------|----------|----------|-------|---------|------------|
-| gpt                     | hotel      | 98.9     | 87.6     | 80.1    | 17.3 | 61.3   | 69.0    | 4.3   | 1.3      | 95.5     | 52.6  | $1.4486 | 5.88s      |
-| gpt                     | restaurant | 99.5     | 91.0     | 76.4    | 30.2 | 61.8   | 66.8    | 5.5   | 0.5      | 96.1     | 52.6  | $1.1943 | 5.92s      |
-| haiku                   | hotel      | 97.9     | 90.0     | 82.6    | 27.9 | 77.4   | 82.6    | 5.5   | 2.3      | 93.0     | 68.1  | $2.7641 | 13.43s     |
-| haiku                   | restaurant | 99.2     | 93.7     | 77.6    | 49.3 | 84.7   | 86.3    | 6.1   | 0.8      | 94.3     | 79.3  | $2.2447 | 14.59s     |
-| qwen3_8b                | hotel      | 98.9     | 85.6     | 74.5    | 24.3 | 76.6   | 80.2    | 8.8   | 3.2      | 93.9     | 62.6  | $0.0000 | 7.90s      |
-| qwen3_8b                | restaurant | 100      | 89.6     | 76.7    | 48.6 | 83.6   | 85.8    | 11.1  | 2.1      | 94.3     | 54.1  | $0.0000 | 7.67s      |
-| qwen25_14b              | hotel      | 99.3     | 90.9     | 80.9    | 16.6 | 64.2   | 71.9    | 5.1   | 0.4      | 94.9     | 46.3  | $0.0000 | 13.41s     |
-| qwen25_14b              | restaurant | 99.2     | 95.1     | 77.8    | 31.8 | 69.5   | 75.7    | 9     | 0.0      | 92.3     | 61.2  | $0.0000 | 13.10s     |
-| qwen3_14b               | hotel      | 98.9     | 90.9     | 82      | 27.0 | 75.7   | 81.5    | 0.3   | 1.3      | 98.5     | 71.8  | $0.0000 | 12.49s     |
-| qwen3_14b               | restaurant | 99.2     | 90.8     | 76.5    | 50.9 | 86.1   | 87.7    | 0.6   | 3.6      | 95.9     | 71.7  | $0.0000 | 11.98s     |
+| gpt                     | hotel      | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —          |
+| gpt                     | restaurant | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —          |
+| haiku                   | hotel      | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —          |
+| haiku                   | restaurant | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —          |
+| qwen3_8b                | hotel      | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —          |
+| qwen3_8b                | restaurant | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —          |
+| qwen25_14b              | hotel      | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —          |
+| qwen25_14b              | restaurant | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —          |
+| qwen3_14b               | hotel      | 99.8     | 89.7     | 78.3    | 24.4 | 73.9   | 79.7    | 3.0   | 0.0      | 97.4     | 77.5  | $0.0000 | 12.56s     |
+| qwen3_14b               | restaurant | 98.7     | 90.2     | 78.7    | 45.2 | 85.2   | 87.8    | 2.2   | 4.4      | 94.1     | 68.7  | $0.0000 | 12.27s     |
 
 ---
 
@@ -163,42 +164,66 @@ Per-Domain Breakdown
 
 | Config                    | DomainP% | IntentP% | Action% | JGA% | SlotR% | SlotF1% | Hall% | PolViol% | SysCorr% | Book% | Inform% | Success% | BLEU | Combined | Cost($) | Latency(s) |
 |---------------------------|----------|----------|---------|------|--------|---------|-------|----------|----------|-------|---------|----------|------|----------|---------|------------|
-| homo_gpt                  | 98.9     | 91.7     | 82.0    | 32.4 | 76.5   | 78.0    | 2.7   | 2.6      | 95.7     | 62.3  | 71.3    | 64.3     | 3.26 | 71.06    | $0.1936 | 3.37s      |
-| homo_haiku                | 98.0     | 88.1     | 80.4    | 30.8 | 75.3   | 77.0    | 4.6   | 2.0      | 95.6     | 65.5  | 64.9    | 56.1     | 2.70 | 63.20    | $0.4179 | 2.36s      |
-| hetero_gpt_haiku          | 98.8     | 90.2     | 80.5    | 34.0 | 77.2   | 78.6    | 2.1   | 2.7      | 96.4     | 66.5  | 74.3    | 70.2     | 3.00 | 75.25    | $0.3051 | 2.46s      |
-| hetero_haiku_gpt          | 97.9     | 87.2     | 79.3    | 30.4 | 74.7   | 76.0    | 3.8   | 1.6      | 96.2     | 53.9  | 62.0    | 48.0     | 2.95 | 57.95    | $0.3019 | 2.48s      |
-| homo_qwen3_14b            | 98.8     | 88.2     | 79.6    | 33.4 | 79.9   | 79.9    | 1.8   | 1.4      | 97.7     | 67.5  | 69.0    | 60.2     | 4.81 | 69.41    | $0.0000 | 2.59s      |
-| hetero_qwen25_qwen3_14b   | 98.4     | 87.4     | 76.6    | 29.8 | 77.7   | 76.5    | 5.3   | 1.9      | 95.8     | 55.3  | 63.2    | 50.3     | 4.32 | 61.07    | $0.0000 | 2.59s      |
-| homo_qwen3_8b             | 99.1     | 90.7     | 80.3    | 33.8 | 79.9   | 81.8    | 5.8   | 2.7      | 96.2     | 65.3  | 51.5    | 45.0     | 5.07 | 53.32    | $0.0000 | 2.26s      |
-| hetero_qwen3_14b_qwen3_8b | 99.2     | 91.2     | 82.0    | 33.4 | 80.3   | 81.5    | 6.4   | 2.6      | 96.0     | 68.5  | 46.8    | 42.1     | 5.30 | 49.75    | $0.0000 | 2.38s      |
+| homo_gpt                  | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —        | —    | —        | —       | —          |
+| homo_haiku                | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —        | —    | —        | —       | —          |
+| hetero_gpt_haiku          | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —        | —    | —        | —       | —          |
+| hetero_haiku_gpt          | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —        | —    | —        | —       | —          |
+| homo_qwen3_14b            | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —        | —    | —        | —       | —          |
+| hetero_qwen25_qwen3_14b   | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —        | —    | —        | —       | —          | —          |
+| homo_qwen3_8b             | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —        | —    | —        | —       | —          |
+| hetero_qwen3_14b_qwen3_8b | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —        | —    | —        | —       | —          |
 
 Per-Domain Breakdown
 
 | Config                    | Domain     | DomainP% | IntentP% | Action% | JGA% | SlotR% | SlotF1% | Hall% | PolViol% | SysCorr% | Book% | Cost($) | Latency(s) |
 |---------------------------|------------|----------|----------|---------|------|--------|---------|-------|----------|----------|-------|---------|------------|
-| homo_gpt                  | hotel      | 98.5     | 89.6     | 84.6    | 19.7 | 70.3   | 73.3    | 4.6   | 2.8      | 94.3     | 50.4  | $0.1100 | 3.43s      |
-| homo_gpt                  | restaurant | 99.5     | 94.3     | 78.7    | 47.7 | 84.2   | 83.9    | 0.7   | 2.3      | 97.4     | 77.9  | $0.0835 | 3.31s      |
-| homo_haiku                | hotel      | 98.9     | 88.1     | 83.3    | 18.9 | 70.1   | 72.8    | 7.2   | 1.5      | 95.2     | 52.1  | $0.2283 | 2.45s      |
-| homo_haiku                | restaurant | 97.0     | 88.1     | 76.9    | 44.2 | 81.2   | 81.7    | 2.4   | 2.5      | 96.0     | 79.1  | $0.1896 | 2.27s      |
-| hetero_gpt_haiku          | hotel      | 98.5     | 88.3     | 82.7    | 19.8 | 70.5   | 73.4    | 3.2   | 1.5      | 97.0     | 56.6  | $0.1738 | 2.51s      |
-| hetero_gpt_haiku          | restaurant | 99.2     | 92.5     | 77.7    | 51.0 | 85.5   | 85.2    | 1.0   | 4.1      | 95.6     | 73.8  | $0.1312 | 2.40s      |
-| hetero_haiku_gpt          | hotel      | 98.7     | 84.5     | 80.6    | 18.2 | 68.3   | 71.1    | 5.9   | 2.0      | 94.7     | 49.5  | $0.1645 | 2.56s      |
-| hetero_haiku_gpt          | restaurant | 97.0     | 90.3     | 77.8    | 44.4 | 81.9   | 81.6    | 1.8   | 1.2      | 97.8     | 65.5  | $0.1374 | 2.39s      |
-| homo_qwen3_14b            | hotel      | 98.3     | 86.0     | 81.3    | 23.5 | 76.1   | 76.9    | 1.7   | 1.3      | 97.7     | 59.7  | $0.0000 | 2.65s      |
-| homo_qwen3_14b            | restaurant | 99.5     | 90.9     | 77.5    | 45.7 | 84.5   | 83.6    | 1.8   | 1.6      | 97.7     | 75.0  | $0.0000 | 2.52s      |
-| hetero_qwen25_qwen3_14b   | hotel      | 98.7     | 85.8     | 76.4    | 20.3 | 72.3   | 72.8    | 6.6   | 0.6      | 96.1     | 42.1  | $0.0000 | 2.60s      |
-| hetero_qwen25_qwen3_14b   | restaurant | 98.0     | 89.3     | 76.8    | 41.1 | 83.9   | 80.9    | 3.9   | 3.3      | 95.4     | 65.2  | $0.0000 | 2.57s      |
-| homo_qwen3_8b             | hotel      | 98.5     | 89.6     | 80.9    | 25.8 | 77.3   | 80.7    | 5.1   | 1.3      | 97.7     | 60.7  | $0.0000 | 2.31s      |
-| homo_qwen3_8b             | restaurant | 99.7     | 91.9     | 79.5    | 43.4 | 83.3   | 83.5    | 6.5   | 4.4      | 94.3     | 65.4  | $0.0000 | 2.20s      |
-| hetero_qwen3_14b_qwen3_8b | hotel      | 98.7     | 89.8     | 84.4    | 23.9 | 77.1   | 79.0    | 9.6   | 0.6      | 97.2     | 55.5  | $0.0000 | 2.45s      |
-| hetero_qwen3_14b_qwen3_8b | restaurant | 99.7     | 93.0     | 79.0    | 45.0 | 84.4   | 84.6    | 3.4   | 4.9      | 94.6     | 69.7  | $0.0000 | 2.30s      |
+| homo_gpt                  | hotel      | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —          |
+| homo_gpt                  | restaurant | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —          |
+| homo_haiku                | hotel      | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —          |
+| homo_haiku                | restaurant | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —          |
+| hetero_gpt_haiku          | hotel      | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —          |
+| hetero_gpt_haiku          | restaurant | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —          |
+| hetero_haiku_gpt          | hotel      | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —          |
+| hetero_haiku_gpt          | restaurant | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —          |
+| homo_qwen3_14b            | hotel      | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —          |
+| homo_qwen3_14b            | restaurant | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —          |
+| hetero_qwen25_qwen3_14b   | hotel      | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —          |
+| hetero_qwen25_qwen3_14b   | restaurant | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —          |
+| homo_qwen3_8b             | hotel      | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —          |
+| homo_qwen3_8b             | restaurant | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —          |
+| hetero_qwen3_14b_qwen3_8b | hotel      | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —          |
+| hetero_qwen3_14b_qwen3_8b | restaurant | —        | —        | —       | —    | —      | —       | —     | —        | —        | —     | —       | —          |
+
+---
+
+### Experiment 3: Modular Fine-Tuned Pipeline
+
+| Config             | DomainP% | IntentP% | Action% | JGA% | SlotR% | SlotF1% | Hall% | PolViol% | SysCorr% | Book% | Inform% | Success% | BLEU  | Combined | Cost($) | Latency(s) |
+|--------------------|----------|----------|---------|------|--------|---------|-------|----------|----------|-------|---------|----------|-------|----------|---------|------------|
+| ft_homo_llama32_3b | 98.2     | 94.3     | 77.1    | 43.5 | 87.5   | 87.8    | 27.9  | 0.3      | 90.6     | 44.6  | 57.0    | 39.8     | 9.39  | 57.79    | $0.0000 | 2.12s      |
+| ft_homo_qwen3_8b   | 99.3     | 95.7     | 78.9    | 47.3 | 88.1   | 89.1    | 22.1  | 0.6      | 92.6     | 48.3  | 53.2    | 48.4     | 11.35 | 62.15    | $0.0000 | 3.36s      |
+| ft_homo_qwen3_14b  | 99.0     | 95.7     | 79.2    | 47.7 | 88.1   | 89.5    | 14.1  | 2.0      | 94.7     | 54.2  | 61.3    | 55.4     | 12.26 | 70.61    | $0.0000 | 3.42s      |
+
+Per-Domain Breakdown
+
+| Config               | Domain     | DomainP% | IntentP% | Action% | JGA% | SlotR% | SlotF1% | Hall% | PolViol% | SysCorr% | Book% | Cost($) | Latency(s) |
+|----------------------|------------|----------|----------|---------|------|--------|---------|-------|----------|----------|-------|---------|------------|
+| ft_homo_llama32_3b   | hotel      | 99.8     | 94.6     | 76.4    | 35.7 | 85.9   | 85.6    | 18.5  | 0.4      | 94.0     | 56.8  | $0.0000 | 2.16s      |
+| ft_homo_llama32_3b   | restaurant | 96.3     | 93.8     | 78.0    | 53.0 | 89.4   | 90.3    | 38.2  | 0.2      | 86.5     | 67.4  | $0.0000 | 2.08s      |
+| ft_homo_qwen3_8b     | hotel      | 99.8     | 95.2     | 77.7    | 37.5 | 86.0   | 87.2    | 19.5  | 0.4      | 94.0     | 74.2  | $0.0000 | 3.39s      |
+| ft_homo_qwen3_8b     | restaurant | 98.7     | 96.4     | 80.5    | 59.7 | 90.9   | 91.6    | 24.8  | 0.8      | 90.8     | 72.6  | $0.0000 | 3.32s      |
+| ft_homo_qwen3_14b    | hotel      | 100.0    | 95.3     | 78.7    | 40.4 | 86.7   | 88.3    | 13.3  | 1.2      | 95.9     | 82.6  | $0.0000 | 3.43s      |
+| ft_homo_qwen3_14b    | restaurant | 97.7     | 96.2     | 79.8    | 56.8 | 89.8   | 91.1    | 15.1  | 3.0      | 93.2     | 79.4  | $0.0000 | 3.41s      |
+
 
 ---
 
 ## References
 
-- **Dataset:** [MultiWOZ 2.2](https://github.com/budzianowski/multiwoz) (Zang et al., 2020)
-- **Evaluation:** [Tomiinek MultiWOZ Evaluation](https://github.com/Tomiinek/MultiWOZ_Evaluation) (Nekvinda & Dusek, 2021)
+- **Dataset:** [MultiWOZ 2.2](https://github.com/budzianowski/multiwoz) 
+- **Evaluation:** [Tomiinek MultiWOZ Evaluation](https://github.com/Tomiinek/MultiWOZ_Evaluation) 
 - **Fine-tuning:** [Unsloth](https://github.com/unslothai/unsloth)
 
 ---
+
+*Proudly the first LLM pipeline to ship from Chatzis, Greece.* 🇬🇷

@@ -23,8 +23,11 @@ TARGET_DOMAINS: set[str] = {"hotel", "restaurant"}
 
 # Fine-tuning data and models paths
 FINETUNE_DIR = Path("data/finetune_data")
-FINETUNE_DST_FILE = FINETUNE_DIR / "dst_train.json"
-FINETUNE_RESPGEN_FILE = FINETUNE_DIR / "respgen_train.json"
+FINETUNE_DST_TRAIN_FILE = FINETUNE_DIR / "dst_train.json"
+FINETUNE_RESPGEN_TRAIN_FILE = FINETUNE_DIR / "respgen_train.json"
+FINETUNE_DST_DEV_FILE = FINETUNE_DIR / "dst_dev.json"
+FINETUNE_RESPGEN_DEV_FILE = FINETUNE_DIR / "respgen_dev.json"
+
 FINETUNED_MODELS_DIR = Path("data/finetuned_models")
 
 
@@ -33,11 +36,12 @@ LLM_MAX_TOKENS: int = 512
 LLM_TEMPERATURE: float = 0.0  # deterministic outputs for task-oriented pipeline
 
 # Local model loading settings
+# LOCAL_MAX_SEQ_LENGTH: int = 2048 # exp2, exp3 to reduce VRAM and training time
 # LOCAL_MAX_SEQ_LENGTH: int = 8192
-LOCAL_MAX_SEQ_LENGTH: int = 32768  # EuroHPC A100 40GB
+LOCAL_MAX_SEQ_LENGTH: int = 32768 # exp1
 # LOCAL_MAX_SEQ_LENGTH: int = 65536
 LOCAL_LOAD_IN_4BIT: bool = True  # matches bnb-4bit downloaded models
-LOCAL_DTYPE = None  # auto-detect: float16 on A100, T4
+LOCAL_DTYPE = None  # auto-detect: float16 on A100
 
 # Fine-tuning instructions
 DST_INSTRUCTION = "You are a dialogue state tracker for a task-oriented dialogue system. Extract ONLY slots explicitly mentioned by the user. Always output in the exact format requested. Never add explanations."
@@ -131,9 +135,7 @@ OPEN_SOURCE_MODELS: dict[str, str] = {
     "qwen3_8b": "unsloth/Qwen3-8B-bnb-4bit",
     "qwen3_14b": "unsloth/Qwen3-14B-bnb-4bit",
     "mistral_12b": "unsloth/Mistral-Nemo-Instruct-2407-bnb-4bit",
-    # "gemma4_e4b": "unsloth/gemma-4-E4B-it",
     "gemma3_12b": "unsloth/gemma-3-12b-it-bnb-4bit",
-
 }
 
 
@@ -200,46 +202,27 @@ EXP2_CONFIGS: dict[str, dict[str, str]] = {
 
 # Experiment 3: same pipeline as Experiment 2, but models are (Q)LoRA fine-tuned
 EXP3_CONFIGS: dict[str, dict[str, str]] = {
-    # "dummy_homo_lamma32_3b": {
-    #     "dst": str(FINETUNED_MODELS_DIR / "dummy/dst_lora"),
-    #     "response_generator": str(FINETUNED_MODELS_DIR / "dummy/respgen_lora"),
+    "ft_homo_qwen3_8b": {
+        "dst": str(FINETUNED_MODELS_DIR / "qwen3_8b_dst"),
+        "response_generator": str(FINETUNED_MODELS_DIR / "qwen3_8b_response_generator"),
+    },
+    "ft_homo_llama32_3b": {
+        "dst": str(FINETUNED_MODELS_DIR / "llama32_3b_dst"),
+        "response_generator": str(FINETUNED_MODELS_DIR / "llama32_3b_response_generator"),
+    },
+    "ft_homo_qwen3_14b": {
+        "dst": str(FINETUNED_MODELS_DIR / "qwen3_14b_dst"),
+        "response_generator": str(FINETUNED_MODELS_DIR / "qwen3_14b_response_generator"),
+    },
+    # "ft_hetero_qwen3_8b_llama32_3b": {
+    #    "dst": str(FINETUNED_MODELS_DIR / "qwen3_8b_dst"),
+    #    "response_generator": str(FINETUNED_MODELS_DIR / "llama32_3b_response_generator"),
     # },
-    # "ft_homo_phi4_mini": {
-    #         "dst": str(FINETUNED_MODELS_DIR / "phi4_mini_dst"),
-    #         "response_generator": str(FINETUNED_MODELS_DIR / "phi4_mini_respgen"),
-    #     },
-    # "ft_homo_llama31_8b": {
-    #     "dst": str(FINETUNED_MODELS_DIR / "llama31_8b_dst"),
-    #     "response_generator": str(FINETUNED_MODELS_DIR / "llama31_8b_respgen"),
+    # "ft_hetero_llama32_3b_qwen3_8b": {
+    #    "dst": str(FINETUNED_MODELS_DIR / "llama32_3b_dst"),
+    #    "response_generator": str(FINETUNED_MODELS_DIR / "qwen3_8b_response_generator"),
     # },
-    # "ft_homo_qwen25_7b": {
-    #     "dst": str(FINETUNED_MODELS_DIR / "qwen25_7b_dst"),
-    #     "response_generator": str(FINETUNED_MODELS_DIR / "qwen25_7b_respgen"),
-    # },
-    # "ft_homo_qwen3_8b": {
-    #         "dst": str(FINETUNED_MODELS_DIR / "qwen3_8b_dst"),
-    #         "response_generator": str(FINETUNED_MODELS_DIR / "qwen3_8b_respgen"),
-    #     },
-    # "ft_homo_qwen3_14b": {
-    #     "dst": str(FINETUNED_MODELS_DIR / "qwen3_14b_dst"),
-    #     "response_generator": str(FINETUNED_MODELS_DIR / "qwen3_14b_respgen"),
-    # },
-    # "ft_hetero_qwen3_llama31": {
-    #         "dst": str(FINETUNED_MODELS_DIR / "qwen3_8b_dst"),
-    #         "response_generator": str(FINETUNED_MODELS_DIR / "llama31_8b_respgen"),
-    #     },
-    # "ft_hetero_llama31_qwen25": {
-    #     "dst": str(FINETUNED_MODELS_DIR / "llama31_8b_dst"),
-    #     "response_generator": str(FINETUNED_MODELS_DIR / "qwen25_7b_respgen"),
-    # },
-    # "ft_homo_mistral_12b": {
-    #     "dst": str(FINETUNED_MODELS_DIR / "mistral_12b_dst"),
-    #     "response_generator": str(FINETUNED_MODELS_DIR / "mistral_12b_respgen"),
-    # },
-    # "ft_homo_llama32_3b": {
-    #     "dst": str(FINETUNED_MODELS_DIR / "llama32_3b_dst"),
-    #     "response_generator": str(FINETUNED_MODELS_DIR / "llama32_3b_respgen"),
-    # },
+
 }
 
 
