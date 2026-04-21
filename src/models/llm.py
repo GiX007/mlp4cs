@@ -93,7 +93,7 @@ def _call_anthropic(model_name: str, prompt: str, system_prompt: str = "", max_t
     """Call an Anthropic model and return a standardized ModelResponse.
 
     Args:
-        model_name: Anthropic model identifier (e.g., 'claude-3-haiku-20240307')
+        model_name: Anthropic model identifier (e.g., 'claude-haiku-4-5-20251001')
         prompt: User message to send
         system_prompt: System instruction for the model
         max_tokens: Maximum tokens to generate

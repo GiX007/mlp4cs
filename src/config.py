@@ -51,7 +51,7 @@ RESPGEN_INSTRUCTION = "Generate a response for the customer service system based
 FINETUNE_EPOCHS: int = 3
 
 # Set to an integer to limit dialogues processed, None = full split
-MAX_DIALOGUES: int | None = 1 # None
+MAX_DIALOGUES: int | None = None
 
 # DB
 MAX_DB_RESULTS: int = 5
@@ -119,7 +119,9 @@ TOMIINEK_SLOT_MAP: dict[str, str] = {
 # API-based models
 API_MODELS: list[str] = [
     "gpt-4o-mini",
-    "claude-3-haiku-20240307",
+    "gpt-4.1-nano",
+    # "claude-3-haiku-20240307",
+    "claude-haiku-4-5-20251001",
 ]
 
 
@@ -144,8 +146,11 @@ EXP1_CONFIGS: dict[str, dict[str, str]] = {
     "gpt": {
         "single": "gpt-4o-mini",
     },
+    "gpt-nano": {
+        "single": "gpt-4.1-nano"
+    },
     "haiku": {
-        "single": "claude-3-haiku-20240307",
+        "single": "claude-haiku-4-5-20251001",
     },
     # "qwen3_8b": {
     #     "single": str(MODELS_DIR / "qwen3_8b"),
@@ -169,15 +174,15 @@ EXP2_CONFIGS: dict[str, dict[str, str]] = {
         "response_generator": "gpt-4o-mini",
     },
     "homo_haiku": {
-        "dst": "claude-3-haiku-20240307",
-        "response_generator": "claude-3-haiku-20240307",
+        "dst": "claude-haiku-4-5-20251001",
+        "response_generator": "claude-haiku-4-5-20251001",
     },
     "hetero_gpt_haiku": {
         "dst": "gpt-4o-mini",
-        "response_generator": "claude-3-haiku-20240307",
+        "response_generator": "claude-haiku-4-5-20251001",
     },
     "hetero_haiku_gpt": {
-        "dst": "claude-3-haiku-20240307",
+        "dst": "claude-haiku-4-5-20251001",
         "response_generator": "gpt-4o-mini",
     },
 
@@ -228,8 +233,13 @@ EXP3_CONFIGS: dict[str, dict[str, str]] = {
 
 # Cost per 1000 tokens in USD (input, output) in USD (Feb 2026)
 MODEL_COSTS: dict[str, tuple[float, float]] = {
+    # https://developers.openai.com/api/docs/pricing
     "gpt-4o-mini": (0.000150, 0.000600),
-    "claude-3-haiku-20240307": (0.000250, 0.001250),
+    "gpt-4.1-nano": (0.000100, 0.000400),
+
+    # https://platform.claude.com/docs/en/about-claude/pricing
+    # "claude-3-haiku-20240307": (0.000250, 0.001250),
+    "claude-haiku-4-5-20251001": (0.001000, 0.005000), # 1.00  / 1,000,000 × 1,000 = $0.001, 5.00 / 1,000,000 × 1,000 = $0.005
     # local models are free
 }
 
