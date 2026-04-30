@@ -5,9 +5,9 @@ Relative research behind each experiment: what we tried, why, and what we learne
 ---
 
 ## Exp1: Single-LLM Baseline
-**Setup:** One LLM handles the entire turn in a single prompt: domain, intent, slots, and response all at once. 
+**Setup:** One LLM handles the entire turn in a single prompt: domain, intent, slots, and response all at once.
 
-**Tested:** GPT-4o-mini, Claude Haiku, Qwen2.5-14B, Qwen3-8B, Qwen3-14B.
+**Tested:** GPT-4o-mini, Claude Haiku, Qwen2.5-14B, Qwen3-8B, Qwen3-14B
 
 **Key findings:**
 - Qwen3-14B beats all models on Combined, Slot extraction and hallucination rate
@@ -15,14 +15,14 @@ Relative research behind each experiment: what we tried, why, and what we learne
 - Smaller models (Qwen3-8B) hallucinate more when forced to juggle DST + entity lookup + response generation in one prompt
 
 **Next step:** We want to test whether splitting the task into focused sub-tasks (DST, ResponseGen) improves performance, especially for smaller models, 
-which struggled most with the single-prompt complexity → **Exp2**.
+which struggled most with the single-prompt complexity → **Exp2**
 
 ---
 
 ## Exp2: Zero-Shot Modular Pipeline
-**Setup:** Split the turn into two LLM calls: DST (extract slots) and ResponseGen (generate text given DB results). Both zero-shot. Tested homogeneous (same model for both) and heterogeneous (different models per role) configurations.
+**Setup:** Split the turn into two LLM calls: DST (extract slots) and ResponseGen (generate text given DB results). Both zero-shot. Tested homogeneous (same model for both) and heterogeneous (different models per role) configurations
 
-**Tested:** homo_qwen3_14b, hetero_qwen25_qwen3_14b, homo_qwen3_8b, hetero_qwen3_14b_qwen3_8b.
+**Tested:** homo_qwen3_14b, hetero_qwen25_qwen3_14b, homo_qwen3_8b, hetero_qwen3_14b_qwen3_8b
 
 ### Run 1: homo_qwen3_14b
 - **Why:** Test whether decomposition helps the strongest open-source model from Exp1

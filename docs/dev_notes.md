@@ -359,8 +359,8 @@ Tomiinek is a standalone evaluator for the MultiWOZ context-to-response task. It
 - `active_domains` (optional): list of active domains. If omitted, inferred from state changes
 
 **What we pass:**
-- `state`: real slot values (lexicalized), e.g., `{"restaurant": {"area": "north", "name": "nirala"}}`. Tomiinek needs real values to query its internal DB as placeholders would fail the lookup.
-- `response`: delexicalized with placeholders, e.g., "I found [restaurant_name] in the [restaurant_area]". Safer for BLEU and entity matching.
+- `state`: real slot values (lexicalized), e.g., `{"restaurant": {"area": "north", "name": "nirala"}}`. Tomiinek needs real values to query its internal DB as placeholders would fail the lookup
+- `response`: delexicalized with placeholders, e.g., "I found [restaurant_name] in the [restaurant_area]". Safer for BLEU and entity matching
 
 **How Inform is computed:**
 1. Takes the predicted belief state (or GT if not provided)

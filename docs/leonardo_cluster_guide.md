@@ -13,7 +13,7 @@ Reference guide for running MLP4CS experiments on the EuroHPC Leonardo cluster.
   - **Interactive session:** fast debugging, max 30 min, immediate output
   - **Batch job:** submit and forget, runs for hours/days on compute node
 - **Hardware partitions:**
-  - **Booster** (A100 GPUs): 3456 nodes, 32 cores, 4× A100 64GB, 512GB RAM, used for our experiments
+  - **Booster** (A100 GPUs): 3456 nodes, 32 cores, 4x A100 64GB, 512GB RAM, used for our experiments
   - **DCGP** (CPU only): 1536 nodes, 112 cores, 512GB RAM
 - **Main file system paths:**
   - `$HOME` = `/leonardo/home/userexternal/gxydias0` (50GB, usually for code, conda)
@@ -59,10 +59,10 @@ cindata # Storage usage
 cinQuota # Quota limits
 ```
 
-**Budget formula:** `Cost = Hours × Nodes × GPU_fraction × CPU_cores`
-- 1 GPU job for 10h = `10 × 1 × 0.25 × 32` = 80 CPU-hours
-- 4 GPU job for 10h = `10 × 1 × 1.0 × 32` = 320 CPU-hours
-- Available single-GPU jobs: 144,000 ÷ 80 = ~1,800 (the maximum of the resources requested per node is determined by the GPUs)
+**Budget formula:** `Cost = Hours x Nodes x GPU_fraction x CPU_cores`
+- 1 GPU job for 10h = `10 x 1 x 0.25 x 32` = 80 CPU-hours
+- 4 GPU job for 10h = `10 x 1 x 1.0 x 32` = 320 CPU-hours
+- Available single-GPU jobs: 144,000 / 80 = ~1,800 (the maximum of the resources requested per node is determined by the GPUs)
 
 ---
 
