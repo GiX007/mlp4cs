@@ -400,9 +400,6 @@ If our DST extracts wrong slots, Tomiinek queries the DB with wrong constraints 
 Even if the response is perfect, Inform fails because the expected entity doesn't match. 
 This means **slot extraction accuracy is the root bottleneck for Inform/Success, not response generation quality**.
 
-Booking slots require additional remapping via TOMIINEK_SLOT_MAP in config.py:
-bookday → booking-day, bookpeople → booking-people, bookstay → booking-stay, booktime → booking-time.
-Without this mapping, Tomiinek silently ignores booking slots, artificially deflating Success% scores.
 
 ### Why we use delexicalized responses
 - Matches GT reference format → higher BLEU

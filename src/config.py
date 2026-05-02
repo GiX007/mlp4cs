@@ -107,13 +107,15 @@ SLOT_VALUE_NORMALIZATION: dict[str, str] = {
 }
 
 
-# Map internal slot names to Tomiinek evaluator format (bookday → booking-day)
-TOMIINEK_SLOT_MAP: dict[str, str] = {
-    "bookday": "booking-day",
-    "bookpeople": "booking-people",
-    "bookstay": "booking-stay",
-    "booktime": "booking-time",
-}
+# Map internal slot names to Tomiinek evaluator format. Tomiinek's mwzeval/normalization.py accepts the bare canonical forms (bookday, bookpeople, etc.)
+TOMIINEK_SLOT_MAP: dict[str, str] = {}
+
+# TOMIINEK_SLOT_MAP: dict[str, str] = {
+#     "bookday": "booking-day",
+#     "bookpeople": "booking-people",
+#     "bookstay": "booking-stay",
+#     "booktime": "booking-time",
+# }
 
 
 # API-based models
@@ -127,17 +129,14 @@ API_MODELS: list[str] = [
 
 # Open-source models
 OPEN_SOURCE_MODELS: dict[str, str] = {
-    "phi4_mini": "unsloth/Phi-4-mini-instruct-bnb-4bit",
+    "phi4_14b": "unsloth/phi-4-bnb-4bit",
     "llama32_3b": "unsloth/Llama-3.2-3B-Instruct-bnb-4bit",
-    "llama3_8b": "unsloth/llama-3-8b-Instruct-bnb-4bit",
     "llama31_8b": "unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit",
-    "qwen25_7b": "unsloth/Qwen2.5-7B-Instruct-bnb-4bit",
     "qwen25_14b": "unsloth/Qwen2.5-14B-Instruct-bnb-4bit",
     "qwen3_4b": "unsloth/Qwen3-4B-unsloth-bnb-4bit",
     "qwen3_8b": "unsloth/Qwen3-8B-bnb-4bit",
     "qwen3_14b": "unsloth/Qwen3-14B-bnb-4bit",
-    "mistral_12b": "unsloth/Mistral-Nemo-Instruct-2407-bnb-4bit",
-    "gemma3_12b": "unsloth/gemma-3-12b-it-bnb-4bit",
+    "gemma2_9b": "unsloth/gemma-2-9b-it-bnb-4bit",
 }
 
 
@@ -152,17 +151,29 @@ EXP1_CONFIGS: dict[str, dict[str, str]] = {
     "haiku": {
         "single": "claude-haiku-4-5-20251001",
     },
+    # "qwen3_4b": {
+    #     "single": str(MODELS_DIR / "qwen3_4b"),
+    # },
     # "qwen3_8b": {
     #     "single": str(MODELS_DIR / "qwen3_8b"),
-    # },
-    # "gemma3_12b": {
-    #     "single": str(MODELS_DIR / "gemma3_12b"),
     # },
     # "qwen25_14b": {
     #     "single": str(MODELS_DIR / "qwen25_14b"),
     # },
     # "qwen3_14b": {
     #     "single": str(MODELS_DIR / "qwen3_14b"),
+    # },
+    # "llama32_3b": {
+    #     "single": str(MODELS_DIR / "llama32_3b"),
+    # },
+    # "llama31_8b": {
+    #     "single": str(MODELS_DIR / "llama31_8b"),
+    # },
+    # "phi4_14b": {
+    #     "single": str(MODELS_DIR / "phi4_14b"),
+    # },
+    # "gemma2_9b": {
+    #     "single": str(MODELS_DIR / "gemma2_9b"),
     # },
 }
 
@@ -186,39 +197,63 @@ EXP2_CONFIGS: dict[str, dict[str, str]] = {
         "response_generator": "gpt-4o-mini",
     },
 
-    # "homo_qwen3_14b": {
-    #     "dst": str(MODELS_DIR / "qwen3_14b"),
-    #     "response_generator": str(MODELS_DIR / "qwen3_14b"),
-    # },
-    # "hetero_qwen25_qwen3_14b": {
-    #     "dst": str(MODELS_DIR / "qwen25_14b"),
-    #     "response_generator": str(MODELS_DIR / "qwen3_14b"),
+    # "homo_qwen3_4b": {
+    #     "dst": str(MODELS_DIR / "qwen3_4b"),
+    #     "response_generator": str(MODELS_DIR / "qwen3_4b"),
     # },
     # "homo_qwen3_8b": {
     #     "dst": str(MODELS_DIR / "qwen3_8b"),
     #     "response_generator": str(MODELS_DIR / "qwen3_8b"),
     # },
+    # "hetero_qwen25_qwen3_14b": {
+    #     "dst": str(MODELS_DIR / "qwen25_14b"),
+    #     "response_generator": str(MODELS_DIR / "qwen3_14b"),
+    # },
+    # "homo_qwen3_14b": {
+    #     "dst": str(MODELS_DIR / "qwen3_14b"),
+    #     "response_generator": str(MODELS_DIR / "qwen3_14b"),
+    # },
     # "hetero_qwen3_14b_qwen3_8b": {
     #     "dst": str(MODELS_DIR / "qwen3_14b"),
     #     "response_generator": str(MODELS_DIR / "qwen3_8b"),
+    # },
+    # "homo_llama32_3b": {
+    #     "dst": str(MODELS_DIR / "llama32_3b"),
+    #     "response_generator": str(MODELS_DIR / "llama32_3b"),
+    # },
+    # "homo_llama31_8b": {
+    #     "dst": str(MODELS_DIR / "llama31_8b"),
+    #     "response_generator": str(MODELS_DIR / "llama31_8b"),
+    # },
+    # "homo_phi4_14b": {
+    #     "dst": str(MODELS_DIR / "phi4_14b"),
+    #     "response_generator": str(MODELS_DIR / "phi4_14b"),
     # },
 }
 
 
 # Experiment 3: same pipeline as Experiment 2, but models are (Q)LoRA fine-tuned
 EXP3_CONFIGS: dict[str, dict[str, str]] = {
-    "ft_homo_qwen3_8b": {
-        "dst": str(FINETUNED_MODELS_DIR / "qwen3_8b_dst"),
-        "response_generator": str(FINETUNED_MODELS_DIR / "qwen3_8b_response_generator"),
-    },
-    "ft_homo_llama32_3b": {
-        "dst": str(FINETUNED_MODELS_DIR / "llama32_3b_dst"),
-        "response_generator": str(FINETUNED_MODELS_DIR / "llama32_3b_response_generator"),
-    },
-    "ft_homo_qwen3_14b": {
-        "dst": str(FINETUNED_MODELS_DIR / "qwen3_14b_dst"),
-        "response_generator": str(FINETUNED_MODELS_DIR / "qwen3_14b_response_generator"),
-    },
+    # "ft_homo_qwen3_4b": {
+    #     "dst": str(FINETUNED_MODELS_DIR / "qwen3_4b_dst"),
+    #     "response_generator": str(FINETUNED_MODELS_DIR / "qwen3_4b_response_generator"),
+    # },
+    # "ft_homo_qwen3_8b": {
+    #     "dst": str(FINETUNED_MODELS_DIR / "qwen3_8b_dst"),
+    #     "response_generator": str(FINETUNED_MODELS_DIR / "qwen3_8b_response_generator"),
+    # },
+    # "ft_homo_llama32_3b": {
+    #     "dst": str(FINETUNED_MODELS_DIR / "llama32_3b_dst"),
+    #     "response_generator": str(FINETUNED_MODELS_DIR / "llama32_3b_response_generator"),
+    # },
+    # "ft_homo_llama31_8b": {
+    #     "dst": str(FINETUNED_MODELS_DIR / "llama31_8b_dst"),
+    #     "response_generator": str(FINETUNED_MODELS_DIR / "llama31_8b_response_generator"),
+    # },
+    # "ft_homo_qwen3_14b": {
+    #     "dst": str(FINETUNED_MODELS_DIR / "qwen3_14b_dst"),
+    #     "response_generator": str(FINETUNED_MODELS_DIR / "qwen3_14b_response_generator"),
+    # },
     # "ft_hetero_qwen3_8b_llama32_3b": {
     #    "dst": str(FINETUNED_MODELS_DIR / "qwen3_8b_dst"),
     #    "response_generator": str(FINETUNED_MODELS_DIR / "llama32_3b_response_generator"),
@@ -227,7 +262,10 @@ EXP3_CONFIGS: dict[str, dict[str, str]] = {
     #    "dst": str(FINETUNED_MODELS_DIR / "llama32_3b_dst"),
     #    "response_generator": str(FINETUNED_MODELS_DIR / "qwen3_8b_response_generator"),
     # },
-
+    # "ft_homo_phi4_14b": {
+    #     "dst": str(FINETUNED_MODELS_DIR / "phi4_14b_dst"),
+    #     "response_generator": str(FINETUNED_MODELS_DIR / "phi4_14b_response_generator"),
+    # },
 }
 
 

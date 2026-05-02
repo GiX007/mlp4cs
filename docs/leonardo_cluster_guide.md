@@ -248,7 +248,7 @@ scp -r gxydias0@login.leonardo.cineca.it:/leonardo_work/EUHPC_D34_189/mlp4cs/res
 **Step 6: Local Tomiinek evaluation:**
 ```bash
 # From local project root (run locally)
-python src/evaluation/tomiinek_local.py
+python src/evaluation/score_tomiinek.py
 ```
 
 ---

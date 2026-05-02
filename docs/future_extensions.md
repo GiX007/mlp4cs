@@ -485,7 +485,7 @@ API models (GPT-4o-mini, Claude Haiku, etc.) need only API keys and budget, no G
 Open-source models (LLaMA, Qwen, etc.) of different sizes (3B–14B) need a GPU with at least ≥40 GB VRAM for inference and fine-tuning.
 
 **GPU access options:**
-- **EuroHPC:** apply to other EuroHPC sites (LUMI, MareNostrum 5, Karolina). Free for academic research
+- **EuroHPC:** apply to other EuroHPC sites. Free for academic research
   - **Independent practitioners** can still apply for access, which is explicitly open to individuals with smaller allocations, but free. Application takes weeks
 - **Cloud GPU rental (pay per hour), no commitment:**
   - RunPod, Lambda Labs, Vast.ai: A100 40GB, A100 80GB, H100. Best price/performance for short experiments

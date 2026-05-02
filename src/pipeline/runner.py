@@ -66,6 +66,9 @@ def run_turn_single(user_utterance: str, history: list[dict], accumulated_slots:
         f"   [hotel_name], [hotel_phone], [hotel_address], [hotel_postcode]\n"
         f"   [restaurant_name], [restaurant_phone], [restaurant_address], [restaurant_postcode]\n"
         f"   [ref] for booking reference.\n\n"
+        # f"   DO NOT invent placeholders like [hotel_bookday], [food_type], [price_range], [restaurant_signature], etc.\n"
+        # f"   For booking attributes (day, time, people, stay), refer to them in plain text\n"
+        # f"   (e.g., 'for monday at 19:00 for 2 people') — NOT as placeholders.\n\n"
         f"6. Recommend ONE entity only and use each placeholder ONCE.\n"
         f"7. If user says goodbye or thanks, respond with a farewell message. Set intent to None.\n"
         f"Respond with valid JSON only:\n"
@@ -100,10 +103,17 @@ def run_turn_single(user_utterance: str, history: list[dict], accumulated_slots:
         raw = re.sub(r'[\x00-\x1f\x7f]', ' ', raw)
 
         # If Haiku outputs plain text instead of JSON, try to extract JSON object from within the text (raw does NOT start with "{" → enters the if block and re.search finds the first { to last })
-        if not raw.strip().startswith("{"):
-            match = re.search(r'\{.*\}', raw, re.DOTALL)
-            if match:
-                raw = match.group()
+        # if not raw.strip().startswith("{"):
+        #     match = re.search(r'\{.*\}', raw, re.DOTALL)
+        #     if match:
+        #         raw = match.group()
+
+        # Extract JSON object from anywhere in the text — handles Haiku (text BEFORE JSON) and Mistral (text AFTER JSON).
+        # Greedy `.*` with re.DOTALL matches from the FIRST `{` to the LAST `}`, dropping leading/trailing chatter.
+        match = re.search(r'\{.*\}', raw, re.DOTALL)
+        if match:
+            raw = match.group()
+
 
         parsed = json.loads(raw)
         domain = parsed.get("domain")
