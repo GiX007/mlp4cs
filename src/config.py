@@ -229,6 +229,10 @@ EXP2_CONFIGS: dict[str, dict[str, str]] = {
     #     "dst": str(MODELS_DIR / "phi4_14b"),
     #     "response_generator": str(MODELS_DIR / "phi4_14b"),
     # },
+    # "hetero_qwen3_14b_phi4_14b": {
+    #     "dst": str(MODELS_DIR / "qwen3_14b"),
+    #     "response_generator": str(MODELS_DIR / "phi4_14b"),
+    # },
 }
 
 
@@ -264,6 +268,10 @@ EXP3_CONFIGS: dict[str, dict[str, str]] = {
     # },
     # "ft_homo_phi4_14b": {
     #     "dst": str(FINETUNED_MODELS_DIR / "phi4_14b_dst"),
+    #     "response_generator": str(FINETUNED_MODELS_DIR / "phi4_14b_response_generator"),
+    # },
+    # "ft_hetero_qwen3_14b_phi4_14b": {
+    #     "dst": str(FINETUNED_MODELS_DIR / "qwen3_14b_dst"),
     #     "response_generator": str(FINETUNED_MODELS_DIR / "phi4_14b_response_generator"),
     # },
 }

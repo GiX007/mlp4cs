@@ -192,6 +192,7 @@ Per-Domain Breakdown
 | homo_llama32_3b           | 5.3  | 42.5    | 28.50   | 14.50    | 1.26 | 22.76    |
 | homo_llama31_8b           | 18.1 | 63.4    | 55.4    | 35.5     | 1.53 | 46.98    |
 | homo_phi4_14b             | 23.8 | 69.7    | 61.3    | 43.5     | 2.83 | 55.23    |
+| hetero_qwen3_14b_phi4_14b | 33.7 | 81.1    | 68.3    | 62.9     | 2.91 | 68.51    |
 
 
 Per-Domain Breakdown
@@ -222,37 +223,41 @@ Per-Domain Breakdown
 | homo_llama31_8b           | restaurant | 23.5 | 64.6    |
 | homo_phi4_14b             | hotel      | 16.8 | 65.0    |
 | homo_phi4_14b             | restaurant | 33.6 | 75.9    |
+| hetero_qwen3_14b_phi4_14b | hotel      | 27.2 | 77.9    |
+| hetero_qwen3_14b_phi4_14b | restaurant | 42.3 | 85.5    |
 
 ---
 
 ### Experiment 3: Modular Fine-Tuned Pipeline
 
-| Config             | JGA% | SlotF1% | Inform% | Success% | BLEU  | Combined |
-|--------------------|------|---------|---------|----------|-------|----------|
-| ft_homo_qwen3_4b   | 44.8 | 88.3    | 54.8    | 36.0     | 8.35  | 53.75    |
-| ft_homo_qwen3_8b   | 47.3 | 89.1    | 53.2    | 48.4     | 11.35 | 62.15    |
-| ft_homo_qwen3_14b  | 47.7 | 89.5    | 61.3    | 55.4     | 12.26 | 70.61    |
-| ft_homo_llama32_3b | 43.5 | 87.8    | 57.0    | 39.8     | 9.39  | 57.79    |
-| ft_homo_llama31_8b | 44.0 | 87.1    | 50.5    | 40.3     | 9.22  | 54.62    |
-| ft_homo_phi4_14b   | 47.0 | 88.9    | 66.7    | 57.5     | 8.74  | 70.84    |
+| Config                       | JGA% | SlotF1% | Inform% | Success% | BLEU  | Combined |
+|------------------------------|------|---------|---------|----------|-------|----------|
+| ft_homo_qwen3_4b             | 44.8 | 88.3    | 54.8    | 36.0     | 8.35  | 53.75    |
+| ft_homo_qwen3_8b             | 47.3 | 89.1    | 53.2    | 48.4     | 11.35 | 62.15    |
+| ft_homo_qwen3_14b            | 47.7 | 89.5    | 61.3    | 55.4     | 12.26 | 70.61    |
+| ft_homo_llama32_3b           | 43.5 | 87.8    | 57.0    | 39.8     | 9.39  | 57.79    |
+| ft_homo_llama31_8b           | 44.0 | 87.1    | 50.5    | 40.3     | 9.22  | 54.62    |
+| ft_homo_phi4_14b             | 47.0 | 88.9    | 66.7    | 57.5     | 8.74  | 70.84    |
+| ft_hetero_qwen3_14b_phi4_14b | 46.9 | 89.2    | 66.7    | 57.0     | 8.71  | 70.56    |
 
 Per-Domain Breakdown
 
-| Config             | Domain     | JGA% | SlotF1% |
-|--------------------|------------|------|---------|
-| ft_homo_qwen3_4b   | hotel      | 35.7 | 86.1    |
-| ft_homo_qwen3_4b   | restaurant | 56.4 | 91.1    |
-| ft_homo_qwen3_8b   | hotel      | 37.5 | 87.2    |
-| ft_homo_qwen3_8b   | restaurant | 59.7 | 91.6    |
-| ft_homo_qwen3_14b  | hotel      | 40.4 | 88.3    |
-| ft_homo_qwen3_14b  | restaurant | 56.8 | 91.1    |
-| ft_homo_llama32_3b | hotel      | 35.7 | 85.6    |
-| ft_homo_llama32_3b | restaurant | 53.0 | 90.3    |
-| ft_homo_llama31_8b | hotel      | 37.7 | 86.0    |
-| ft_homo_llama31_8b | restaurant | 50.9 | 88.6    |
-| ft_homo_phi4_14b   | hotel      | 38.8 | 87.5    |
-| ft_homo_phi4_14b   | restaurant | 57.5 | 90.6    |
-
+| Config                       | Domain     | JGA% | SlotF1% |
+|------------------------------|------------|------|---------|
+| ft_homo_qwen3_4b             | hotel      | 35.7 | 86.1    |
+| ft_homo_qwen3_4b             | restaurant | 56.4 | 91.1    |
+| ft_homo_qwen3_8b             | hotel      | 37.5 | 87.2    |
+| ft_homo_qwen3_8b             | restaurant | 59.7 | 91.6    |
+| ft_homo_qwen3_14b            | hotel      | 40.4 | 88.3    |
+| ft_homo_qwen3_14b            | restaurant | 56.8 | 91.1    |
+| ft_homo_llama32_3b           | hotel      | 35.7 | 85.6    |
+| ft_homo_llama32_3b           | restaurant | 53.0 | 90.3    |
+| ft_homo_llama31_8b           | hotel      | 37.7 | 86.0    |
+| ft_homo_llama31_8b           | restaurant | 50.9 | 88.6    |
+| ft_homo_phi4_14b             | hotel      | 38.8 | 87.5    |
+| ft_homo_phi4_14b             | restaurant | 57.5 | 90.6    |
+| ft_hetero_qwen3_14b_phi4_14b | hotel      | 39.4 | 88.0    |
+| ft_hetero_qwen3_14b_phi4_14b | restaurant | 56.3 | 90.7    |
 
 ---
 

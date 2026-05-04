@@ -21,6 +21,7 @@ PATH_EXP2_HETERO_QWEN25_QWEN3_14B = r"C:\Users\giorg\Projects\PycharmProjects\ml
 PATH_EXP2_HOMO_LLAMA32_3B = r"C:\Users\giorg\Projects\PycharmProjects\mlp4cs\archived_results\open_source_test_20260418\exp2_homo_llama32_3b\exp2_homo_llama32_3b_tomiinek_input.json"
 PATH_EXP2_HOMO_LLAMA31_8B = r"C:\Users\giorg\Projects\PycharmProjects\mlp4cs\archived_results\open_source_test_20260418\exp2_homo_llama31_8b\exp2_homo_llama31_8b_tomiinek_input.json"
 PATH_EXP2_HOMO_PHI4_14B = r"C:\Users\giorg\Projects\PycharmProjects\mlp4cs\archived_results\open_source_test_20260418\exp2_homo_phi4_14b\exp2_homo_phi4_14b_tomiinek_input.json"
+PATH_EXP2_HETERO_QWEN3_14b_PHI4_14B = r"C:\Users\giorg\Projects\PycharmProjects\mlp4cs\archived_results\open_source_test_20260418\exp2_hetero_qwen3_14b_phi4_14b\exp2_hetero_qwen3_14b_phi4_14b_tomiinek_input.json"
 
 PATH_EXP3_FT_HOMO_QWEN3_4B = r"C:\Users\giorg\Projects\PycharmProjects\mlp4cs\archived_results\open_source_test_20260418\exp3_ft_homo_qwen3_4b\exp3_ft_homo_qwen3_4b_tomiinek_input.json"
 PATH_EXP3_FT_HOMO_QWEN3_8B = r"C:\Users\giorg\Projects\PycharmProjects\mlp4cs\archived_results\open_source_test_20260418\exp3_ft_homo_qwen3_8b\exp3_ft_homo_qwen3_8b_tomiinek_input.json"
@@ -28,6 +29,7 @@ PATH_EXP3_FT_HOMO_QWEN3_14B = r"C:\Users\giorg\Projects\PycharmProjects\mlp4cs\a
 PATH_EXP3_FT_HOMO_LLAMA32_3B = r"C:\Users\giorg\Projects\PycharmProjects\mlp4cs\archived_results\open_source_test_20260418\exp3_ft_homo_llama32_3b\exp3_ft_homo_llama32_3b_tomiinek_input.json"
 PATH_EXP3_FT_HOMO_LLAMA31_8B = r"C:\Users\giorg\Projects\PycharmProjects\mlp4cs\archived_results\open_source_test_20260418\exp3_ft_homo_llama31_8b\exp3_ft_homo_llama31_8b_tomiinek_input.json"
 PATH_EXP3_FT_HOMO_PHI4_14B = r"C:\Users\giorg\Projects\PycharmProjects\mlp4cs\archived_results\open_source_test_20260418\exp3_ft_homo_phi4_14b\exp3_ft_homo_phi4_14b_tomiinek_input.json"
+PATH_EXP3_FT_HETERO_QWEN3_14b_PHI4_14B = r"C:\Users\giorg\Projects\PycharmProjects\mlp4cs\archived_results\open_source_test_20260418\exp3_ft_hetero_qwen3_14b_phi4_14b\exp3_ft_hetero_qwen3_14b_phi4_14b_tomiinek_input.json"
 
 # API runs
 PATH_EXP1_GPT = r"C:\Users\giorg\Projects\PycharmProjects\mlp4cs\archived_results\api_baselines_cot_test_20260420\exp1_gpt\exp1_gpt_tomiinek_input.json"
@@ -67,13 +69,15 @@ RUNS: dict[str, str] = {
     # "exp2_homo_qwen3_8b": PATH_EXP2_HOMO_QWEN3_8B,
     # "exp2_homo_qwen3_14b": PATH_EXP2_HOMO_QWEN3_14B,
     # "exp2_hetero_qwen25_qwen3_14b": PATH_EXP2_HETERO_QWEN25_QWEN3_14B,
+    # "exp2_hetero_qwen3_14b_phi4_14b": PATH_EXP2_HETERO_QWEN3_14b_PHI4_14B,
     # "exp2_homo_phi4_14b": PATH_EXP2_HOMO_PHI4_14B,
     # "exp3_ft_homo_llama32_3b": PATH_EXP3_FT_HOMO_LLAMA32_3B,
     # "exp3_ft_homo_llama31_8b": PATH_EXP3_FT_HOMO_LLAMA31_8B,
     # "exp3_ft_homo_qwen3_8b": PATH_EXP3_FT_HOMO_QWEN3_8B,
     # "exp3_ft_homo_qwen3_14b": PATH_EXP3_FT_HOMO_QWEN3_14B,
     # "exp3_ft_homo_qwen3_1b": PATH_EXP3_FT_HOMO_QWEN3_4B,
-    "exp3_ft_homo_phi4_14b": PATH_EXP3_FT_HOMO_PHI4_14B,
+    # "exp3_ft_homo_phi4_14b": PATH_EXP3_FT_HOMO_PHI4_14B,
+    "exp3_ft_hetero_qwen3_14b_phi4_14b": PATH_EXP3_FT_HETERO_QWEN3_14b_PHI4_14B,
 }
 
 
