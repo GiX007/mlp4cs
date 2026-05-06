@@ -231,6 +231,23 @@ def count_dialogues_per_split() -> None:
     print_separator("END OF DIALOGUE COUNTS")
 
 
+def count_user_turns_per_split() -> None:
+    """Count user turns and dialogues across all splits filtered to target domains."""
+    print_separator(f"USER TURN COUNTS of {sorted(TARGET_DOMAINS)}")
+    print()
+
+    for split in ("train", "dev", "test"):
+        dialogues = load_split(split)
+        user_turns = sum(
+            1 for d in dialogues for t in d["turns"] if t["speaker"] == "USER"
+        )
+        avg = user_turns / len(dialogues) if dialogues else 0.0
+        print(f"{split}: {len(dialogues)} dialogues, {user_turns} user turns, "
+              f"avg {avg:.2f} user turns/dialogue")
+
+    print_separator("END OF USER TURN COUNTS")
+
+
 def explore_slot_values(split: str = "train") -> None:
     """
     Print all unique slot values per slot across target domain dialogues.
@@ -345,6 +362,7 @@ def main() -> None:
     explore_db_structure()
     explore_conversation_examples()
     count_dialogues_per_split()
+    count_user_turns_per_split()
     explore_slot_values()
     inspect_finetune_datasets()
 

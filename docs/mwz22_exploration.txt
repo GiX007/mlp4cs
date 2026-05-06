@@ -410,6 +410,18 @@ END OF DIALOGUE COUNTS
 ============================================================
 
 ============================================================
+USER TURN COUNTS of ['hotel', 'restaurant']
+============================================================
+
+train: 2850 dialogues, 14464 user turns, avg 5.08 user turns/dialogue
+dev: 171 dialogues, 1038 user turns, avg 6.07 user turns/dialogue
+test: 186 dialogues, 1100 user turns, avg 5.91 user turns/dialogue
+
+============================================================
+END OF USER TURN COUNTS
+============================================================
+
+============================================================
 SLOT VALUE DISTRIBUTION of ['hotel', 'restaurant'] of [train]
 ============================================================
 

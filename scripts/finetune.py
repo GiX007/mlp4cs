@@ -122,8 +122,8 @@ def finetune(role: str, model_alias: str) -> None:
     model, tokenizer = FastLanguageModel.from_pretrained(
         model_name=model_local_path,
         max_seq_length=LOCAL_MAX_SEQ_LENGTH,
-        dtype=LOCAL_DTYPE,
-        load_in_4bit=LOCAL_LOAD_IN_4BIT,
+        dtype=LOCAL_DTYPE,  # bf16 on A100 → keeps LoRA adapters at 16-bit (QLoRA)
+        load_in_4bit=LOCAL_LOAD_IN_4BIT,  # quantize frozen base weights to 4-bit NF4 (QLoRA)
     )
 
     model = FastLanguageModel.get_peft_model(
