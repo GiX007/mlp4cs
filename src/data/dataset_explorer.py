@@ -248,6 +248,24 @@ def count_user_turns_per_split() -> None:
     print_separator("END OF USER TURN COUNTS")
 
 
+def count_multi_domain_dialogues_per_split() -> None:
+    """Count single-domain and multi-domain dialogues per split, broken down by domain."""
+    print_separator(f"MULTI-DOMAIN DIALOGUE COUNTS of {sorted(TARGET_DOMAINS)}")
+    print()
+
+    for split in ("train", "dev", "test"):
+        dialogues = load_split(split)
+        total = len(dialogues)
+        counts = {}
+        for dom in sorted(TARGET_DOMAINS):
+            counts[dom] = sum(1 for d in dialogues if set(d["services"]) == {dom})
+        multi = sum(1 for d in dialogues if set(d["services"]) == TARGET_DOMAINS)
+        breakdown = ", ".join(f"{dom}: {n} ({n/total*100:.1f}%)" for dom, n in counts.items())
+        print(f"{split}: {total} dialogues, {breakdown}, multi: {multi} ({multi/total*100:.1f}%)")
+
+    print_separator("END OF MULTI-DOMAIN DIALOGUE COUNTS")
+
+
 def explore_slot_values(split: str = "train") -> None:
     """
     Print all unique slot values per slot across target domain dialogues.
@@ -363,6 +381,7 @@ def main() -> None:
     explore_conversation_examples()
     count_dialogues_per_split()
     count_user_turns_per_split()
+    count_multi_domain_dialogues_per_split()
     explore_slot_values()
     inspect_finetune_datasets()
 

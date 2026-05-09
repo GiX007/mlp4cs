@@ -51,7 +51,7 @@ Each module uses a LoRA fine-tuned open-source adapter (via Unsloth). Tests whet
 
 ## Evaluation
 
-All experiments are evaluated on the MultiWOZ 2.2 dev set (hotel + restaurant domains) using both custom and official metrics.
+All experiments are evaluated on the MultiWOZ 2.2 test set (hotel + restaurant domains) using both custom and official metrics.
 
 **Custom metrics:** Domain Precision, Intent Precision, Action Accuracy, Joint Goal Accuracy (JGA), Slot Recall, Slot F1, Hallucination Rate, Policy Violation Rate, System Correctness, Booking Rate, Latency per turn, Cost per run.
 
@@ -61,7 +61,7 @@ All experiments are evaluated on the MultiWOZ 2.2 dev set (hotel + restaurant do
 
 ## Setup
 ```bash
-git clone <repo>
+git clone https://github.com/GiX007/mlp4cs.git
 cd mlp4cs
 
 python -m venv venv
@@ -120,7 +120,7 @@ Results are saved to `results/` with three files per run: dataset-level, dialogu
 | Model                 | Provider  | Release  | Params      | Quantization | Context | Training Data | Open Source      | Cost (in/out per 1K tokens) |
 |-----------------------|-----------|----------|-------------|--------------|---------|---------------|------------------|-----------------------------|
 | GPT-4o-mini           | OpenAI    | Jul 2024 | Undisclosed | N/A          | 128K    | Undisclosed   | No               | $0.15 / $0.60               |
-| Claude 3 Haiku        | Anthropic | Oct 2025 | Undisclosed | N/A          | 200K    | Undisclosed   | No               | $0.25 / $1.25               |
+| Claude Haiku 4.5      | Anthropic | Oct 2025 | Undisclosed | N/A          | 200K    | Undisclosed   | No               | $0.25 / $1.25               |
 | Llama-3.2-3B-Instruct | Meta      | Sep 2024 | 3.2B        | 4-bit (bnb)  | 128K    | 9T+ tokens    | Yes (Llama 3.2)  | Free                        |
 | Llama-3.1-8B-Instruct | Meta      | Jul 2024 | 8.0B        | 4-bit (bnb)  | 128K    | 15T tokens    | Yes (Llama 3.1)  | Free                        |
 | Qwen2.5-14B-Instruct  | Alibaba   | Sep 2024 | 14.7B       | 4-bit (bnb)  | 128K    | 18T tokens    | Yes (Apache 2.0) | Free                        |
@@ -189,7 +189,7 @@ Per-Domain Breakdown
 | hetero_qwen25_qwen3_14b   | 30.1 | 76.9    | 73.7    | 60.8     | 4.54 | 71.79    |
 | homo_qwen3_8b             | 34.2 | 81.3    | 51.6    | 42.5     | 5.10 | 52.15    |
 | hetero_qwen3_14b_qwen3_8b | 33.7 | 81.6    | 52.7    | 45.2     | 5.20 | 54.15    |
-| homo_llama32_3b           | 5.3  | 42.5    | 28.50   | 14.50    | 1.26 | 22.76    |
+| homo_llama32_3b           | 5.3  | 42.5    | 28.5    | 14.5     | 1.26 | 22.76    |
 | homo_llama31_8b           | 18.1 | 63.4    | 55.4    | 35.5     | 1.53 | 46.98    |
 | homo_phi4_14b             | 23.8 | 69.7    | 61.3    | 43.5     | 2.83 | 55.23    |
 | hetero_qwen3_14b_phi4_14b | 33.7 | 81.1    | 68.3    | 62.9     | 2.91 | 68.51    |
@@ -261,4 +261,51 @@ Per-Domain Breakdown
 
 ---
 
-*Proudly the first LLM pipeline to ship from Chatzis, Greece.* 🇬🇷
+## Key Findings
+
+- **Best commercial configuration:** Claude Haiku 4.5 in the zero-shot modular pipeline of Experiment 2 reaches Combined 91.35, JGA 45.1, Slot F1 87.3 at $2.10 over 1,100 turns
+- **Best open-source configuration:** Phi-4-14B fine-tuned in Experiment 3 reaches Combined 70.84, JGA 47.0, Slot F1 88.9 at zero dollars and 3.44 seconds per turn
+- **Two architectural axes:** decomposition (Experiment 1 to Experiment 2) is primarily a cost-and-latency axis, while specialization through fine-tuning (Experiment 2 to 
+  Experiment 3) is primarily a dialogue-state-tracking axis that lifts fine-tuned 14B-class adapters above the Haiku zero-shot baseline on JGA and Slot F1
+
+---
+
+## Related Work
+
+See `docs/references.md` for the full reference list and per-paper relation notes.
+
+---
+
+## Acknowledgements
+
+This work was carried out with computational resources granted on the EuroHPC Leonardo Booster supercomputer (NVIDIA A100 GPUs) under project `EUHPC_D34_189`, 
+made available through Kosmas Kritsis (Institute for Language and Speech Processing, Athena Research Center). MultiWOZ 2.2 by Zang et al. (2020) provides the 
+dataset on which all experiments are run. The Tomiinek MultiWOZ evaluator provides the official metrics.
+
+---
+
+## Citation
+
+If you use MLP4CS in your research, please cite:
+
+```bibtex
+@mastersthesis{xydias2026mlp4cs,
+  title = {Modular LLM Pipeline for Task-Oriented Customer Service Dialogue},
+  author = {Xydias, Georgios},
+  school = {National and Kapodistrian University of Athens, Department of Informatics and Telecommunications},
+  year = {2026},
+  type = {{MSc} thesis}
+}
+```
+
+---
+
+## License
+
+MIT License. Copyright (c) 2026 Georgios Xydias.
+
+You are free to use, copy, modify, and share this software, as long as this notice stays included. The software is provided as is, with no warranty.
+
+---
+
+*Proudly built in Chatzis, Greece.* 🇬🇷
