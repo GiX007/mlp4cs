@@ -121,19 +121,19 @@ Results are saved to `results/` with three files per run: dataset-level, dialogu
 |-----------------------|-----------|----------|-------------|--------------|---------|---------------|------------------|-----------------------------|
 | GPT-4o-mini           | OpenAI    | Jul 2024 | Undisclosed | N/A          | 128K    | Undisclosed   | No               | $0.15 / $0.60               |
 | Claude Haiku 4.5      | Anthropic | Oct 2025 | Undisclosed | N/A          | 200K    | Undisclosed   | No               | $0.25 / $1.25               |
-| Llama-3.2-3B-Instruct | Meta      | Sep 2024 | 3.2B        | 4-bit (bnb)  | 128K    | 9T+ tokens    | Yes (Llama 3.2)  | Free                        |
-| Llama-3.1-8B-Instruct | Meta      | Jul 2024 | 8.0B        | 4-bit (bnb)  | 128K    | 15T tokens    | Yes (Llama 3.1)  | Free                        |
-| Qwen2.5-14B-Instruct  | Alibaba   | Sep 2024 | 14.7B       | 4-bit (bnb)  | 128K    | 18T tokens    | Yes (Apache 2.0) | Free                        |
-| Qwen3-4B              | Alibaba   | Apr 2025 | 4.0B        | 4-bit (bnb)  | 32K     | 36T tokens    | Yes (Apache 2.0) | Free                        |
-| Qwen3-8B              | Alibaba   | Apr 2025 | 8.2B        | 4-bit (bnb)  | 32K     | 36T tokens    | Yes (Apache 2.0) | Free                        |
-| Qwen3-14B             | Alibaba   | Apr 2025 | 14.8B       | 4-bit (bnb)  | 32K     | 36T tokens    | Yes (Apache 2.0) | Free                        |
-| Phi-4-14B             | Microsoft | Dec 2024 | 14B         | 4-bit (bnb)  | 16K     | 9.8T tokens   | Yes (MIT)        | Free                        |
+| Llama-3.2-3B-Instruct | Meta      | Sep 2024 | 3.2B        | 4-bit        | 128K    | 9T+ tokens    | Yes (Llama 3.2)  | Free                        |
+| Llama-3.1-8B-Instruct | Meta      | Jul 2024 | 8.0B        | 4-bit        | 128K    | 15T tokens    | Yes (Llama 3.1)  | Free                        |
+| Qwen2.5-14B-Instruct  | Alibaba   | Sep 2024 | 14.7B       | 4-bit        | 128K    | 18T tokens    | Yes (Apache 2.0) | Free                        |
+| Qwen3-4B              | Alibaba   | Apr 2025 | 4.0B        | 4-bit        | 32K     | 36T tokens    | Yes (Apache 2.0) | Free                        |
+| Qwen3-8B              | Alibaba   | Apr 2025 | 8.2B        | 4-bit        | 32K     | 36T tokens    | Yes (Apache 2.0) | Free                        |
+| Qwen3-14B             | Alibaba   | Apr 2025 | 14.8B       | 4-bit        | 32K     | 36T tokens    | Yes (Apache 2.0) | Free                        |
+| Phi-4-14B             | Microsoft | Dec 2024 | 14B         | 4-bit        | 16K     | 9.8T tokens   | Yes (MIT)        | Free                        |
 
 ---
 
 ## Results
 
-*Results on MultiWOZ 2.2 test set (hotel + restaurant domains only). Tomiinek metrics cover 2 of 5 leaderboard domains so they are not directly comparable to official MultiWOZ leaderboard scores.*
+*Results on MultiWOZ 2.2 test set (hotel + restaurant domains only). Tomiinek metrics cover 2 of 7 leaderboard domains so they are not directly comparable to official MultiWOZ leaderboard scores.*
 
 ### Experiment 1: Single-LLM Baseline
 
