@@ -18,7 +18,7 @@ def test_local_models() -> None:
             print(f"Fail {alias}: {e}")
 
 
-# NOTE: Cannot run locally because it requires sm_70+ GPU and ≥8GB VRAM. Run on Kaggle, Colab (T4), or EuroHPC only.
+# Note: Cannot run locally because it requires sm_70+ GPU and ≥8GB VRAM. Run on Kaggle, Colab (T4), or EuroHPC only
 def test_llama32_local_models() -> None:
     """Test Llama 3.2 3B base model and both of its fine-tuned LoRA adapters."""
     prompt = "Say exactly: hello"

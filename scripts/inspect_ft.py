@@ -1,5 +1,4 @@
-"""
-Inspect a fine-tuned model's training summary.
+"""Inspect a fine-tuned model's training summary.
 
 Reminder: Fine-Tuning Step Math
 
