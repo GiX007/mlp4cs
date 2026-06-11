@@ -554,7 +554,7 @@ Latency = AVERAGE (mean per turn). Per-domain latencies do NOT add up to overall
 Example (1 dialogue, haiku, 5 turns: 2 hotel + 3 restaurant):
 - Hotel avg latency: 9.67s, Restaurant avg latency: 3.09s
 - Overall avg latency: (2 × 9.67 + 3 × 3.09) / 5 = 5.72s (weighted average, not sum)
-- Hotel cost: $0.0119, Restaurant cost: $0.0176
-- Overall cost: $0.0119 + $0.0176 = $0.0296 (sum)
+- Hotel cost: 0.0119, Restaurant cost: 0.0176
+- Overall cost: 0.0119 + 0.0176 = 0.0296, cost in dollars
 
 ---

@@ -1,9 +1,6 @@
 """
 Reconstruct the exact Exp1/Exp2/Exp3 prompts for every saved turn, tokenize them, and report overflows vs LOCAL_MAX_SEQ_LENGTH.
 
-Run with: python -m scripts.sandbox.scan_seq_lengths
-
-
 Context window basics: The model processes ONE continuous token sequence per forward pass: prompt + generated response. Both count toward the cap:
     - peak_seq_len = prompt_tokens + max_new_tokens
     - peak_seq_len <= LOCAL_MAX_SEQ_LENGTH <= model_context_window,
@@ -277,5 +274,6 @@ def main() -> None:
             print(f"    {ex['dialogue_id']}: {ex['tokens']} tokens (over by {ex['over_by']})")
 
 
+# Run with: python -m scripts.sandbox.scan_seq_lengths
 if __name__ == "__main__":
     main()
