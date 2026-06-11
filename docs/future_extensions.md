@@ -41,7 +41,7 @@ Independent of the shape, the prompts themselves can improve: inject the slot sc
 (Zhang et al. 2023, SGP-TOD), and retrieve similar past dialogues as few-shot examples per turn (Hudecek & Dušek 2023). Both can be tuned automatically with 
 prompt optimizers such as DSPy instead of manual editing.
 
-Together with the thesis experiments, this gives five architectures to compare: a) single LLM with a DB retrieval tool (Experiment 1, with the full-DB prompt 
+Together with this project's experiments, this gives five architectures to compare: a) single LLM with a DB retrieval tool (Experiment 1, with the full-DB prompt 
 replaced by a search tool), b) decomposition with two LLMs (Experiment 2), c) the same with fine-tuned modules (Experiment 3), d) the single agent with tools, and 
 e) the workflow graph. All five are evaluated on the cleaned benchmark of Section 1, adding goal completion on tool calls for d and e.
 
