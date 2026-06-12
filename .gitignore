@@ -13,10 +13,11 @@ __pycache__/
 # Environment variables
 .env
 
-# Data (large files)
+# Data (large files and sensitive data)
 data/
 !src/data/
 docs/references/videos/
+docs/defense_speech_and_qa.txt
 
 # Exclude large JSON files from archived results, and also summary txt files
 #archived_results/**/*.json
