@@ -16,6 +16,7 @@ __pycache__/
 # Data (large files)
 data/
 !src/data/
+docs/references/videos/
 
 # Exclude large JSON files from archived results, and also summary txt files
 #archived_results/**/*.json
