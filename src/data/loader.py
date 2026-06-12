@@ -62,7 +62,7 @@ def filter_by_domains(dialogues: list[dict], domains: set) -> list[dict]:
     Returns:
         filtered list of dialogues
     """
-    return [d for d in dialogues if all(s in domains for s in d["services"])]
+    return [d for d in dialogues if d["services"] and all(s in domains for s in d["services"])]
 
 
 def load_split(split: str, verbose: bool = False) -> list[dict]:

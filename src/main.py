@@ -29,7 +29,7 @@ def main() -> None:
     print(f"\n>>> Total execution time: {total:.2f} seconds")
     print_separator("MLP4CS PIPELINE COMPLETED")
 
-
+# Run with: python -m src.main
 if __name__ == "__main__":
     timestamp = time.strftime("%Y%m%d_%H%M%S")
 
