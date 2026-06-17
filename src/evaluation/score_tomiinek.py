@@ -1,8 +1,4 @@
-"""
-Evaluate Tomiinek metrics (Inform, Success, BLEU, Combined) from tomiinek_input.json files.
-
-Run with: python src/evaluation/score_tomiinek.py
-"""
+"""Evaluate Tomiinek metrics (Inform, Success, BLEU, Combined) from tomiinek_input.json files."""
 import json
 from mwzeval.metrics import Evaluator
 
@@ -143,7 +139,8 @@ def score_run(data_path: str) -> dict:
     return {"inform": inform, "success": success, "bleu": bleu, "combined": combined}
 
 
-# Run and print table
+
+# Run with: python src/evaluation/score_tomiinek.py
 print(f"\n{'Run':<35} {'Inform':>8} {'Success':>8} {'BLEU':>6} {'Combined':>9}")
 print("-" * 70)
 for name, path in RUNS.items():
