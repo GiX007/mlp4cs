@@ -49,14 +49,14 @@ intent=None only affects policy as no violations raised, pipeline continues safe
 
 Known limitation: multi-domain turns where the user addresses both hotel and restaurant simultaneously result in domain=None and intent=None (e.g., Turn 4 of PMUL4398.json). 
 This is a tradeoff of our single-domain-per-turn pipeline design. Slots for both domains are still extracted and accumulated correctly.
-See Section 5 for how these turns are handled in evaluation.
+See Section 6 → DST metrics → 'Multi-domain turn slot miss' for how these turns are handled in evaluation.
 
 ### Prompt: dontcare extraction rule
 Added explicit rule to `build_dst_prompt()`: if user expresses no preference (e.g., "any food", "doesn't matter") → extract that slot with value `dontcare`.
 Without this rule, LLMs omit the slot entirely. GT always has `slot=dontcare` in these cases so missing it causes JGA=False and lower Slot Recall.
 
 Impact: improved JGA and Slot F1 in Exp2. Consistent across Experiment 2 and Experiment 3 as the same rule is used in fine-tuning data via `build_dst_prompt()`.
-See Section 5 for observed failure cases in error analysis.
+See Section 6 → DST metrics → 'Most common JGA failure: missing dontcare' for observed failure cases in error analysis.
 
 ### Over-extraction patterns
 Two known LLM extraction errors that affect JGA:
@@ -156,7 +156,12 @@ Tests the questions:
 - `policy()`: checks if required booking slots are present before allowing a booking
 - `supervisor()`: validates the response, triggers retry if invalid (max 2 attempts)
 - `lexicalize()`: replaces placeholders with real entity values from DB results
-- `memory()`: stores the final lexicalized response in history for subsequent turns
+- `memory()`: stores the final lexicalized response in history for subsequent turns 
+  (stores the lexicalized response in history to prevent placeholder contamination in subsequent turns)
+
+### Shared limitations across all three experiments
+- Co-reference resolution ("same group", "book it") depends on the LLM reading history correctly. No deterministic step resolves it in any experiment
+- Entity name injection into accumulated_slots is commented out across all three experiments (see Section 6 → DST metrics → "Challenge: missing entity name in predicted slots")
 
 ---
 
@@ -195,7 +200,7 @@ Entry: `python -m src.main` with `run_experiment_2()` uncommented.
    - DB lookup runs *before* ResponseGen: `find_entity()` for find intents, `book_entity()` for book intents when `not violations`
    - `response_generator()` (second LLM call) receives the slots, violations, and `db_results[:1]`, with `zeroshot=True` the prompt includes placeholder instructions
    - `supervisor()` validates the delex response, and if invalid, the retry loop calls `response_generator()` again with feedback (max 2 attempts)
-6. Same step, post-processing: `lexicalize()` → `memory()`
+6. Same step, post-processing: `lexicalize()` → `memory()` 
 7. Same step, packaging: `build_tomiinek_turn()` and `build_custom_turn()` produce the two per-turn output dicts
 8. Back in `run_experiment()`, per-dialogue lists are merged into `tomiinek_results` (keyed by lowercased `dialogue_id` without `.json`) and `custom_results` (keyed by raw `dialogue_id`)
 9. Back in `exp2.py`, `tomiinek_results` is saved to `results/<experiment_name>/<experiment_name>_tomiinek_input.json`
@@ -218,14 +223,14 @@ This runs once per (model, role) combination, not per run.
 - `scripts/build_ft_data.py` loads the MultiWOZ 2.2 train split via `load_split("train")`
 - For each dialogue, iterates USER turns and builds two training examples per turn:
    - **DST example:** input = `build_dst_prompt(history, user_utterance, accumulated_slots)`, target = GT domain + intent + slots as JSON
-   - **ResponseGen example:** input = `build_respgen_prompt(..., zeroshot=False)` (stripped format: history + domain + intent + slots only, no DB results or placeholder rules), target = GT delexicalized response
+   - **ResponseGen example:** input = `build_respgen_prompt(...)` (stripped format: history + domain + intent + slots only, no DB results or placeholder rules), target = GT delexicalized response
 - Examples are written to `data/finetune_data/dst_train.json` and `data/finetune_data/respgen_train.json`
 - Same process on the dev split → `dst_dev.json` and `respgen_dev.json` for validation during training
 
 **Phase 2. LoRA training (Leonardo cluster, A100):**
 - `scripts/finetune.py` is launched per (base_model, role) pair
 - Unsloth loads the base model in 4-bit (QLoRA), attaches LoRA adapters to attention layers (rank=16)
-- Training loop runs for N epochs on the JSONL file, validating on the dev JSONL
+- Training loop runs for N epochs on the JSON file, validating on the dev JSON
 - Best checkpoint (lowest dev loss) is saved as a LoRA adapter under `data/finetuned_models/<base_model>_<role>/`
 
 **Phase 3. Inference (back to the main flow):**
@@ -261,16 +266,23 @@ The `skip` flag is set when BOTH predicted domain and intent are None (multi-dom
 Rationale for exclusion: multi-domain turns produce None by design (single-domain pipeline), and conversational turns (greetings, goodbyes) have no task-oriented domain/intent. 
 Including these as wrong predictions would unfairly penalize the pipeline for cases outside its design scope.
 
-**Special averaging rules at dataset level:**
-- Hallucination: averaged only over turns where `entity_mentioned=True`
-- Policy: averaged over ALL turns (compliant turns count as 1.0)
-- Booking rate: dialogue-level only, excludes dialogues with no booking intent
-- All other metrics: micro-averaged over all turns (standard in MultiWOZ literature)
-
 **Pre-evaluation exclusion in `evaluate_experiment()`:**
 - SYSTEM turns: completely skipped (only USER turns trigger evaluation)
 - Goodbye/farewell turns: skipped when `gt_domains` is empty
 - These turns never reach `evaluate_turn()` at all
+
+**Averaging levels:**
+- Turn level: raw metrics (JGA=True/False, Slot F1=float)
+- Dialogue level: macro average over turns within dialogue (stored in `dialogues.json`, internal use only)
+- Dataset level: micro average over ALL turns directly (standard in MultiWOZ literature, used for reported results)
+- Per-domain: micro average over domain-specific turns only (comparable to overall dataset metrics)
+
+**Special averaging rules at dataset level:**
+- Hallucination: averaged only over turns where `entity_mentioned=True`
+- Policy: averaged over ALL turns (compliant turns count as 1.0)
+- Booking rate: dialogue-level fraction, excludes dialogues with no booking intent
+- Tomiinek metrics (Inform, Success, BLEU, Combined): merged into `dataset_metrics` after `evaluate_experiment()` returns, from `run_tomiinek()`
+- All other metrics: micro-averaged over all turns (standard in MultiWOZ literature)
 
 ---
 
@@ -327,7 +339,18 @@ Example:
 - Turns 3–4: `accumulated_slots` still has `restaurant-area=cambridge`, but GT has `restaurant-area=centre`
 - Result: JGA = False for turns 3 AND 4, caused by a single turn 2 error
 
-This is by design accumulated belief state mirrors how a real dialogue system tracks constraints across turns.
+This is by design: accumulated belief state mirrors how a real dialogue system tracks constraints across turns.
+
+**Most common JGA failure: missing dontcare.**
+User says "No particular type of food but moderate price" → model extracts pricerange=moderate but omits food=dontcare. 
+CoT prompt and explicit dontcare examples partially address this. 
+Remaining failures are cases where user combines preference + non-preference in one sentence and model focuses on explicit value and drops implicit dontcare.
+Observed in API-baseline runs (GPT-4o-mini, Haiku) on the dev set.
+
+**Multi-domain turn slot miss:**
+GT has slots for both hotel and restaurant in same turn. Pipeline predicts single domain → misses the other domain's slots entirely.
+JGA=False for that turn and all subsequent turns (cascading). Affects ~3-4% of turns. Accepted tradeoff of single-domain-per-turn design.
+Observed in API-baseline runs (GPT-4o-mini, Haiku) on the dev set.
 
 ---
 
@@ -335,6 +358,23 @@ This is by design accumulated belief state mirrors how a real dialogue system tr
 Evaluated per USER turn but checks the system's response to that turn. Policy compliance is NOT simply `len(violations) == 0`. 
 A turn with violations is still compliant if the pipeline correctly asked the user for missing slots instead of confirming a booking. 
 Non-compliant only when violations exist AND the response contains the `[ref]` placeholder (e.g., the system confirmed a booking despite missing required slots).
+
+#### Policy violation rate: Experiment 1 vs Experiment 2 tradeoff
+Policy violation rate is consistently higher in Exp2 than Exp1.
+
+Root cause: 
+In Experiment 1, the single LLM sees the full conversation, full DB, AND booking policy rules in the prompt so it rarely predicts `book_*` intent unless confident all required slots are present. 
+In Experiment 2, the DST model only sees the conversation and valid intents so it sometimes predicts `book_hotel` or `book_restaurant` too early before all required slots are provided.
+
+Example: User says "I want to book a hotel."
+- Experiment 1: sees booking rules → predicts `find_hotel` → no violation
+- Experiment 2 DST: sees "book" → predicts `book_hotel` → policy catches missing slots → violation
+
+The pipeline handles violations correctly as it asks the user for missing slots instead of executing a bad booking. 
+The violation is an internal metric artifact, not a user-facing failure.
+
+Impact: this is a real architectural tradeoff. The modular pipeline trades a slightly higher policy violation rate for better DST accuracy and overall task success.
+Future work: adding booking policy rules to the DST prompt could reduce Experiment 2 violations.
 
 ---
 
@@ -360,7 +400,13 @@ Turns where no entity is mentioned in the response are excluded from the halluci
 **True hallucination (primarily Experiment 1):**
 LLM generates entity details from training knowledge instead of DB results.
 Example: *"Cotto is at Regent Street."* The LLM knows Cotto from training, but the DB returned a different entity. Entity NOT in `db_results` → true hallucination.
-Impact: even with the full DB in the prompt, single-call LLMs hallucinate and validates the modular architecture's value.
+Impact: even with the full DB in the prompt, single-call LLMs hallucinate.
+
+**Placeholder discipline reduces hallucination (Experiment 2):**
+The metric is the same as Exp1, computed on `lex_response`. What changes is the LLM's input. The ResponseGen LLM sees only this turn's 
+`db_results` (a few entities, not the full DB) and is told to use placeholders like `[hotel_name]`. When it follows the rule, `lexicalize()` 
+replaces the placeholders with real values from `db_results`, and no real name can sneak in. Hallucination only happens when the LLM 
+bypasses placeholders and writes a real name directly into `delex_response`, which then survives lexicalization and gets flagged.
 
 **Fine-tuning hallucination amplification (Experiment 3 only):**
 Fine-tuned response generators sometimes emit real entity names where their zero-shot counterparts would have emitted placeholders. Cause: the fine-tuning training 
@@ -383,50 +429,23 @@ GT can have multiple active domains per turn (e.g., {"restaurant", "hotel"}). Ou
 matches ANY active GT domain. Precision, recall, and F1 are computed treating predicted as a set of size 1 and GT as a set of size 1 or 2.
 On multi-domain turns: precision=1.0 if predicted is correct, recall=0.5 because we miss the second domain. This is a tradeoff of single-domain design.
 
+**Intent confusion find vs book:**
+User says "book it" or "yes please, for 8 people" without explicit booking details → GT=book_hotel, pipeline predicts find_hotel. Booking 
+slots not extracted, which cascades into JGA failure for that turn and all subsequent ones. Most common in implicit confirmation turns, 
+especially in Experiment 2 where the DST module has no policy context to disambiguate.
+Observed in API-baseline runs (GPT-4o-mini, Haiku) on the dev set.
+
 ---
 
-### Observed failure patterns
-The patterns below come from manual error analysis of the API-baseline runs (GPT-4o-mini, Claude 3 Haiku) on the dev set.
+### Cost and latency aggregation
+Cost = TOTAL (sum of all turns). Per-domain costs add up to overall cost.
+Latency = AVERAGE (mean per turn). Per-domain latencies do NOT add up to overall.
 
-**Most common JGA failure: missing dontcare.**
-User says "No particular type of food but moderate price" → model extracts pricerange=moderate but omits food=dontcare. 
-CoT prompt and explicit dontcare examples partially address this. 
-Remaining failures are cases where user combines preference + non-preference in one sentence and model focuses on explicit value and drops implicit dontcare.
-
-**Multi-domain turn slot miss:**
-GT has slots for both hotel and restaurant in same turn. Pipeline predicts single domain → misses the other domain's slots entirely.
-JGA=False for that turn and all subsequent turns (cascading). Affects ~3-4% of turns. Accepted tradeoff of single-domain-per-turn design.
-
-**Intent confusion find vs book:**
-User says "book it" without explicit booking details → GT=book_hotel, pipeline predicts find_hotel. Booking slots not extracted.
-Most common in implicit confirmation turns.
-
-**Hallucination pattern:**
-The pipeline mentions a real entity name in the response that was NOT returned by the DB for this turn. 
-The entity exists in our knowledge (from LLM training or DB) but is factually wrong for the user's current constraints.
-
-**Experiment 1 (~5% hallucination rate):** The single LLM sees the full DB in the system prompt AND generates the response. It sometimes ignores the DB results and uses memorized training knowledge instead.
-
-Dummy example:
-- User: "I need a cheap hotel in the east."
-- DB query with {area=east, pricerange=cheap} → returns [] (no match)
-- LLM response: "I found Home From Home at 124 Marathonos Road, cb12dp."
-- LLM knows "Home From Home" from training data → generates real address
-- "Home From Home" NOT in db_results → hallucination detected
-
-**Experiment 2 (~2% hallucination rate):** ResponseGen LLM does NOT see the full DB. It only sees db_results from the current turn and is instructed to use placeholders only.
-
-Same scenario:
-- DB query → returns [] (no match)
-- ResponseGen sees: "DB results: empty"
-- ResponseGen prompted: use ONLY [hotel_name], [hotel_phone] etc.
-- Response: "I'm sorry, I couldn't find a cheap hotel in the east. Would you like to try a different area?"
-- No entity name mentioned → no hallucination
-
-**Why the drop from 5% to 2%:**
-Experiment 1 gives the LLM freedom to generate entity details from its own knowledge.
-Experiment 2 forces ResponseGen to use only what the DB returned so hallucination becomes structurally much harder when the model outputs only placeholders.
-Remaining 2% in Experiment 2 occurs when the LLM ignores placeholder instructions and outputs a real entity name directly.
+Example (1 dialogue, haiku, 5 turns: 2 hotel + 3 restaurant):
+- Hotel avg latency: 9.67s, Restaurant avg latency: 3.09s
+- Overall avg latency: (2 × 9.67 + 3 × 3.09) / 5 = 5.72s (weighted average, not sum)
+- Hotel cost: 0.0119, Restaurant cost: 0.0176
+- Overall cost: 0.0119 + 0.0176 = 0.0296, cost in dollars
 
 ---
 
@@ -547,6 +566,10 @@ Key takeaways:
 - Case D shows attributes alone don't save us. We must offer the entity itself
 - Case E shows that even a perfect response can be killed by DST errors that empty the DB
 
+**Critical implication for our pipeline:**
+Because Stage 1 depends entirely on the predicted state, DST errors poison Inform/Success even when the response text is perfect. The dominant failure mode is wrong 
+constraints producing an **empty DB result** → no valid goal entity exists → Inform = 0 regardless of how good the response is. This is why slot extraction accuracy is 
+the root bottleneck for Inform/Success in our pipeline, not response generation quality.
 
 ---
 
@@ -560,11 +583,6 @@ Combined = 0.5 * (Inform + Success) + BLEU
 ```
 
 ---
-
-**Critical implication for our pipeline:**
-Because Stage 1 depends entirely on the predicted state, DST errors poison Inform/Success even when the response text is perfect. The dominant failure mode is wrong 
-constraints producing an **empty DB result** → no valid goal entity exists → Inform = 0 regardless of how good the response is. This is why slot extraction accuracy is 
-the root bottleneck for Inform/Success in our pipeline, not response generation quality.
 
 ### Why we use delexicalized responses
 - Matches GT reference format → higher BLEU
@@ -584,93 +602,13 @@ Our Tomiinek "total" covers **2 of those 5** (hotel + restaurant), so direct com
 
 ---
 
-## 8. Experiments
+## 8. Infrastructure
 
-### Experiment 1: Single-LLM baseline
-One LLM call per turn handles DST, entity selection, and response generation. 
-Full hotel and restaurant databases passed in system prompt (~2000 extra tokens per turn).
-LLM returns JSON: `{"domain", "intent", "slots", "response"}`, parsed with `json.loads()` with some processing.
+### Context length and open-source models in Exp1
+Exp1 sends full history + full DB + all instructions in one prompt per turn, growing to 20,000+ tokens by turn 3–4. Local open-source runs use
+`LOCAL_MAX_SEQ_LENGTH=32768` for Exp1 vs. 2048 for Exp2/Exp3 where each modular call is much shorter. Each modular call is shorter and focused 
+on one task, making Exp2/Exp3 better suited for open-source models with limited context windows.
 
-Post-processing after LLM call (all rule-based, no additional LLM calls):
-- `policy()` - check violations from parsed intent + slots
-- `find_entity()` / `book_entity()` - DB lookup for lexicalization
-- `supervisor()` - no retry, valid flag for metrics only
-- `lexicalize()` - replace placeholders with real entity values
-- `memory()` - store lex_response in history
-
-Known limitations:
-- No retry loop, single call, no self-correction
-- JSON parsing failures handled with retry (max 3), control character stripping, and regex JSON extraction (needed for Haiku)
-- Co-reference resolution ("same group", "book it") depends entirely on LLM reading history correctly
-- Full DB in prompt feasible for API models only as small open-source models (3B) suffer context length truncation and quality degradation (see Section 9: Infrastructure)
-- Entity name injection into accumulated_slots is commented out (see Section 5)
-
-#### Context length problem with open-source models
-Experiment 1 sends full dialogue history + full DB + all instructions in one prompt per turn.
-By turn 3-4, prompts grow to 20,000+ tokens. With `LOCAL_MAX_SEQ_LENGTH=8192`, Unsloth truncates the prompt, cutting the system prompt which contains output format rules.
-Result: model produces invalid JSON, slot extraction fails, metrics are unreliable.
-
-This is a key finding motivating the modular architecture (Experiment 2/Experiment 3): each modular call is shorter and focused on one task (DST or ResponseGen). 
-The modular approach is better suited for open-source models with limited context windows. 
-Single-LLM baseline works reliably only with API models (GPT/Claude) that have 128K+ token context windows.
-
-
-### Experiment 2 & 3: Modular pipeline
-Two LLM calls per turn: DST and ResponseGen. Both Experiment 2 and Experiment 3 use `zeroshot=True` at inference with same pipeline, different models powering each module.
-
-Pipeline steps per turn (`run_turn()`):
-1. `dst()` → domain, intent, accumulated_slots
-2. `policy()` → violations (missing required booking slots)
-3. `response_generator()` → `supervisor()` → retry if invalid (max 2 attempts)
-4. `lexicalize()` → replace placeholders with real entity values
-5. `memory()` → store lex_response in history (NOT delex — prevents placeholder contamination)
-6. Build `tomiinek_turn` (for official eval) and `custom_turn` (for custom metrics)
-
-Key design decisions:
-- `accumulated_slots` grows turn by turn, never reset within a dialogue
-- Supervisor feedback passed to next retry attempt and enables self-correction
-- Cost and response time accumulated across DST + all ResponseGen attempts per turn
-- History stores lexicalized responses to avoid placeholder contamination in subsequent turns
-
-`run_dialogue()` loops over USER turns only, passing `accumulated_slots` and `history` across turns. 
-`run_experiment()` loops over all dialogues and returns two result dicts (`tomiinek_results`, `custom_results`) both keyed by dialogue_id.
-
-#### Prompt consistency (Experiment 2 & Experiment 3)
-Both zero-shot and fine-tuned models use identical input format at inference, generated by `build_dst_prompt()` and `build_respgen_prompt()`. 
-Fine-tuning data preparation uses the same functions to generate training examples, guaranteeing train/inference prompt consistency.
-
-### Evaluation pipeline (all experiments)
-All three experiments produce the same two output dicts per turn and are evaluated identically:
-- Custom metrics computed on **lexicalized** response (`lex_response`)
-- Tomiinek metrics (Inform, Success, BLEU, Combined) computed on **delexicalized** response (`delex_response`)
-
-### Intent confusion: find vs book
-A recurring pattern across all experiments: GT intent is `book_hotel` but pipeline predicts `find_hotel`. 
-User says "book it" or "yes please, for 8 people", GT considers this a booking intent, 
-but the pipeline (especially Experiment 2 DST) sometimes interprets it as still searching. 
-This cascades: wrong intent → booking slots not extracted → JGA failure. 
-Most common in turns where the user implicitly confirms without using the word "book".
-
-### Policy violation rate: Experiment 1 vs Experiment 2 tradeoff
-Policy violation rate is consistently higher in Exp2 than Exp1.
-
-Root cause: 
-In Experiment 1, the single LLM sees the full conversation, full DB, AND booking policy rules in the prompt so it rarely predicts `book_*` intent unless confident all required slots are present. 
-In Experiment 2, the DST model only sees the conversation and valid intents so it sometimes predicts `book_hotel` or `book_restaurant` too early before all required slots are provided.
-
-Example: User says "I want to book a hotel."
-- Experiment 1: sees booking rules → predicts `find_hotel` → no violation
-- Experiment 2 DST: sees "book" → predicts `book_hotel` → policy catches missing slots → violation
-
-The pipeline handles violations correctly as it asks the user for missing slots instead of executing a bad booking. 
-The violation is an internal metric artifact, not a user-facing failure.
-
-Impact: this is a real architectural tradeoff. The modular pipeline trades a slightly higher policy violation rate for better DST accuracy and overall task success.
-Future work: adding booking policy rules to the DST prompt could reduce Experiment 2 violations.
-
----
-
-## 9. Infrastructure
 
 ### What is LoRA and QLoRA
 LoRA (Low-Rank Adaptation) freezes all base model weights and adds two small trainable matrices (A and B) to each attention layer. 
@@ -699,27 +637,5 @@ QLoRA accepts this precision loss in base weights because the LoRA adapters (16-
 ### Why training cannot run locally
 - GPU architecture: Unsloth uses Triton kernels requiring sm_70+ (Volta, 2017+). Local GPU is GTX 1050 Ti (Pascal, sm_61). No software fix.
 - VRAM: a 3B model in 4-bit needs ~6 GB minimum. GTX 1050 Ti has 4 GB. No software fix.
-
----
-
-## 10. Aggregation Notes
-
-### Averaging strategy across evaluation levels
-- **Turn level:** raw metrics (JGA=True/False, Slot F1=float)
-- **Dialogue level:** macro average over turns within dialogue (stored in dialogues.json, internal use only)
-- **Dataset level:** micro average over ALL turns directly (standard in MultiWOZ literature, used for reported results)
-- **Per-domain:** micro average over domain-specific turns only (comparable to overall dataset metrics)
-- **Booking rate:** dialogue-level fraction, not micro-averaged
-- **Tomiinek metrics:** merged into dataset_metrics after `evaluate_experiment()` returns, from `run_tomiinek()`
-
-### Latency vs cost: aggregation difference
-Cost = TOTAL (sum of all turns). Per-domain costs add up to overall cost.
-Latency = AVERAGE (mean per turn). Per-domain latencies do NOT add up to overall.
-
-Example (1 dialogue, haiku, 5 turns: 2 hotel + 3 restaurant):
-- Hotel avg latency: 9.67s, Restaurant avg latency: 3.09s
-- Overall avg latency: (2 × 9.67 + 3 × 3.09) / 5 = 5.72s (weighted average, not sum)
-- Hotel cost: 0.0119, Restaurant cost: 0.0176
-- Overall cost: 0.0119 + 0.0176 = 0.0296, cost in dollars
 
 ---
