@@ -1,5 +1,4 @@
 # Fine-Tuning Process
-
 Implementation details, design decisions, and concrete examples for (Q)LoRA fine-tuning.
 
 ---
@@ -156,12 +155,12 @@ If eval keeps rising through steps 700 and 800, early stopping triggers at step 
 ### Full early-stopping sequence
 
 ```
-Step 100: eval_loss=0.52   (best so far)
-Step 200: eval_loss=0.45   (new best)
-Step 300: eval_loss=0.41   (new best)
-Step 400: eval_loss=0.43   (worse, patience 1/3)
-Step 500: eval_loss=0.42   (worse, patience 2/3)
-Step 600: eval_loss=0.44   (worse, patience 3/3 → STOP)
+Step 100: eval_loss=0.52 (best so far)
+Step 200: eval_loss=0.45 (new best)
+Step 300: eval_loss=0.41 (new best)
+Step 400: eval_loss=0.43 (worse, patience 1/3)
+Step 500: eval_loss=0.42 (worse, patience 2/3)
+Step 600: eval_loss=0.44 (worse, patience 3/3 → STOP)
 
 Training stops.
 Disk contains: checkpoint-300 (best, preserved), checkpoint-500, checkpoint-600.

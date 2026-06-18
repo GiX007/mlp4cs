@@ -1,5 +1,4 @@
 # Experiments Log
-
 Relative research behind each experiment: what we tried, why, and what we learned.
 
 ---

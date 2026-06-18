@@ -272,7 +272,7 @@ Per-Domain Breakdown
 
 ## Related Work
 
-See `docs/references.md` for the full reference list and per-paper relation notes.
+See `docs/references/` for the full reference list and per-paper relation notes.
 
 ---
 
