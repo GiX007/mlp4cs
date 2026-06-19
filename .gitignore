@@ -19,6 +19,7 @@ data/
 docs/references/videos/
 docs/defense_speech_and_qa.txt
 docs/error_catalog.md
+docs/future_extensions.md
 
 # Exclude large JSON files from archived results, and also summary txt files
 #archived_results/**/*.json
