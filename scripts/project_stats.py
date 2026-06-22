@@ -1,4 +1,5 @@
 """Project statistics: file counts, line counts, size, and directory breakdown."""
+import json
 from pathlib import Path
 
 EXCLUDE = {"venv"}
@@ -55,6 +56,29 @@ def project_size_mb(root: str = ".") -> float:
     return round(total_bytes / (1024 * 1024), 2)
 
 
+def find_retried_turns(turns_path: str) -> None:
+    """
+    Print all turns where the supervisor triggered a retry (attempts > 1).
+
+    Args:
+        turns_path: path to a *_turns.json file
+    Return:
+        None (prints results to console)
+    """
+    # turns.json is a dict: {dialogue_id: [turn_dict, turn_dict, ...]}
+    data = json.loads(Path(turns_path).read_text(encoding="utf-8"))
+
+    count = 0
+    for dialogue_id, turns in data.items():
+        for i, turn in enumerate(turns):
+            if turn.get("attempts", 1) > 1:
+                count += 1
+                print(f"{dialogue_id} | turn {i} | attempts={turn['attempts']} | valid={turn.get('valid')}")
+                print(f"   response: {turn.get('delex_response')}")
+
+    print(f"\nTotal retried turns: {count}")
+
+
 # Run from project root: python scripts/project_stats.py
 if __name__ == "__main__":
     total, non_blank = count_lines()
@@ -71,3 +95,7 @@ if __name__ == "__main__":
     # print("\nFiles per directory:")
     # for folder, count in dir_summary().items():
     #     print(f"  {count:>5}  {folder}")
+
+    # Check retries in turns.json
+    # path = r"C:\...\mlp4cs\archived_results\open_source_test_20260418\exp1_gpt\overall\exp1_gpt_test_20260421_083748_turns.json"
+    # find_retried_turns(path)
