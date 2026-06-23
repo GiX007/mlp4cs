@@ -24,6 +24,17 @@ def supervisor(delex_response: str, violations: list[str], db_results: list[dict
         2. Hallucination: real entity name from db_results appears literally in delex_response. Feedback: "Response contains real entity name '{name}'. Use [{domain}_name] instead."
         3. Booking reference: booking intent, no violations, db_results non-empty → [ref] must appear. Feedback: "Booking succeeded but [ref] placeholder is missing from response."
         4. Policy compliance: violations exist → response must not be empty. Covered by Check 1.
+
+    Example of a hallucination retry:
+
+    User: "I want a cheap restaurant in the centre."
+    DST: domain=restaurant, intent=find_restaurant, slots={area: centre, price_range: cheap} -> DB returns: [{name: "the missing sock", ...}]
+
+    Attempt 1 -> ResponseGen output: "I found The Missing Sock, a cheap restaurant in the centre."
+    Supervisor: rejected. Feedback: "Response contains real entity name 'the missing sock'. Use [restaurant_name] instead."
+
+    Attempt 2 -> ResponseGen output: "I found [restaurant_name], a cheap restaurant in the [restaurant_area]."
+    Supervisor: valid. Forwarded to lexicalize.
     """
     # Check 0: farewell turn, always valid
     if any(kw in user_utterance.lower() for kw in FAREWELL_KEYWORDS):
